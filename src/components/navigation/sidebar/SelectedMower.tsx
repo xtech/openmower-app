@@ -1,9 +1,9 @@
-import {type Mower} from '@/components/types';
+import type {MowerConfig} from '@/components/types';
 import {KeyboardArrowDown, SmartToy as MowerIcon} from '@mui/icons-material';
 import {Avatar, Box, Typography, useTheme} from '@mui/material';
 
 interface SelectedMowerProps {
-  selectedMower: Mower;
+  selectedMower: MowerConfig;
   onMowerMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
 }
 

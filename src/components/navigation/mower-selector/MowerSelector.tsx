@@ -1,17 +1,19 @@
 'use client';
 
-import {mockMowers, type Mower} from '@/components/types';
+import type {MowerConfig} from '@/components/types';
+import {useConfig} from '@/contexts/ConfigContext';
 import {Menu} from '@mui/material';
 import MowerSelectorHeader from './MowerSelectorHeader';
 import MowerSelectorItem from './MowerSelectorItem';
 
 interface MowerSelectorProps {
-  onMowerSelect: (mower: Mower) => void;
+  onMowerSelect: (mower: MowerConfig) => void;
   anchorEl: HTMLElement | null;
   onClose: () => void;
 }
 
 export default function MowerSelector({onMowerSelect, anchorEl, onClose}: MowerSelectorProps) {
+  const {mowers} = useConfig();
   return (
     <Menu
       anchorEl={anchorEl}
@@ -38,7 +40,7 @@ export default function MowerSelector({onMowerSelect, anchorEl, onClose}: MowerS
       }}
     >
       <MowerSelectorHeader />
-      {mockMowers.map((mower) => (
+      {mowers.map((mower) => (
         <MowerSelectorItem key={mower.id} mower={mower} onClick={onMowerSelect} />
       ))}
     </Menu>

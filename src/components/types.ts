@@ -7,11 +7,27 @@ export interface NavigationItem {
   isGlobal: boolean;
 }
 
-export interface Mower {
+export interface MowerConfig {
   id: string;
   name: string;
+  mqtt_ws_url: string;
+  mqtt_prefix: string;
+  description: string;
+}
+
+export interface AppConfig {
+  mowers: MowerConfig[];
+}
+
+export interface Mower extends MowerConfig {
   status: 'active' | 'docked' | 'error' | 'unknown';
   battery: number;
+  operation?: string;
+  estimatedTime?: string;
+  location?: string;
+  lastSeen?: string;
+  efficiency?: number;
+  speed?: string;
 }
 
 // Utility functions for mower status
@@ -40,9 +56,3 @@ export const getMowerStatusLabel = (status: Mower['status']) => {
       return 'Unknown';
   }
 };
-
-// Mock data - in real app this would come from API
-export const mockMowers: Mower[] = [
-  {id: '1', name: 'LawnBot Alpha', status: 'active', battery: 85},
-  {id: '2', name: 'LawnBot Beta', status: 'docked', battery: 100},
-];
