@@ -1,5 +1,9 @@
 import {z} from 'zod/v4';
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// State
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const numericBoolean = z.union([z.literal(0), z.literal(1)]).transform((v) => v === 1);
 const percentage = z
   .number()
@@ -29,6 +33,64 @@ export const stateSchema = z.object({
 });
 
 export type State = z.infer<typeof stateSchema>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Map
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const pointSchema = z.object({x: z.number(), y: z.number()});
+const polygonSchema = z.array(pointSchema);
+const areaSchema = z.object({
+  name: z.string(),
+  obstacles: z.array(polygonSchema).nullable(),
+  outline: polygonSchema,
+});
+
+export const mapSchema = z.object({
+  datum: z
+    .object({
+      lat: z.number(),
+      long: z.number(),
+      height: z.number(),
+    })
+    .optional(),
+  docking_pose: z.object({
+    heading: z.number(),
+    x: z.number(),
+    y: z.number(),
+  }),
+  meta: z.object({
+    mapCenterX: z.number(),
+    mapCenterY: z.number(),
+    mapHeight: z.number(),
+    mapWidth: z.number(),
+  }),
+  navigation_areas: z.array(areaSchema).nullable(),
+  working_areas: z.array(areaSchema).nullable(),
+});
+
+export type MapData = z.infer<typeof mapSchema>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Defaults
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const mapDefaults: MapData = {
+  datum: undefined,
+  docking_pose: {
+    heading: 0,
+    x: 0,
+    y: 0,
+  },
+  meta: {
+    mapCenterX: 0,
+    mapCenterY: 0,
+    mapHeight: 0,
+    mapWidth: 0,
+  },
+  navigation_areas: [],
+  working_areas: [],
+};
 
 export const stateDefaults: State = {
   battery_percentage: 100,

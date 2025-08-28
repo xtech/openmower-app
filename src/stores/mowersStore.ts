@@ -2,7 +2,7 @@ import mqtt, {MqttClient} from 'mqtt';
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 import {useConfigStore} from './configStore';
-import {stateDefaults, stateSchema, type State} from './schemas';
+import {mapDefaults, mapSchema, stateDefaults, stateSchema, type MapData, type State} from './schemas';
 
 interface Mower {
   id: string;
@@ -11,6 +11,7 @@ interface Mower {
   mqttClient: MqttClient;
   mqttPrefix: string;
   state: State;
+  map: MapData;
 }
 
 interface MowersStore {
@@ -46,6 +47,7 @@ export const useMowersStore = create<MowersStore>()(
               mqttClient: client,
               mqttPrefix: config.mqtt_prefix,
               state: stateDefaults,
+              map: mapDefaults,
             };
             mowers.push(mower);
             clientMowers.push({prefix: mower.mqttPrefix, idx: mowers.length - 1});
@@ -60,6 +62,7 @@ export const useMowersStore = create<MowersStore>()(
           console.log('connected');
           for (const clientMower of clientMowers) {
             client.subscribe(clientMower.prefix + 'robot_state/json');
+            client.subscribe(clientMower.prefix + 'map/json');
           }
         });
 
@@ -71,6 +74,10 @@ export const useMowersStore = create<MowersStore>()(
             if (partialTopic === 'robot_state/json') {
               set((state) => {
                 state.mowers[idx].state = stateSchema.parse(JSON.parse(payload.toString()));
+              });
+            } else if (partialTopic === 'map/json') {
+              set((state) => {
+                state.mowers[idx].map = mapSchema.parse(JSON.parse(payload.toString()));
               });
             }
           }
