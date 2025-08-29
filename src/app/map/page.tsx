@@ -1,6 +1,8 @@
 'use client';
 
+import {MowerMap} from '@/components/map';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
+import {useMowers} from '@/stores/mowersStore';
 
 import {
   Add as AddIcon,
@@ -62,6 +64,12 @@ export default function MapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const mowers = useMowers();
+  if (mowers.length === 0) {
+    return <div>No mowers</div>;
+  }
+  const mower = mowers[0];
+  const mapData = mower.map;
 
   const handleAreaAction = (action: string, areaId: string) => {
     console.log(`${action} for area ${areaId}`);
@@ -168,49 +176,8 @@ export default function MapPage() {
                   </Box>
                 </Box>
 
-                {/* Enhanced Map Placeholder */}
-                <Box
-                  sx={{
-                    height: '400px',
-                    background: `linear-gradient(135deg, ${theme.palette.grey[100]} 0%, ${theme.palette.grey[200]} 100%)`,
-                    border: `2px dashed ${theme.palette.grey[300]}`,
-                    borderRadius: 3,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    gap: 3,
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {/* Map Grid Pattern */}
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      opacity: 0.3,
-                      backgroundImage: `
-                        linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-                      `,
-                      backgroundSize: '20px 20px',
-                    }}
-                  />
-
-                  <LocationIcon sx={{fontSize: 64, color: theme.palette.info.main, zIndex: 1}} />
-                  <Box sx={{textAlign: 'center', zIndex: 1}}>
-                    <Typography variant="h5" color="info.main" fontWeight="600" gutterBottom>
-                      Interactive Map Coming Soon
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" textAlign="center" sx={{maxWidth: 400}}>
-                      GPS tracking, area boundaries, mowing paths, and real-time position monitoring
-                    </Typography>
-                  </Box>
-                </Box>
+                {/* Interactive Map */}
+                <MowerMap mapData={mapData} mowerState={mower.state} height="400px" />
 
                 {/* Manual Control Panel */}
                 <Box sx={{mt: 4}}>
