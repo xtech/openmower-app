@@ -2,6 +2,8 @@
 
 import type {MapData, State} from '@/stores/schemas';
 import {getMapBounds, utmPolygonToLatLng, utmToLatLng, type Point} from '@/utils/coordinates';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import {
   CenterFocusStrong as FitBoundsIcon,
   Home as HomeIcon,
@@ -13,7 +15,20 @@ import type {LngLatBoundsLike} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import type {ViewState} from 'react-map-gl/maplibre';
-import Map, {Layer, Marker, NavigationControl, Source, type MapRef} from 'react-map-gl/maplibre';
+import Map, {
+  AttributionControl,
+  FullscreenControl,
+  Layer,
+  Marker,
+  ScaleControl,
+  Source,
+  type MapRef,
+} from 'react-map-gl/maplibre';
+import DrawControl from './DrawControl';
+
+import SplitPolygonMode, {drawStyles as splitPolygonDrawStyles} from 'mapbox-gl-draw-split-polygon-mode';
+
+import SelectFeatureMode, {drawStyles as selectFeatureDrawStyles} from 'mapbox-gl-draw-select-mode';
 
 interface MowerMapProps {
   mapData: MapData;
@@ -73,6 +88,34 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
   const theme = useTheme();
   const datum = mapData.datum || DEFAULT_DATUM;
   const mapRef = useRef<MapRef>(null);
+  const drawRef = useRef<MapboxDraw | null>(null);
+
+  useEffect(() => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+
+    // init draw only once
+    if (!drawRef.current) {
+      const draw = new MapboxDraw({
+        displayControlsDefault: true,
+        controls: {
+          polygon: true,
+          trash: true,
+        },
+      });
+      drawRef.current = draw;
+      alert('hello');
+      map.addControl(draw);
+
+      // Example: listen for events
+      map.on('draw.create', (e) => {
+        console.log('Polygon created:', e.features);
+      });
+      map.on('draw.update', (e) => {
+        console.log('Polygon updated:', e.features);
+      });
+    }
+  }, []);
 
   // Create a stable key for view-reset-triggering data (exclude frequently changing mower position)
   const boundsResetKey = useMemo(() => {
@@ -278,37 +321,27 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
   const dockingHeading = convertHeadingForDisplay(mapData.docking_pose.heading);
   const mowerHeading = convertHeadingForDisplay(mowerState.pose.heading);
 
-  // Debug logging for positions and headings
-  console.log('🗺️ Map Debug Info:', {
-    datum,
-    dockingPose: mapData.docking_pose,
-    dockingPosition,
-    mowerPose: mowerState.pose,
-    mowerPosition,
-    headings: {
-      dockingHeadingRaw: mapData.docking_pose.heading,
-      dockingHeadingConverted: dockingHeading,
-      mowerHeadingRaw: mowerState.pose.heading,
-      mowerHeadingConverted: mowerHeading,
-      headingValid: mowerState.pose.heading_valid,
-    },
-    coordinateConversion: {
-      utmDocking: {x: mapData.docking_pose.x, y: mapData.docking_pose.y},
-      utmMower: {x: mowerState.pose.x, y: mowerState.pose.y},
-    },
-    mapBounds: calculateBounds(),
-    currentViewState: viewState,
-  });
+  const [features, setFeatures] = useState({});
 
-  // Log marker rendering
-  console.log('🎯 Rendering markers:', {
-    dockingMarker: `lat=${dockingPosition.lat}, lng=${dockingPosition.lng}`,
-    mowerMarker: `lat=${mowerPosition.lat}, lng=${mowerPosition.lng}`,
-    validCoordinates: {
-      dockingValid: !isNaN(dockingPosition.lat) && !isNaN(dockingPosition.lng),
-      mowerValid: !isNaN(mowerPosition.lat) && !isNaN(mowerPosition.lng),
-    },
-  });
+  const onUpdate = useCallback((e) => {
+    setFeatures((currFeatures) => {
+      const newFeatures = {...currFeatures};
+      for (const f of e.features) {
+        newFeatures[f.id] = f;
+      }
+      return newFeatures;
+    });
+  }, []);
+
+  const onDelete = useCallback((e) => {
+    setFeatures((currFeatures) => {
+      const newFeatures = {...currFeatures};
+      for (const f of e.features) {
+        delete newFeatures[f.id];
+      }
+      return newFeatures;
+    });
+  }, []);
 
   return (
     <Box sx={{width, height, borderRadius: 3, overflow: 'hidden', position: 'relative'}}>
@@ -320,9 +353,33 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
         style={{width: '100%', height: '100%'}}
         mapStyle={getCurrentMapStyle()}
         attributionControl={false}
+        maxZoom={24}
       >
+        <FullscreenControl />
+
         {/* Navigation Controls */}
-        <NavigationControl position="top-right" showCompass showZoom />
+        {/* <NavigationControl position="top-right" showCompass={false} /> */}
+        {/* <DrawControl
+          position="top-left"
+          displayControlsDefault={true}
+          controls={{
+            polygon: true,
+            trash: true,
+            uncombine_features: true,
+            combine_features: true,
+          }}
+          modes={{
+            ...SelectFeatureMode(MapboxDraw.modes),
+            ...SplitPolygonMode(MapboxDraw.modes),
+          }}
+          styles={[...splitPolygonDrawStyles(MapboxDraw.lib.theme), ...selectFeatureDrawStyles(MapboxDraw.lib.theme)]}
+          defaultMode="simple_select"
+          onCreate={onUpdate}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+          userProperties={true}
+          selectHighlightColor="red"
+        /> */}
         {/* Working Areas */}
         {workingAreasGeoJSON && (
           <Source id="working-areas" type="geojson" data={workingAreasGeoJSON}>
@@ -344,7 +401,6 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
             />
           </Source>
         )}
-
         {/* Navigation Areas */}
         {navigationAreasGeoJSON && (
           <Source id="navigation-areas" type="geojson" data={navigationAreasGeoJSON}>
@@ -367,7 +423,6 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
             />
           </Source>
         )}
-
         {/* Test Marker - Very Simple */}
         <Marker latitude={dockingPosition.lat} longitude={dockingPosition.lng} anchor="center">
           <div
@@ -381,7 +436,6 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
             onClick={() => console.log('Simple test marker clicked!', dockingPosition)}
           />
         </Marker>
-
         {/* Docking Station Marker */}
         <Marker latitude={dockingPosition.lat} longitude={dockingPosition.lng} anchor="center" offset={[25, 0]}>
           <div
@@ -417,7 +471,6 @@ export function MowerMap({mapData, mowerState, width = '100%', height = '400px'}
             />
           </div>
         </Marker>
-
         {/* Mower Position Marker */}
         <Marker latitude={mowerPosition.lat} longitude={mowerPosition.lng} anchor="center" offset={[0, 25]}>
           <div
