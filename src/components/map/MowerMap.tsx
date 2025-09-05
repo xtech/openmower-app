@@ -16,12 +16,13 @@ import {ToggleStyleControl} from './ToggleStyleControl';
 import type {BBox} from './types';
 
 interface MowerMapProps {
+  id: string;
   mapData: MapData;
   width?: string | number;
   height?: string | number;
 }
 
-export function MowerMap({mapData, width = '100%', height = '400px'}: MowerMapProps) {
+export function MowerMap({id, mapData, width = '100%', height = '400px'}: MowerMapProps) {
   const [styleName, setStyleName] = useState<keyof typeof mapStyles>('white');
   const style = mapStyles[styleName];
   const toggleStyle = () => {
@@ -41,7 +42,8 @@ export function MowerMap({mapData, width = '100%', height = '400px'}: MowerMapPr
   return (
     <Box sx={{width, height, borderRadius: 3, overflow: 'hidden', position: 'relative'}}>
       <RMap
-        id="map"
+        key={id}
+        id={id}
         // key={JSON.stringify(drawStyles)}
         style={{width: '100%', height: '100%'}}
         mapStyle={style}

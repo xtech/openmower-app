@@ -1,6 +1,8 @@
 'use client';
 
+import {DownloadButton} from '@/components/map/DownloadButton';
 import {MowerMap} from '@/components/map/MowerMap';
+import {UploadButton} from '@/components/map/UploadButton';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
 import {useMowers} from '@/stores/mowersStore';
 
@@ -26,6 +28,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  type ButtonProps,
 } from '@mui/material';
 import {useState} from 'react';
 
@@ -61,6 +64,7 @@ const mockAreas = [
 ];
 
 export default function MapPage() {
+  const mapId = 'map';
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
@@ -105,6 +109,12 @@ export default function MapPage() {
     if (coverage === 100) return 'success';
     if (coverage > 50) return 'warning';
     return 'error';
+  };
+
+  const buttonProps: ButtonProps = {
+    variant: 'outlined',
+    color: 'secondary',
+    size: 'medium',
   };
 
   return (
@@ -164,20 +174,16 @@ export default function MapPage() {
                     >
                       Add Area
                     </Button>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="medium"
-                      startIcon={<EditIcon />}
-                      sx={{borderRadius: 2, fontWeight: 600}}
-                    >
+                    <Button {...buttonProps} startIcon={<EditIcon />} sx={{borderRadius: 2, fontWeight: 600}}>
                       Edit
                     </Button>
+                    <DownloadButton mapId={mapId} {...buttonProps} />
+                    <UploadButton mapId={mapId} {...buttonProps} />
                   </Box>
                 </Box>
 
                 {/* Interactive Map */}
-                <MowerMap mapData={mapData} height="400px" />
+                <MowerMap id={mapId} mapData={mapData} height="400px" />
 
                 {/* Manual Control Panel */}
                 <Box sx={{mt: 4}}>

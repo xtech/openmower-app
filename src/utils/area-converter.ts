@@ -6,6 +6,7 @@ import {
   type RelativePoint,
   type UtmPoint,
 } from '@/utils/coordinates';
+import area from '@turf/area';
 import type {Feature, FeatureCollection, Point, Polygon} from 'geojson';
 
 interface AreaProps {
@@ -62,4 +63,37 @@ export function mapToFeatures(map: MapData): FeatureCollection {
       ...(map.navigation_areas?.map((area) => areaToFeature('navigation_area', area, datum)) ?? []),
     ],
   };
+}
+
+export function getFeatureDescription(feature: Feature) {
+  const type = feature.geometry.type;
+  const properties = feature.properties;
+
+  if (properties?.name) {
+    return `${type}: ${properties.name}`;
+  }
+
+  if (type === 'Polygon') {
+    let subType = 'Polygon';
+    if (properties?.type === 'working_area') {
+      subType = 'Working Area';
+    } else if (properties?.type === 'navigation_area') {
+      subType = 'Navigation Area';
+    }
+    return `${subType} (${area(feature.geometry).toFixed(2)} m²)`;
+  }
+
+  if (type === 'LineString') {
+    const coordinates = feature.geometry.coordinates;
+    return `LineString (${coordinates.length} points)`;
+  }
+
+  if (type === 'Point') {
+    if (properties?.type === 'docking_pose') {
+      return 'Docking Pose';
+    }
+    return 'Point';
+  }
+
+  return type;
 }
