@@ -1,13 +1,16 @@
 'use client';
 
+import {useMapboxDraw} from '@/contexts/DrawContext';
 import type {MapData} from '@/stores/schemas';
 import {mapToFeatures} from '@/utils/area-converter';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import {Box} from '@mui/material';
 import bbox from '@turf/bbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {DrawControl} from './DrawControl';
 import {drawStyles} from './drawStyles';
 import {FitToBoundsControl} from './FitBoundsControl';
@@ -20,9 +23,21 @@ interface MowerMapProps {
   mapData: MapData;
   width?: string | number;
   height?: string | number;
+  editMode?: boolean;
 }
 
-export function MowerMap({id, mapData, width = '100%', height = '400px'}: MowerMapProps) {
+export function MowerMap({id, mapData, width = '100%', height = '400px', editMode = false}: MowerMapProps) {
+  const draw = useMapboxDraw(id);
+  useEffect(() => {
+    if (draw) {
+      if (editMode) {
+        draw.changeMode('simple_select');
+      } else {
+        draw.changeMode('static');
+      }
+    }
+  }, [draw, editMode]);
+
   const [styleName, setStyleName] = useState<keyof typeof mapStyles>('white');
   const style = mapStyles[styleName];
   const toggleStyle = () => {
@@ -65,11 +80,12 @@ export function MowerMap({id, mapData, width = '100%', height = '400px'}: MowerM
             combine_features: true,
           }}
           styles={drawStyles}
-          // modes={{
-          //   ...SplitPolygonMode(MapboxDraw.modes),
-          // }}
+          modes={{
+            ...MapboxDraw.modes,
+            static: StaticMode,
+          }}
           // styles={[...splitPolygonDrawStyles(MapboxDraw.lib.theme)]}
-          defaultMode="simple_select"
+          defaultMode={editMode ? 'simple_select' : 'static'}
           // onCreate={onUpdate}
           // onUpdate={onUpdate}
           // onDelete={onDelete}

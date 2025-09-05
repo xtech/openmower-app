@@ -32,7 +32,6 @@ export function DownloadButton({mapId, ...buttonProps}: DownloadButtonProps) {
       startIcon={<DownloadIcon />}
       onClick={downloadFeatures}
       disabled={buttonProps.disabled || !draw}
-      sx={{borderRadius: 2, fontWeight: 600}}
     >
       Download
     </Button>

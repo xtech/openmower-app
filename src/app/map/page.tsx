@@ -68,6 +68,7 @@ export default function MapPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
   const mowers = useMowers();
   if (mowers.length === 0) {
     return <div>No mowers</div>;
@@ -111,10 +112,18 @@ export default function MapPage() {
     return 'error';
   };
 
-  const buttonProps: ButtonProps = {
+  const buttonPropsPrimary: ButtonProps = {
+    variant: 'contained',
+    color: 'primary',
+    size: 'medium',
+    sx: {borderRadius: 2, fontWeight: 600},
+  };
+
+  const buttonPropsSecondary: ButtonProps = {
     variant: 'outlined',
     color: 'secondary',
     size: 'medium',
+    sx: {borderRadius: 2, fontWeight: 600},
   };
 
   return (
@@ -165,25 +174,23 @@ export default function MapPage() {
                     </Box>
                   </Box>
                   <Box sx={{display: 'flex', gap: 1}}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      startIcon={<AddIcon />}
-                      sx={{borderRadius: 2, fontWeight: 600}}
-                    >
+                    <Button {...buttonPropsPrimary} startIcon={<AddIcon />}>
                       Add Area
                     </Button>
-                    <Button {...buttonProps} startIcon={<EditIcon />} sx={{borderRadius: 2, fontWeight: 600}}>
-                      Edit
+                    <Button
+                      {...(editMode ? buttonPropsPrimary : buttonPropsSecondary)}
+                      startIcon={<EditIcon />}
+                      onClick={() => setEditMode(!editMode)}
+                    >
+                      {editMode ? 'Exit Edit' : 'Edit'}
                     </Button>
-                    <DownloadButton mapId={mapId} {...buttonProps} />
-                    <UploadButton mapId={mapId} {...buttonProps} />
+                    <DownloadButton mapId={mapId} {...buttonPropsSecondary} />
+                    <UploadButton mapId={mapId} {...buttonPropsSecondary} />
                   </Box>
                 </Box>
 
                 {/* Interactive Map */}
-                <MowerMap id={mapId} mapData={mapData} height="400px" />
+                <MowerMap id={mapId} mapData={mapData} height="400px" editMode={editMode} />
 
                 {/* Manual Control Panel */}
                 <Box sx={{mt: 4}}>

@@ -73,7 +73,6 @@ export function UploadButton({mapId, ...buttonProps}: UploadButtonProps) {
         startIcon={<UploadIcon />}
         onClick={handleUploadClick}
         disabled={buttonProps.disabled || !draw}
-        sx={{borderRadius: 2, fontWeight: 600}}
       >
         Upload
       </Button>
