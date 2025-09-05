@@ -1,4 +1,3 @@
-import {SelectedMowerProvider} from '@/contexts/SelectedMowerContext';
 import {loadAppConfig} from '@/lib/actions';
 import {Box} from '@mui/material';
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
@@ -34,24 +33,22 @@ export default async function RootLayout({
         <ConfigInitializer config={config} />
         <ThemeProvider theme={theme}>
           <AppRouterCacheProvider>
-            <SelectedMowerProvider>
-              <Box sx={{display: 'flex', height: '100vh'}}>
-                <Navigation />
-                <Box
-                  component="main"
-                  sx={{
-                    flex: 1,
-                    pb: {xs: 7, md: 0}, // Account for mobile bottom navigation
-                    margin: 0,
-                    padding: 0,
-                    width: '100%',
-                    overflow: 'auto',
-                  }}
-                >
-                  {children}
-                </Box>
+            <Box sx={{display: 'flex', height: '100vh'}}>
+              <Navigation />
+              <Box
+                component="main"
+                sx={{
+                  flex: 1,
+                  pb: {xs: 7, md: 0}, // Account for mobile bottom navigation
+                  margin: 0,
+                  padding: 0,
+                  width: '100%',
+                  overflow: 'auto',
+                }}
+              >
+                {children}
               </Box>
-            </SelectedMowerProvider>
+            </Box>
           </AppRouterCacheProvider>
         </ThemeProvider>
       </body>

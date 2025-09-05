@@ -1,8 +1,8 @@
 'use client';
 
 import type {MowerConfig} from '@/components/types';
-import {useSelectedMower} from '@/contexts/SelectedMowerContext';
-import {useMowers} from '@/stores/configStore';
+import {useMowerConfigs} from '@/stores/configStore';
+import {useSelectedMower} from '@/stores/mowersStore';
 import {Box, Drawer, List, SxProps, Theme, useTheme} from '@mui/material';
 import {usePathname, useRouter} from 'next/navigation';
 import {useState} from 'react';
@@ -22,8 +22,9 @@ export default function Sidebar({open, onClose}: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [mowerMenuAnchor, setMowerMenuAnchor] = useState<null | HTMLElement>(null);
-  const mowers = useMowers();
-  const {selectedMower, setSelectedMower} = useSelectedMower();
+  const mowerConfigs = useMowerConfigs();
+  const selectedMowerId = useSelectedMower((s) => s?.id);
+  const selectedMower = mowerConfigs.find((mower) => mower.id === selectedMowerId);
   const navigationItems = createNavigationItems();
 
   const handleMowerMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -35,7 +36,8 @@ export default function Sidebar({open, onClose}: SidebarProps) {
   };
 
   const handleMowerSelect = (mower: MowerConfig) => {
-    setSelectedMower(mower);
+    // FIXME
+    // setSelectedMower(mower);
     handleMowerMenuClose();
   };
 
@@ -114,7 +116,7 @@ export default function Sidebar({open, onClose}: SidebarProps) {
             ))}
           </List>
         </Box>
-        {mowers.length > 1 && selectedMower && (
+        {mowerConfigs.length > 1 && selectedMower && (
           <SelectedMower selectedMower={selectedMower} onMowerMenuOpen={handleMowerMenuOpen} />
         )}
       </Box>

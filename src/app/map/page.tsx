@@ -4,7 +4,7 @@ import {DownloadButton} from '@/components/map/DownloadButton';
 import {MowerMap} from '@/components/map/MowerMap';
 import {UploadButton} from '@/components/map/UploadButton';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {useMowers} from '@/stores/mowersStore';
+import {useSelectedMower} from '@/stores/mowersStore';
 
 import {
   Add as AddIcon,
@@ -69,12 +69,10 @@ export default function MapPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const mowers = useMowers();
-  if (mowers.length === 0) {
-    return <div>No mowers</div>;
+  const mapData = useSelectedMower((s) => s?.map);
+  if (mapData === undefined) {
+    return <div>No map data</div>;
   }
-  const mower = mowers[0];
-  const mapData = mower.map;
 
   const handleAreaAction = (action: string, areaId: string) => {
     console.log(`${action} for area ${areaId}`);

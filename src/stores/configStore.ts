@@ -11,4 +11,4 @@ export const useConfigStore = create<ConfigStore>((set) => ({
   setConfig: (config) => set({config}),
 }));
 
-export const useMowers = () => useConfigStore((s) => s.config.mowers);
+export const useMowerConfigs = () => useConfigStore((s) => s.config.mowers);

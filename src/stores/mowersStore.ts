@@ -1,5 +1,5 @@
 import mqtt, {MqttClient} from 'mqtt';
-import {create} from 'zustand';
+import {create, useStore} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 import {useConfigStore} from './configStore';
 import {mapDefaults, mapSchema, stateDefaults, stateSchema, type MapData, type State} from './schemas';
@@ -16,12 +16,14 @@ interface Mower {
 
 interface MowersStore {
   mowers: Mower[];
+  selected: number;
   loadMowers: () => void;
 }
 
 export const useMowersStore = create<MowersStore>()(
   immer((set, get) => ({
     mowers: [],
+    selected: 0,
     loadMowers: () => {
       for (const oldMower of get().mowers) {
         oldMower.mqttClient.end();
@@ -83,7 +85,7 @@ export const useMowersStore = create<MowersStore>()(
           }
         });
       }
-      set({mowers});
+      set({mowers, selected: 0});
     },
   })),
 );
@@ -93,3 +95,10 @@ export const useMowers = () => {
   const mowers = useMowersStore((s) => s.mowers);
   return mowers;
 };
+
+const identity = <T>(arg: T): T => arg;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useSelectedMower<StateSlice>(selector: (state?: Mower) => StateSlice = identity as any) {
+  return useStore(useMowersStore, (s) => selector(s.mowers[s.selected]));
+}
