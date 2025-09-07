@@ -6,7 +6,7 @@ import {mapToFeatures} from '@/utils/area-converter';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import {Box} from '@mui/material';
+import {Box, type SxProps} from '@mui/material';
 import bbox from '@turf/bbox';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
@@ -21,12 +21,11 @@ import type {BBox} from './types';
 interface MowerMapProps {
   id: string;
   mapData: MapData;
-  width?: string | number;
-  height?: string | number;
   editMode?: boolean;
+  sx: SxProps;
 }
 
-export function MowerMap({id, mapData, width = '100%', height = '400px', editMode = false}: MowerMapProps) {
+export function MowerMap({id, mapData, editMode = false, sx}: MowerMapProps) {
   const draw = useMapboxDraw(id);
   useEffect(() => {
     if (draw) {
@@ -55,7 +54,7 @@ export function MowerMap({id, mapData, width = '100%', height = '400px', editMod
   }, [features, mapData.datum]);
 
   return (
-    <Box sx={{width, height, borderRadius: 1, overflow: 'hidden', position: 'relative'}}>
+    <Box sx={{...sx, overflow: 'hidden', position: 'relative'}}>
       <RMap
         key={id}
         id={id}
