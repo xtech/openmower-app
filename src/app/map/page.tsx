@@ -4,6 +4,7 @@ import {DownloadButton} from '@/components/map/DownloadButton';
 import {MowerMap} from '@/components/map/MowerMap';
 import {UploadButton} from '@/components/map/UploadButton';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
+import {useMapContext} from '@/contexts/MapContext';
 import {innerCardStyles, outerCardStyles} from '@/lib/cardStyles';
 import {useSelectedMower} from '@/stores/mowersStore';
 import {mapToFeatures} from '@/utils/area-converter';
@@ -32,7 +33,7 @@ import {
   useTheme,
   type ButtonProps,
 } from '@mui/material';
-import {useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 // Mock data - in real app this would come from API
 const mockAreas = [
@@ -66,13 +67,14 @@ const mockAreas = [
 ];
 
 export default function MapPage() {
-  const mapId = 'map';
+  const {setFeatures, editMode, setEditMode} = useMapContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
-  const [editMode, setEditMode] = useState(false);
   const mapData = useSelectedMower((s) => s?.map);
-  const features = useMemo(() => mapToFeatures(mapData), [mapData]);
+  useEffect(() => {
+    setFeatures(mapToFeatures(mapData));
+  }, [mapData, setFeatures]);
   if (mapData === undefined) {
     return <div>No map data</div>;
   }
@@ -155,13 +157,7 @@ export default function MapPage() {
             >
               <CardContent>
                 {/* Interactive Map */}
-                <MowerMap
-                  id={mapId}
-                  mapData={mapData}
-                  features={features}
-                  editMode={editMode}
-                  sx={{height: 400, borderRadius: 1, mb: 3}}
-                />
+                <MowerMap mapData={mapData} sx={{height: 400, borderRadius: 1, mb: 3}} />
 
                 {/* Map Header */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
@@ -187,8 +183,8 @@ export default function MapPage() {
                     >
                       {editMode ? 'Exit Edit' : 'Edit'}
                     </Button>
-                    <DownloadButton mapId={mapId} {...buttonPropsSecondary} />
-                    <UploadButton mapId={mapId} {...buttonPropsSecondary} />
+                    <DownloadButton {...buttonPropsSecondary} />
+                    <UploadButton {...buttonPropsSecondary} />
                   </Box>
                 </Box>
 

@@ -1,15 +1,11 @@
 'use client';
 
-import {useMapboxDraw} from '@/contexts/DrawContext';
+import {useMapboxDraw} from '@/contexts/MapContext';
 import {Download as DownloadIcon} from '@mui/icons-material';
 import {Button, type ButtonProps} from '@mui/material';
 
-interface DownloadButtonProps extends ButtonProps {
-  mapId: string;
-}
-
-export function DownloadButton({mapId, ...buttonProps}: DownloadButtonProps) {
-  const draw = useMapboxDraw(mapId);
+export function DownloadButton(buttonProps: ButtonProps) {
+  const draw = useMapboxDraw();
 
   const downloadFeatures = () => {
     if (!draw) return;

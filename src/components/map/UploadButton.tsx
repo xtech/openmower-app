@@ -1,18 +1,14 @@
 'use client';
 
-import {useMapboxDraw} from '@/contexts/DrawContext';
+import {useMapboxDraw} from '@/contexts/MapContext';
 import {Upload as UploadIcon} from '@mui/icons-material';
 import {Button, type ButtonProps} from '@mui/material';
 import type {Feature, FeatureCollection} from 'geojson';
 import {useRef, useState} from 'react';
 import {UploadModal} from './UploadModal';
 
-interface UploadButtonProps extends ButtonProps {
-  mapId: string;
-}
-
-export function UploadButton({mapId, ...buttonProps}: UploadButtonProps) {
-  const draw = useMapboxDraw(mapId);
+export function UploadButton(buttonProps: ButtonProps) {
+  const draw = useMapboxDraw();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [pendingFeatures, setPendingFeatures] = useState<FeatureCollection | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
