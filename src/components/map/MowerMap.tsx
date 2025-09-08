@@ -1,13 +1,13 @@
 'use client';
 
 import {useMapboxDraw} from '@/contexts/DrawContext';
-import type {MapData} from '@/stores/schemas';
-import {mapToFeatures} from '@/utils/area-converter';
+import {MapData} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import {Box, type SxProps} from '@mui/material';
 import bbox from '@turf/bbox';
+import type {FeatureCollection} from 'geojson';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
 import {useEffect, useMemo, useState} from 'react';
@@ -21,11 +21,12 @@ import type {BBox} from './types';
 interface MowerMapProps {
   id: string;
   mapData: MapData;
+  features: FeatureCollection;
   editMode?: boolean;
   sx: SxProps;
 }
 
-export function MowerMap({id, mapData, editMode = false, sx}: MowerMapProps) {
+export function MowerMap({id, mapData, features, editMode = false, sx}: MowerMapProps) {
   const draw = useMapboxDraw(id);
   useEffect(() => {
     if (draw) {
@@ -43,7 +44,6 @@ export function MowerMap({id, mapData, editMode = false, sx}: MowerMapProps) {
     setStyleName((prev) => (prev === 'white' ? 'satellite' : 'white'));
   };
 
-  const features = useMemo(() => mapToFeatures(mapData), [mapData]);
   const bounds = useMemo(() => {
     if (features.features.length > 0) {
       return bbox(features) as BBox;

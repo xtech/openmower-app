@@ -6,6 +6,7 @@ import {UploadButton} from '@/components/map/UploadButton';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
 import {innerCardStyles, outerCardStyles} from '@/lib/cardStyles';
 import {useSelectedMower} from '@/stores/mowersStore';
+import {mapToFeatures} from '@/utils/area-converter';
 
 import {
   Add as AddIcon,
@@ -31,7 +32,7 @@ import {
   useTheme,
   type ButtonProps,
 } from '@mui/material';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 
 // Mock data - in real app this would come from API
 const mockAreas = [
@@ -71,6 +72,7 @@ export default function MapPage() {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const mapData = useSelectedMower((s) => s?.map);
+  const features = useMemo(() => mapToFeatures(mapData), [mapData]);
   if (mapData === undefined) {
     return <div>No map data</div>;
   }
@@ -153,7 +155,13 @@ export default function MapPage() {
             >
               <CardContent>
                 {/* Interactive Map */}
-                <MowerMap id={mapId} mapData={mapData} editMode={editMode} sx={{height: 400, borderRadius: 1, mb: 3}} />
+                <MowerMap
+                  id={mapId}
+                  mapData={mapData}
+                  features={features}
+                  editMode={editMode}
+                  sx={{height: 400, borderRadius: 1, mb: 3}}
+                />
 
                 {/* Map Header */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>

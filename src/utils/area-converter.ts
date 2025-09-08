@@ -50,8 +50,8 @@ function convertDatum(map: MapData) {
   return datumToRelative([long, lat]);
 }
 
-export function mapToFeatures(map: MapData): FeatureCollection {
-  if (!map.datum) {
+export function mapToFeatures(map?: MapData): FeatureCollection {
+  if (!map || !map.datum) {
     return {type: 'FeatureCollection', features: []};
   }
   const datum = convertDatum(map);
