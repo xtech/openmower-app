@@ -56,7 +56,6 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
         <ToggleStyleControl onClick={toggleStyle} />
         <DrawControl
           position="top-left"
-          features={features}
           displayControlsDefault={true}
           controls={{
             polygon: true,

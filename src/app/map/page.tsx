@@ -4,7 +4,7 @@ import {DownloadButton} from '@/components/map/DownloadButton';
 import {MowerMap} from '@/components/map/MowerMap';
 import {UploadButton} from '@/components/map/UploadButton';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {useMapContext} from '@/contexts/MapContext';
+import {useMapboxDraw, useMapContext} from '@/contexts/MapContext';
 import {innerCardStyles, outerCardStyles} from '@/lib/cardStyles';
 import {useSelectedMower} from '@/stores/mowersStore';
 import {mapToFeatures} from '@/utils/area-converter';
@@ -67,14 +67,23 @@ const mockAreas = [
 ];
 
 export default function MapPage() {
+  const draw = useMapboxDraw();
   const {setFeatures, editMode, setEditMode} = useMapContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
+
+  // In display mode, send the features directly to the map.
+  // In edit mode, the draw controll will take care of updates.
   const mapData = useSelectedMower((s) => s?.map);
   useEffect(() => {
-    setFeatures(mapToFeatures(mapData));
-  }, [mapData, setFeatures]);
+    if (draw && mapData && !editMode) {
+      const features = mapToFeatures(mapData);
+      draw.set(features);
+      setFeatures(features);
+    }
+  }, [draw, mapData, editMode, setFeatures]);
+
   if (mapData === undefined) {
     return <div>No map data</div>;
   }
