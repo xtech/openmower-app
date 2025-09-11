@@ -115,15 +115,26 @@ const convertLegacyMap = (legacy: LegacyMapData) => ({
 });
 
 const convertLegacyAreas = (areas: LegacyArea[], type: AreaType, prefix: string): Area[] =>
-  areas.map((area, idx) => ({
-    id: nanoid(),
-    properties: {
-      name: area.name === '' ? `${prefix} ${idx}` : area.name,
-      type: type,
-      active: true,
+  areas.flatMap((area, idx) => [
+    {
+      id: nanoid(),
+      properties: {
+        name: area.name === '' ? `${prefix} ${idx}` : area.name,
+        type: type,
+        active: true,
+      },
+      outline: area.outline,
     },
-    outline: area.outline,
-  }));
+    ...(area.obstacles ?? []).map((obstacle) => ({
+      id: nanoid(),
+      properties: {
+        name: 'Obstacle',
+        type: 'obstacle' as const,
+        active: true,
+      },
+      outline: obstacle,
+    })),
+  ]);
 
 export const useMowers = () => {
   // FIXME - this is a hack to get the mowers from the store

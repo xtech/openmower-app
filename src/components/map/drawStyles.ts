@@ -1,12 +1,14 @@
 const green = '#4caf50';
 const orange = '#fbb03b';
 const white = '#dddddd';
+const black = '#000000';
 
 // prettier-ignore
 const type_color = [
   'case',
-  ['==', ['get', 'user_type'], 'mow'],  green,
-  ['==', ['get', 'user_type'], 'nav'],  white,
+  ['==', ['get', 'user_type'], 'mow'], green,
+  ['==', ['get', 'user_type'], 'nav'], white,
+  ['==', ['get', 'user_type'], 'obstacle'], black,
   orange,
 ];
 

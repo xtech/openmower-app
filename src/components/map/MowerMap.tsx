@@ -43,8 +43,8 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
     <Box sx={{...sx, overflow: 'hidden', position: 'relative'}}>
       <RMap
         key={id}
+        // key={id + JSON.stringify(drawStyles)}
         id={id}
-        // key={JSON.stringify(drawStyles)}
         style={{width: '100%', height: '100%'}}
         mapStyle={style}
         initialAttributionControl={false}
