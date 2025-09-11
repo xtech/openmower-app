@@ -1,4 +1,4 @@
-import type {Area, MapData} from '@/stores/schemas';
+import type {Area, AreaProps, AreaType, MapData} from '@/stores/schemas';
 import {
   datumToRelative,
   pointsToAbsolute,
@@ -9,23 +9,11 @@ import {
 import area from '@turf/area';
 import type {Feature, FeatureCollection, Point, Polygon} from 'geojson';
 
-interface AreaProps {
-  name: string;
-  type: 'working_area' | 'navigation_area';
-}
-
-function areaToFeature(
-  type: 'working_area' | 'navigation_area',
-  area: Area,
-  datum: UtmPoint,
-): Feature<Polygon, AreaProps> {
+function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps> {
   return {
     type: 'Feature',
     id: area.id,
-    properties: {
-      name: area.name,
-      type: type,
-    },
+    properties: area.properties,
     geometry: {
       type: 'Polygon',
       coordinates: [pointsToAbsolute(area.outline, datum)],
@@ -60,8 +48,7 @@ export function mapToFeatures(map?: MapData): FeatureCollection {
     type: 'FeatureCollection',
     features: [
       ...(map.docking_pose ? [pointToFeature('docking_pose', map.docking_pose, datum)] : []),
-      ...(map.working_areas?.map((area) => areaToFeature('working_area', area, datum)) ?? []),
-      ...(map.navigation_areas?.map((area) => areaToFeature('navigation_area', area, datum)) ?? []),
+      ...(map.areas?.map((area) => areaToFeature(area, datum)) ?? []),
     ],
   };
 }
@@ -76,9 +63,9 @@ export function getFeatureDescription(feature: Feature) {
 
   if (type === 'Polygon') {
     let subType = 'Polygon';
-    if (properties?.type === 'working_area') {
+    if (properties?.type === 'mow') {
       subType = 'Working Area';
-    } else if (properties?.type === 'navigation_area') {
+    } else if (properties?.type === 'nav') {
       subType = 'Navigation Area';
     }
     return `${subType} (${area(feature.geometry).toFixed(2)} m²)`;
@@ -99,10 +86,7 @@ export function getFeatureDescription(feature: Feature) {
   return type;
 }
 
-export function getAreaFeatures(
-  features: FeatureCollection,
-  type: 'working_area' | 'navigation_area',
-): Feature<Polygon, AreaProps>[] {
+export function getAreaFeatures(features: FeatureCollection, type: AreaType): Feature<Polygon, AreaProps>[] {
   return features.features.filter(
     (feature): feature is Feature<Polygon, AreaProps> =>
       feature.geometry.type === 'Polygon' && feature.properties?.type === type,

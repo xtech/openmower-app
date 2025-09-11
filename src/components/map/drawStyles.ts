@@ -5,8 +5,8 @@ const white = '#dddddd';
 // prettier-ignore
 const type_color = [
   'case',
-  ['==', ['get', 'user_type'], 'working_area'],  green,
-  ['==', ['get', 'user_type'], 'navigation_area'],  white,
+  ['==', ['get', 'user_type'], 'mow'],  green,
+  ['==', ['get', 'user_type'], 'nav'],  white,
   orange,
 ];
 

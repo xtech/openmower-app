@@ -54,8 +54,8 @@ export default function MapPage() {
     }
   }, [draw, mapData, editMode, setFeatures]);
 
-  const workingAreas = useMemo(() => getAreaFeatures(features, 'working_area'), [features]);
-  const navigationAreas = useMemo(() => getAreaFeatures(features, 'navigation_area'), [features]);
+  const workingAreas = useMemo(() => getAreaFeatures(features, 'mow'), [features]);
+  const navigationAreas = useMemo(() => getAreaFeatures(features, 'nav'), [features]);
   const totalWorkingArea = useMemo(() => turfArea({type: 'FeatureCollection', features: workingAreas}), [workingAreas]);
 
   if (mapData === undefined) {

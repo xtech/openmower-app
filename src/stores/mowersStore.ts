@@ -1,8 +1,20 @@
 import mqtt, {MqttClient} from 'mqtt';
+import {customAlphabet} from 'nanoid/non-secure';
 import {create, useStore} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 import {useConfigStore} from './configStore';
-import {mapDefaults, mapSchema, stateDefaults, stateSchema, type Area, type MapData, type State} from './schemas';
+import {
+  Area,
+  AreaType,
+  LegacyArea,
+  LegacyMapData,
+  legacyMapSchema,
+  mapDefaults,
+  stateDefaults,
+  stateSchema,
+  type MapData,
+  type State,
+} from './schemas';
 
 interface Mower {
   id: string;
@@ -19,6 +31,8 @@ interface MowersStore {
   selected: number;
   loadMowers: () => void;
 }
+
+const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 32);
 
 export const useMowersStore = create<MowersStore>()(
   immer((set, get) => ({
@@ -79,10 +93,8 @@ export const useMowersStore = create<MowersStore>()(
               });
             } else if (partialTopic === 'map/json') {
               set((state) => {
-                const map = mapSchema.parse(JSON.parse(payload.toString()));
-                generateAreaNames('Working Area', map.working_areas ?? []);
-                generateAreaNames('Navigation Area', map.navigation_areas ?? []);
-                state.mowers[idx].map = map;
+                const json = JSON.parse(payload.toString());
+                state.mowers[idx].map = convertLegacyMap(legacyMapSchema.parse(json));
               });
             }
           }
@@ -93,13 +105,25 @@ export const useMowersStore = create<MowersStore>()(
   })),
 );
 
-const generateAreaNames = (prefix: string, areas: Area[]) => {
-  for (const [idx, area] of areas.entries()) {
-    if (area.name === '') {
-      area.name = `${prefix} ${idx}`;
-    }
-  }
-};
+const convertLegacyMap = (legacy: LegacyMapData) => ({
+  datum: legacy.datum,
+  docking_pose: legacy.docking_pose,
+  areas: [
+    ...convertLegacyAreas(legacy.working_areas ?? [], 'mow', 'Working Area'),
+    ...convertLegacyAreas(legacy.navigation_areas ?? [], 'nav', 'Navigation Area'),
+  ],
+});
+
+const convertLegacyAreas = (areas: LegacyArea[], type: AreaType, prefix: string): Area[] =>
+  areas.map((area, idx) => ({
+    id: nanoid(),
+    properties: {
+      name: area.name === '' ? `${prefix} ${idx}` : area.name,
+      type: type,
+      active: true,
+    },
+    outline: area.outline,
+  }));
 
 export const useMowers = () => {
   // FIXME - this is a hack to get the mowers from the store

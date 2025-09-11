@@ -1,7 +1,4 @@
-import {customAlphabet} from 'nanoid/non-secure';
 import {z} from 'zod/v4';
-
-const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 32);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // State
@@ -44,14 +41,47 @@ export type State = z.infer<typeof stateSchema>;
 const pointSchema = z.object({x: z.number(), y: z.number()});
 const polygonSchema = z.array(pointSchema);
 const areaSchema = z.object({
-  id: z.string().default(nanoid),
+  id: z.string(),
+  properties: z.object({
+    name: z.string(),
+    type: z.enum(['mow', 'nav', 'obstacle']).optional(),
+    active: z.boolean().default(true),
+  }),
+  outline: polygonSchema,
+});
+export type Area = z.infer<typeof areaSchema>;
+export type AreaProps = Area['properties'];
+export type AreaType = AreaProps['type'];
+
+export const mapSchema = z.object({
+  datum: z
+    .object({
+      lat: z.number(),
+      long: z.number(),
+      height: z.number(),
+    })
+    .optional(),
+  docking_pose: z.object({
+    heading: z.number(),
+    x: z.number(),
+    y: z.number(),
+  }),
+  areas: z.array(areaSchema),
+});
+
+export type MapData = z.infer<typeof mapSchema>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Legacy map
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const legacyAreaSchema = z.object({
   name: z.string(),
   obstacles: z.array(polygonSchema).nullable(),
   outline: polygonSchema,
 });
-export type Area = z.infer<typeof areaSchema>;
 
-export const mapSchema = z.object({
+export const legacyMapSchema = z.object({
   datum: z
     .object({
       lat: z.number(),
@@ -70,11 +100,12 @@ export const mapSchema = z.object({
     mapHeight: z.number(),
     mapWidth: z.number(),
   }),
-  navigation_areas: z.array(areaSchema).nullable(),
-  working_areas: z.array(areaSchema).nullable(),
+  navigation_areas: z.array(legacyAreaSchema).nullable(),
+  working_areas: z.array(legacyAreaSchema).nullable(),
 });
 
-export type MapData = z.infer<typeof mapSchema>;
+export type LegacyArea = z.infer<typeof legacyAreaSchema>;
+export type LegacyMapData = z.infer<typeof legacyMapSchema>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Defaults
@@ -87,14 +118,7 @@ export const mapDefaults: MapData = {
     x: 0,
     y: 0,
   },
-  meta: {
-    mapCenterX: 0,
-    mapCenterY: 0,
-    mapHeight: 0,
-    mapWidth: 0,
-  },
-  navigation_areas: [],
-  working_areas: [],
+  areas: [],
 };
 
 export const stateDefaults: State = {
