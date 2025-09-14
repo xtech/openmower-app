@@ -35,6 +35,20 @@ a {
   text-decoration: none;
 }
 
+.maplibregl-ctrl-top-left .maplibregl-ctrl + .maplibregl-ctrl,
+.maplibregl-ctrl-top-right .maplibregl-ctrl + .maplibregl-ctrl {
+  margin-top: 4px !important;
+}
+
+.maplibregl-ctrl-top-left .maplibregl-ctrl + .maplibregl-ctrl-spaced {
+  margin-top: 20px !important;
+}
+
+.maplibregl-ctrl-group button {
+  width: 40px !important;
+  height: 40px !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

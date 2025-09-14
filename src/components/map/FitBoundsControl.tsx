@@ -1,4 +1,4 @@
-import {CenterFocusStrong} from '@mui/icons-material';
+import {FocusIcon} from 'lucide-react';
 import type {ControlPosition} from 'maplibre-gl';
 import {useMap, useRControl} from 'maplibre-react-components';
 import {useCallback} from 'react';
@@ -13,7 +13,7 @@ export function FitToBoundsControl({position = 'top-right', bounds}: {position?:
   }, [bounds, map]);
   return createPortal(
     <button type="button" aria-hidden="true" onClick={onClick}>
-      <CenterFocusStrong />
+      <FocusIcon />
     </button>,
     container,
   );

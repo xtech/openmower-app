@@ -13,6 +13,7 @@ import {useMemo, useState} from 'react';
 import {DrawControl} from './DrawControl';
 import {drawStyles} from './drawStyles';
 import {FitToBoundsControl} from './FitBoundsControl';
+import {MainControls} from './MainControls';
 import {mapStyles} from './mapStyles';
 import {ToggleStyleControl} from './ToggleStyleControl';
 import type {BBox} from './types';
@@ -55,14 +56,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
         <FitToBoundsControl bounds={bounds} />
         <ToggleStyleControl onClick={toggleStyle} />
         <DrawControl
-          position="top-left"
-          displayControlsDefault={true}
-          controls={{
-            polygon: true,
-            trash: true,
-            uncombine_features: true,
-            combine_features: true,
-          }}
+          displayControlsDefault={false}
           styles={drawStyles}
           modes={{
             ...MapboxDraw.modes,
@@ -75,6 +69,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           // onDelete={onDelete}
           userProperties={true}
         />
+        <MainControls />
       </RMap>
     </Box>
   );

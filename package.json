@@ -22,6 +22,7 @@
     "@types/mapbox__mapbox-gl-draw": "^1.4.9",
     "@types/maplibre-gl": "^1.13.2",
     "immer": "^10.1.1",
+    "lucide-react": "^0.544.0",
     "mapbox-gl-draw-passing-mode": "^2.2.2",
     "mapbox-gl-draw-select-mode": "^1.0.3",
     "mapbox-gl-draw-split-polygon-mode": "^2.2.1",

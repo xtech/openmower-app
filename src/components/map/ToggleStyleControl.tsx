@@ -1,4 +1,4 @@
-import {Layers} from '@mui/icons-material';
+import {Layers} from 'lucide-react';
 import type {ControlPosition} from 'maplibre-gl';
 import {useRControl} from 'maplibre-react-components';
 import {createPortal} from 'react-dom';
