@@ -5,7 +5,7 @@ import {MapData, type AreaProps} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import {Box, useMediaQuery, useTheme, type SxProps} from '@mui/material';
+import {Box, Dialog, useMediaQuery, useTheme, type SxProps} from '@mui/material';
 import bbox from '@turf/bbox';
 import type {Feature, Polygon} from 'geojson';
 import {LayoutListIcon} from 'lucide-react';
@@ -80,7 +80,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           userProperties={true}
         />
         <MainControls />
-        {showAreaList && !isMobile && (
+        {!isMobile && showAreaList && (
           <Box
             sx={{
               position: 'absolute',
@@ -92,6 +92,26 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           >
             <AreasList areas={areas} />
           </Box>
+        )}
+        {isMobile && (
+          <Dialog
+            open={showAreaList}
+            onClose={() => setShowAreaList(false)}
+            disablePortal
+            slotProps={{
+              paper: {
+                sx: {
+                  margin: 0,
+                  width: 'calc(100% - 3rem)',
+                  height: 'calc(100% - 3rem)',
+                  maxWidth: 'none',
+                  maxHeight: 'none',
+                },
+              },
+            }}
+          >
+            <AreasList areas={areas} />
+          </Dialog>
         )}
         <ControlButton
           position="top-right"

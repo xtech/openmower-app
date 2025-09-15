@@ -1,6 +1,5 @@
 import {formatAreaSize} from '@/app/map/page';
 import {useMapSelection} from '@/contexts/MapContext';
-import {outerCardStyles} from '@/lib/cardStyles';
 import {AreaProps} from '@/stores/schemas';
 import theme from '@/theme';
 import {Delete as DeleteIcon} from '@mui/icons-material';
@@ -11,7 +10,7 @@ import {Feature, Polygon} from 'geojson';
 export default function AreasList({areas}: {areas: Feature<Polygon, AreaProps>[]}) {
   const selectedIds = useMapSelection();
   return (
-    <Card sx={{...outerCardStyles, height: '100%'}}>
+    <Card sx={{height: '100%'}}>
       <CardContent sx={{height: '100%', display: 'flex', flexDirection: 'column'}}>
         <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 2}}>
           <Avatar sx={{bgcolor: theme.palette.primary.main, width: 40, height: 40}}>{/* TerrainIcon */}</Avatar>
