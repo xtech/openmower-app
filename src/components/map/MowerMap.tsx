@@ -1,6 +1,6 @@
 'use client';
 
-import {useMapContext, useMapSelection} from '@/contexts/MapContext';
+import {useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
 import {MapData, type AreaProps} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
@@ -38,6 +38,7 @@ interface MowerMapProps {
 
 export function MowerMap({mapData, sx}: MowerMapProps) {
   const {id, editMode, features} = useMapContext();
+  const draw = useMapboxDraw();
   const selectedIds = useMapSelection();
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
@@ -99,7 +100,15 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           disabled={selectedIds.length != 1}
           onClick={() => setShowSettings(true)}
         />
-        <ControlButton position="top-left" icon={Trash2Icon} title="Delete" onClick={() => {}} />
+        <ControlButton
+          position="top-left"
+          icon={Trash2Icon}
+          title="Delete"
+          disabled={selectedIds.length === 0}
+          onClick={() => {
+            draw?.trash();
+          }}
+        />
         <ControlButton position="top-left" icon={PencilLineIcon} title="Draw new area" onClick={() => {}} />
         <ControlButton spaced={true} position="top-left" icon={SquaresUniteIcon} title="Merge" onClick={() => {}} />
         <ControlButton position="top-left" icon={SquaresSubtractIcon} title="Call Split" onClick={() => {}} />
