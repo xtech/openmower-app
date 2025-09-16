@@ -1,6 +1,6 @@
 'use client';
 
-import {useMapContext} from '@/contexts/MapContext';
+import {useMapContext, useMapSelection} from '@/contexts/MapContext';
 import {MapData, type AreaProps} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
@@ -8,15 +8,25 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import {Box, Dialog, useMediaQuery, useTheme, type SxProps} from '@mui/material';
 import bbox from '@turf/bbox';
 import type {Feature, Polygon} from 'geojson';
-import {LayoutListIcon} from 'lucide-react';
+import {
+  LayoutListIcon,
+  PencilLineIcon,
+  ScissorsLineDashedIcon,
+  Settings2Icon,
+  SquaresIntersectIcon,
+  SquaresSubtractIcon,
+  SquaresUniteIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
 import {useMemo, useState} from 'react';
+import {AreaSettingsDialog} from './AreaSettingsDialog';
 import AreasList from './AreasList';
+import ControlButton from './ControlButton';
 import {DrawControl} from './DrawControl';
 import {drawStyles} from './drawStyles';
 import {FitToBoundsControl} from './FitBoundsControl';
-import {ControlButton, MainControls} from './MainControls';
 import {mapStyles} from './mapStyles';
 import {ToggleStyleControl} from './ToggleStyleControl';
 import type {BBox} from './types';
@@ -28,6 +38,7 @@ interface MowerMapProps {
 
 export function MowerMap({mapData, sx}: MowerMapProps) {
   const {id, editMode, features} = useMapContext();
+  const selectedIds = useMapSelection();
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
     [features],
@@ -35,6 +46,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showAreaList, setShowAreaList] = useState(!isMobile);
+  const [showSettings, setShowSettings] = useState(false);
   const [styleName, setStyleName] = useState<keyof typeof mapStyles>('white');
   const style = mapStyles[styleName];
   const toggleStyle = () => {
@@ -79,7 +91,32 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           // onDelete={onDelete}
           userProperties={true}
         />
-        <MainControls />
+        <ControlButton
+          position="top-left"
+          icon={Settings2Icon}
+          title="Settings"
+          active={showSettings}
+          disabled={selectedIds.length != 1}
+          onClick={() => setShowSettings(true)}
+        />
+        <ControlButton position="top-left" icon={Trash2Icon} title="Delete" onClick={() => {}} />
+        <ControlButton position="top-left" icon={PencilLineIcon} title="Draw new area" onClick={() => {}} />
+        <ControlButton spaced={true} position="top-left" icon={SquaresUniteIcon} title="Merge" onClick={() => {}} />
+        <ControlButton position="top-left" icon={SquaresSubtractIcon} title="Call Split" onClick={() => {}} />
+        <ControlButton
+          position="top-left"
+          icon={SquaresIntersectIcon}
+          title="Remove overlapping areas"
+          onClick={() => {}}
+        />
+        <ControlButton position="top-left" icon={ScissorsLineDashedIcon} title="Split area" onClick={() => {}} />{' '}
+        <ControlButton
+          position="top-right"
+          icon={LayoutListIcon}
+          title="Show area list"
+          active={showAreaList}
+          onClick={() => setShowAreaList(!showAreaList)}
+        />
         {!isMobile && showAreaList && (
           <Box
             sx={{
@@ -113,13 +150,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
             <AreasList areas={areas} />
           </Dialog>
         )}
-        <ControlButton
-          position="top-right"
-          icon={LayoutListIcon}
-          title="Show area list"
-          active={showAreaList}
-          onClick={() => setShowAreaList(!showAreaList)}
-        />
+        <AreaSettingsDialog open={showSettings} onClose={() => setShowSettings(false)} />
       </RMap>
     </Box>
   );
