@@ -68,7 +68,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
   const fitToBounds = useCallback(
     (immediate: boolean = false) => {
       mapRef.current?.fitBounds(bounds, {
-        padding: {top: 10, bottom: 10, left: 60, right: showAreaList ? 470 : 10},
+        padding: {top: 10, bottom: 10, left: 60, right: showAreaList ? 390 : 60},
         duration: immediate ? 0 : 1000,
       });
     },
@@ -193,7 +193,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
               top: 10,
               right: 60,
               bottom: 10,
-              width: '400px',
+              width: '320px',
             }}
           >
             <AreasList areas={areas} />
