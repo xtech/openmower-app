@@ -50,8 +50,21 @@ a {
   height: 40px !important;
 }
 
-.maplibregl-ctrl-active {
-  background-color: #4caf50 !important;
+.maplibregl-ctrl button.maplibregl-ctrl-fullscreen .maplibregl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-shrink .maplibregl-ctrl-icon {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLW1heGltaXplMi1pY29uIGx1Y2lkZS1tYXhpbWl6ZS0yIj48cGF0aCBkPSJNMTUgM2g2djYiLz48cGF0aCBkPSJtMjEgMy03IDciLz48cGF0aCBkPSJtMyAyMSA3LTciLz48cGF0aCBkPSJNOSAyMUgzdi02Ii8+PC9zdmc+) !important;
+}
+
+.maplibregl-ctrl-active,
+.maplibregl-ctrl button.maplibregl-ctrl-shrink {
+  background-color: #ffc107 !important;
+}
+
+@media ((hover: hover) and (pointer: fine)) {
+  .maplibregl-ctrl button:not(:disabled):hover {
+      background-color: #ffd54f !important;
+      border-radius: 4px;
+  }
 }
 
 .maplibregl-map.mouse-pointer .maplibregl-canvas-container.maplibregl-interactive {

@@ -10,6 +10,8 @@ import bbox from '@turf/bbox';
 import type {Feature, Polygon} from 'geojson';
 import {
   CircleXIcon,
+  FocusIcon,
+  GlobeIcon,
   LayoutListIcon,
   PencilIcon,
   PencilLineIcon,
@@ -21,17 +23,16 @@ import {
   SquaresUniteIcon,
   Trash2Icon,
 } from 'lucide-react';
+import type {Map} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
-import {useMemo, useState} from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 import {AreaSettingsDialog} from './AreaSettingsDialog';
 import AreasList from './AreasList';
 import ControlButton from './ControlButton';
 import {DrawControl} from './DrawControl';
 import {drawStyles} from './drawStyles';
-import {FitToBoundsControl} from './FitBoundsControl';
 import {mapStyles} from './mapStyles';
-import {ToggleStyleControl} from './ToggleStyleControl';
 import type {BBox} from './types';
 
 interface MowerMapProps {
@@ -41,6 +42,7 @@ interface MowerMapProps {
 
 export function MowerMap({mapData, sx}: MowerMapProps) {
   const {id, editMode, setEditMode, features, drawMode, trashEnabled} = useMapContext();
+  const mapRef = useRef<Map>(null);
   const draw = useMapboxDraw();
   const selectedIds = useMapSelection();
   const isDrawing = drawMode === MapboxDraw.constants.modes.DRAW_POLYGON;
@@ -52,11 +54,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showAreaList, setShowAreaList] = useState(!isMobile);
   const [showSettings, setShowSettings] = useState(false);
-  const [styleName, setStyleName] = useState<keyof typeof mapStyles>('white');
-  const style = mapStyles[styleName];
-  const toggleStyle = () => {
-    setStyleName((prev) => (prev === 'white' ? 'satellite' : 'white'));
-  };
+  const [showSatelliteLayer, setShowSatelliteLayer] = useState(false);
 
   const bounds = useMemo(() => {
     if (features.features.length > 0) {
@@ -67,21 +65,26 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
     }
   }, [features, mapData.datum]);
 
+  const fitToBounds = useCallback(() => {
+    mapRef.current?.fitBounds(bounds, {
+      padding: {top: 10, bottom: 10, left: 60, right: showAreaList ? 470 : 10},
+      duration: 1000,
+    });
+  }, [bounds, showAreaList]);
+
   return (
     <Box sx={{...sx, overflow: 'hidden', position: 'relative'}}>
       <RMap
         key={id}
         // key={id + JSON.stringify(drawStyles)}
         id={id}
+        ref={mapRef}
         style={{width: '100%', height: '100%'}}
-        mapStyle={style}
+        mapStyle={mapStyles[showSatelliteLayer ? 'satellite' : 'white']}
         initialAttributionControl={false}
         maxZoom={24}
         initialBounds={bounds}
       >
-        <RFullscreenControl />
-        <FitToBoundsControl bounds={bounds} extraRightPadding={!isMobile && showAreaList ? 460 : 0} />
-        <ToggleStyleControl onClick={toggleStyle} />
         <DrawControl
           displayControlsDefault={false}
           styles={drawStyles}
@@ -94,6 +97,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           userProperties={true}
           onFeaturesCreated={() => setShowSettings(true)}
         />
+        {/* Left controls */}
         {editMode ? (
           <>
             <ControlButton
@@ -156,6 +160,17 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
             <ControlButton position="top-left" icon={PencilIcon} title="Edit mode" onClick={() => setEditMode(true)} />
           </>
         )}
+
+        {/* Right controls */}
+        <RFullscreenControl />
+        <ControlButton position="top-right" icon={FocusIcon} title="Fit to bounds" onClick={fitToBounds} />
+        <ControlButton
+          position="top-right"
+          title="Toggle satellite layer"
+          icon={GlobeIcon}
+          active={showSatelliteLayer}
+          onClick={() => setShowSatelliteLayer(!showSatelliteLayer)}
+        />
         <ControlButton
           position="top-right"
           icon={LayoutListIcon}
@@ -163,6 +178,8 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
           active={showAreaList}
           onClick={() => setShowAreaList(!showAreaList)}
         />
+
+        {/* Overlays */}
         {!isMobile && showAreaList && (
           <Box
             sx={{
