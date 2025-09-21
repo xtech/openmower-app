@@ -19,6 +19,7 @@ interface MapContextType {
 export const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapContextProvider = ({id, children}: {id: string; children: React.ReactNode}) => {
+  // Note that here is where we keep the correct order of features (mapbox-gl-draw doesn't maintain it).
   const [features, setFeatures] = useImmer<FeatureCollection>({type: 'FeatureCollection', features: []});
   const [editMode, setEditMode] = useState(false);
   const [drawMode, setDrawMode] = useState<DrawMode>(MapboxDraw.constants.modes.STATIC);
