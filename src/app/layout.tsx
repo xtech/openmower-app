@@ -4,6 +4,7 @@ import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
 import {ThemeProvider} from '@mui/material/styles';
 import type {Metadata} from 'next';
 import {Roboto} from 'next/font/google';
+import {DialogProvider} from 'react-dialog-async';
 import {ConfigInitializer} from '../components/ConfigInitializer';
 import Navigation from '../components/navigation/Navigation';
 import theme from '../theme';
@@ -33,22 +34,24 @@ export default async function RootLayout({
         <ConfigInitializer config={config} />
         <ThemeProvider theme={theme}>
           <AppRouterCacheProvider>
-            <Box sx={{display: 'flex', height: '100dvh'}}>
-              <Navigation />
-              <Box
-                component="main"
-                sx={{
-                  flex: 1,
-                  pb: {xs: 7, md: 0}, // Account for mobile bottom navigation
-                  margin: 0,
-                  padding: 0,
-                  width: '100%',
-                  overflow: 'auto',
-                }}
-              >
-                {children}
+            <DialogProvider>
+              <Box sx={{display: 'flex', height: '100dvh'}}>
+                <Navigation />
+                <Box
+                  component="main"
+                  sx={{
+                    flex: 1,
+                    pb: {xs: 7, md: 0}, // Account for mobile bottom navigation
+                    margin: 0,
+                    padding: 0,
+                    width: '100%',
+                    overflow: 'auto',
+                  }}
+                >
+                  {children}
+                </Box>
               </Box>
-            </Box>
+            </DialogProvider>
           </AppRouterCacheProvider>
         </ThemeProvider>
       </body>
