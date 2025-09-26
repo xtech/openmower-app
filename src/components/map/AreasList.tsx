@@ -11,7 +11,7 @@ import SortableAreaItem from './SortableAreaItem';
 
 export default function AreasList({areas}: {areas: Feature<Polygon, AreaProps>[]}) {
   const selectedIds = useMapSelection();
-  const {setFeatures} = useMapContext();
+  const {editMode, setFeatures} = useMapContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const {active, over} = event;
@@ -41,7 +41,12 @@ export default function AreasList({areas}: {areas: Feature<Polygon, AreaProps>[]
           <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}>
             <SortableContext items={areas.map((area) => area.id as string)} strategy={verticalListSortingStrategy}>
               {areas.map((area) => (
-                <SortableAreaItem key={area.id} area={area} selected={selectedIds.includes(area.id as string)} />
+                <SortableAreaItem
+                  key={area.id}
+                  area={area}
+                  selected={selectedIds.includes(area.id as string)}
+                  showDragHandle={editMode}
+                />
               ))}
             </SortableContext>
             <DragOverlay style={{cursor: 'grabbing'}} />

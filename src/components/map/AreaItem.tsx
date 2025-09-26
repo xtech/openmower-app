@@ -1,5 +1,4 @@
 import {formatAreaSize} from '@/app/map/page';
-import {useMapContext} from '@/contexts/MapContext';
 import {AreaProps} from '@/stores/schemas';
 import theme from '@/theme';
 import type {DraggableSyntheticListeners} from '@dnd-kit/core';
@@ -11,6 +10,7 @@ import {MenuIcon} from 'lucide-react';
 export interface AreaItemProps {
   area: Feature<Polygon, AreaProps>;
   selected?: boolean;
+  showDragHandle?: boolean;
 }
 
 interface SortableItemProps {
@@ -23,13 +23,13 @@ interface SortableItemProps {
 export default function AreaItem({
   area,
   selected = false,
+  showDragHandle = false,
   ref,
   style,
   listeners,
   dragging = false,
   ...props
 }: AreaItemProps & SortableItemProps) {
-  const {editMode} = useMapContext();
   return (
     <ListItem
       style={style}
@@ -61,7 +61,7 @@ export default function AreaItem({
             {area.properties.type === 'mow' ? ' • Last mowed: Never' : ''}
           </Typography>
         </Box>
-        {editMode && (
+        {showDragHandle && (
           <Box
             ref={ref}
             {...listeners}
