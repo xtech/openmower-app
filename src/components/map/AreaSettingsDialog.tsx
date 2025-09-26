@@ -5,7 +5,6 @@ import {AreaProps} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -18,6 +17,7 @@ import {
   TextField,
 } from '@mui/material';
 import {useEffect, useState} from 'react';
+import MapDialog from './MapDialog';
 
 interface AreaSettingsDialogProps {
   open: boolean;
@@ -62,25 +62,7 @@ export function AreaSettingsDialog({open, onClose}: AreaSettingsDialogProps) {
   }
 
   return (
-    <Dialog
-      open={open}
-      maxWidth="xs"
-      fullWidth
-      disablePortal
-      onClose={onClose}
-      slotProps={{
-        root: {
-          sx: {
-            position: 'absolute',
-          },
-        },
-        backdrop: {
-          sx: {
-            position: 'absolute',
-          },
-        },
-      }}
-    >
+    <MapDialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>Area Settings</DialogTitle>
       <DialogContent>
         <TextField
@@ -122,6 +104,6 @@ export function AreaSettingsDialog({open, onClose}: AreaSettingsDialogProps) {
           Save
         </Button>
       </DialogActions>
-    </Dialog>
+    </MapDialog>
   );
 }
