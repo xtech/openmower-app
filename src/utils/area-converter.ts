@@ -47,8 +47,8 @@ export function mapToFeatures(map?: MapData): FeatureCollection {
   return {
     type: 'FeatureCollection',
     features: [
-      ...(map.docking_pose ? [pointToFeature('docking_pose', map.docking_pose, datum)] : []),
-      ...(map.areas?.map((area) => areaToFeature(area, datum)) ?? []),
+      ...map.docking_stations.map((dock) => pointToFeature('docking_station', dock.position, datum)),
+      ...map.areas.map((area) => areaToFeature(area, datum)),
     ],
   };
 }
@@ -77,8 +77,8 @@ export function getFeatureDescription(feature: Feature) {
   }
 
   if (type === 'Point') {
-    if (properties?.type === 'docking_pose') {
-      return 'Docking Pose';
+    if (properties?.type === 'docking_station') {
+      return 'Docking station';
     }
     return 'Point';
   }

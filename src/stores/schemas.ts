@@ -53,6 +53,16 @@ export type Area = z.infer<typeof areaSchema>;
 export type AreaProps = Area['properties'];
 export type AreaType = AreaProps['type'];
 
+const dockingStationSchema = z.object({
+  id: z.string(),
+  properties: z.object({
+    name: z.string(),
+    active: z.boolean().default(true),
+  }),
+  position: pointSchema,
+  heading: z.number(),
+});
+
 export const mapSchema = z.object({
   datum: z
     .object({
@@ -61,12 +71,8 @@ export const mapSchema = z.object({
       height: z.number(),
     })
     .optional(),
-  docking_pose: z.object({
-    heading: z.number(),
-    x: z.number(),
-    y: z.number(),
-  }),
   areas: z.array(areaSchema),
+  docking_stations: z.array(dockingStationSchema),
 });
 
 export type MapData = z.infer<typeof mapSchema>;
@@ -113,12 +119,8 @@ export type LegacyMapData = z.infer<typeof legacyMapSchema>;
 
 export const mapDefaults: MapData = {
   datum: undefined,
-  docking_pose: {
-    heading: 0,
-    x: 0,
-    y: 0,
-  },
   areas: [],
+  docking_stations: [],
 };
 
 export const stateDefaults: State = {

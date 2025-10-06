@@ -110,6 +110,8 @@ const convertLegacyMap = (legacy: LegacyMapData) => ({
     ...convertLegacyAreas(legacy.working_areas ?? [], 'mow', 'Working Area'),
     ...convertLegacyAreas(legacy.navigation_areas ?? [], 'nav', 'Navigation Area'),
   ],
+  // TODO: Handle empty docking pose.
+  docking_stations: [convertLegacyDockingStation(legacy.docking_pose)],
 });
 
 const convertLegacyAreas = (areas: LegacyArea[], type: AreaType, prefix: string): Area[] =>
@@ -133,6 +135,16 @@ const convertLegacyAreas = (areas: LegacyArea[], type: AreaType, prefix: string)
       outline: obstacle,
     })),
   ]);
+
+const convertLegacyDockingStation = (docking_pose: LegacyMapData['docking_pose']) => ({
+  id: generateId(),
+  properties: {
+    name: 'Docking station',
+    active: true,
+  },
+  position: {x: docking_pose.x, y: docking_pose.y},
+  heading: docking_pose.heading,
+});
 
 export const useMowers = () => {
   // FIXME - this is a hack to get the mowers from the store
