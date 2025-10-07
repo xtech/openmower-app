@@ -105,13 +105,11 @@ export const useMowersStore = create<MowersStore>()(
 
 const convertLegacyMap = (legacy: LegacyMapData) => ({
   datum: legacy.datum,
-  docking_pose: legacy.docking_pose,
   areas: [
     ...convertLegacyAreas(legacy.working_areas ?? [], 'mow', 'Working Area'),
     ...convertLegacyAreas(legacy.navigation_areas ?? [], 'nav', 'Navigation Area'),
   ],
-  // TODO: Handle empty docking pose.
-  docking_stations: [convertLegacyDockingStation(legacy.docking_pose)],
+  docking_stations: legacy.docking_pose.heading === null ? [] : [convertLegacyDockingStation(legacy.docking_pose)],
 });
 
 const convertLegacyAreas = (areas: LegacyArea[], type: AreaType, prefix: string): Area[] =>
@@ -143,7 +141,7 @@ const convertLegacyDockingStation = (docking_pose: LegacyMapData['docking_pose']
     active: true,
   },
   position: {x: docking_pose.x, y: docking_pose.y},
-  heading: docking_pose.heading,
+  heading: docking_pose.heading!,
 });
 
 export const useMowers = () => {

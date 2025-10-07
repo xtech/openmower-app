@@ -96,7 +96,7 @@ export const legacyMapSchema = z.object({
     })
     .optional(),
   docking_pose: z.object({
-    heading: z.number(),
+    heading: z.number().nullable(),
     x: z.number(),
     y: z.number(),
   }),
