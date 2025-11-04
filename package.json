@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "genrpc": "scripts/generate-rpc-client.ts > src/lib/rpc.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -50,6 +51,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@open-rpc/schema-utils-js": "^2.1.2",
+    "@open-rpc/typings": "^1.13.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20",
     "@types/react": "^19",

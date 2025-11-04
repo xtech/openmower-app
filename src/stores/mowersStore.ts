@@ -1,3 +1,4 @@
+import {OpenMowerRpc} from '@/lib/rpc';
 import {generateId} from '@/utils/area-utils';
 import mqtt, {MqttClient} from 'mqtt';
 import {create, useStore} from 'zustand';
@@ -10,6 +11,7 @@ import {
   LegacyMapData,
   legacyMapSchema,
   mapDefaults,
+  mapSchema,
   stateDefaults,
   stateSchema,
   type MapData,
@@ -22,6 +24,7 @@ interface Mower {
   description: string;
   mqttClient: MqttClient;
   mqttPrefix: string;
+  rpc: OpenMowerRpc;
   state: State;
   map: MapData;
 }
@@ -54,12 +57,14 @@ export const useMowersStore = create<MowersStore>()(
         const clientMowers: {prefix: string; idx: number}[] = [];
         for (const config of mowerConfigs) {
           if (config.mqtt_ws_url === url) {
+            const rpc = new OpenMowerRpc(client, config.mqtt_prefix);
             const mower = {
               id: config.id,
               name: config.name,
               description: config.description,
               mqttClient: client,
               mqttPrefix: config.mqtt_prefix,
+              rpc,
               state: stateDefaults,
               map: mapDefaults,
             };
@@ -77,6 +82,7 @@ export const useMowersStore = create<MowersStore>()(
           for (const clientMower of clientMowers) {
             client.subscribe(clientMower.prefix + 'robot_state/json');
             client.subscribe(clientMower.prefix + 'map/json');
+            client.subscribe(clientMower.prefix + 'rpc/response');
           }
         });
 
@@ -95,6 +101,8 @@ export const useMowersStore = create<MowersStore>()(
                 state.mowers[idx].map =
                   'areas' in json ? mapSchema.parse(json) : convertLegacyMap(legacyMapSchema.parse(json));
               });
+            } else if (partialTopic === 'rpc/response') {
+              mowers[idx].rpc._handleResponse(payload.toString());
             }
           }
         });
