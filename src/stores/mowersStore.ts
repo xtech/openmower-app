@@ -7,6 +7,7 @@ import {useConfigStore} from './configStore';
 import {
   Area,
   AreaType,
+  capabilitiesSchema,
   LegacyArea,
   LegacyMapData,
   legacyMapSchema,
@@ -14,6 +15,7 @@ import {
   mapSchema,
   stateDefaults,
   stateSchema,
+  type Capabilities,
   type MapData,
   type State,
 } from './schemas';
@@ -25,6 +27,7 @@ interface Mower {
   mqttClient: MqttClient;
   mqttPrefix: string;
   rpc: OpenMowerRpc;
+  capabilities: Capabilities;
   state: State;
   map: MapData;
 }
@@ -65,6 +68,7 @@ export const useMowersStore = create<MowersStore>()(
               mqttClient: client,
               mqttPrefix: config.mqtt_prefix,
               rpc,
+              capabilities: {},
               state: stateDefaults,
               map: mapDefaults,
             };
@@ -80,6 +84,7 @@ export const useMowersStore = create<MowersStore>()(
         client.on('connect', () => {
           console.log('connected');
           for (const clientMower of clientMowers) {
+            client.subscribe(clientMower.prefix + 'capabilities/json');
             client.subscribe(clientMower.prefix + 'robot_state/json');
             client.subscribe(clientMower.prefix + 'map/json');
             client.subscribe(clientMower.prefix + 'rpc/response');
@@ -103,6 +108,10 @@ export const useMowersStore = create<MowersStore>()(
               });
             } else if (partialTopic === 'rpc/response') {
               mowers[idx].rpc._handleResponse(payload.toString());
+            } else if (partialTopic === 'capabilities/json') {
+              set((state) => {
+                state.mowers[idx].capabilities = capabilitiesSchema.parse(JSON.parse(payload.toString()));
+              });
             }
           }
         });
