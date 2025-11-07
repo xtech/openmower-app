@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx -y tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {type MethodObject} from '@open-rpc/meta-schema';
+import {type ContentDescriptorObject, type MethodObject} from '@open-rpc/meta-schema';
 import {parseOpenRPCDocument} from '@open-rpc/schema-utils-js';
 import OpenRPCTypings from '@open-rpc/typings';
 
@@ -39,6 +39,13 @@ function extractMethodTypings(methods: MethodObject[], typings: OpenRPCTypings):
   );
 }
 
+function methodReturnsNothing(method: MethodObject): boolean {
+  if (!method.result) return true;
+  const schema = (method.result as ContentDescriptorObject).schema;
+  if (typeof schema !== 'object') return false;
+  return schema.type === 'null';
+}
+
 function buildObject(node: any, methodTypings: MethodTypings, topLevel = false): string[] {
   const lines: string[] = [];
 
@@ -52,12 +59,13 @@ function buildObject(node: any, methodTypings: MethodTypings, topLevel = false):
     if (method) {
       const summary = ['/**', `* ${method.summary}`, '*/'];
       const types = methodTypings[method.name];
+      const resultType = methodReturnsNothing(method) ? 'Promise<void>' : types.result;
       const call =
         method.params.length === 0
-          ? `async (): ${types.result} => this.call('${method.name}')`
+          ? `async (): ${resultType} => this.call('${method.name}')`
           : method.paramStructure === 'by-name'
-          ? `async (args: {${types.params}}): ${types.result} => this.call('${method.name}', args)`
-          : `async (...args: [${types.params}]): ${types.result} => this.call('${method.name}', args)`;
+          ? `async (args: {${types.params}}): ${resultType} => this.call('${method.name}', args)`
+          : `async (...args: [${types.params}]): ${resultType} => this.call('${method.name}', args)`;
       if (Object.keys(value).length > 1) {
         // both callable and nested → Object.assign
         const nested = buildObject(value, methodTypings);
