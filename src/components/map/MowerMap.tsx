@@ -29,10 +29,11 @@ import type {BBox} from './types';
 
 interface MowerMapProps {
   mapData: MapData;
+  saveMapToMower: () => Promise<void>;
   sx: SxProps;
 }
 
-export function MowerMap({mapData, sx}: MowerMapProps) {
+export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   const {id, editMode, setEditMode, features, setFeatures, drawWorkflow, setDrawWorkflow} = useMapContext();
   const mapRef = useRef<Map>(null);
   const draw = useMapboxDraw();
@@ -124,7 +125,7 @@ export function MowerMap({mapData, sx}: MowerMapProps) {
         />
         {/* Left controls */}
         {editMode ? (
-          <EditControls areas={areas} />
+          <EditControls areas={areas} saveMapToMower={saveMapToMower} />
         ) : (
           <ControlButton position="top-left" icon={PencilIcon} title="Edit mode" onClick={() => setEditMode(true)} />
         )}

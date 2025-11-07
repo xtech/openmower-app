@@ -1,13 +1,17 @@
 import type {Area, AreaProps, MapData} from '@/stores/schemas';
+import type {AreaFeature} from '@/types/geojson';
 import {
   datumToRelative,
   pointsToAbsolute,
+  pointsToRelative,
   pointToAbsolute,
+  type AbsolutePoint,
   type RelativePoint,
   type UtmPoint,
 } from '@/utils/coordinates';
 import area from '@turf/area';
 import type {Feature, FeatureCollection, Point, Polygon} from 'geojson';
+import {produce} from 'immer';
 
 function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps> {
   return {
@@ -18,6 +22,14 @@ function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps>
       type: 'Polygon',
       coordinates: [pointsToAbsolute(area.outline, datum)],
     },
+  };
+}
+
+function featureToArea(feature: AreaFeature, datum: UtmPoint): Area {
+  return {
+    id: feature.id as string,
+    properties: feature.properties,
+    outline: pointsToRelative(feature.geometry.coordinates[0] as AbsolutePoint[], datum),
   };
 }
 
@@ -51,6 +63,17 @@ export function mapToFeatures(map?: MapData): FeatureCollection {
       ...map.areas.map((area) => areaToFeature(area, datum)),
     ],
   };
+}
+
+export function featuresToMap(map: MapData, features: FeatureCollection) {
+  const datum = convertDatum(map);
+  return produce(map, (draft) => {
+    draft.areas = features.features
+      .filter((feature) => feature.geometry.type === 'Polygon')
+      .map((feature) => featureToArea(feature as AreaFeature, datum));
+
+    // TODO: Convert docking stations (but we don't say the orientation, so we can't convert them back).
+  });
 }
 
 export function getFeatureDescription(feature: Feature) {

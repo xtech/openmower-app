@@ -5,13 +5,13 @@ import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
 import {useMapboxDraw, useMapContext} from '@/contexts/MapContext';
 import {outerCardStyles} from '@/lib/cardStyles';
 import {useSelectedMower} from '@/stores/mowersStore';
-import {mapToFeatures} from '@/utils/area-converter';
+import {featuresToMap, mapToFeatures} from '@/utils/area-converter';
 import {area as turfArea} from '@turf/area';
 
 import {AreaProps} from '@/stores/schemas';
 import {CheckCircle as CheckIcon, LocationOn as LocationIcon, PlayArrow as PlayIcon} from '@mui/icons-material';
 import {Feature, Polygon} from 'geojson';
-import {useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 
 export function formatAreaSize(squareMeters: number): string {
   return `${Math.round(squareMeters)}m²`;
@@ -24,6 +24,7 @@ export default function MapPage() {
   // In display mode, send the features directly to the map.
   // In edit mode, the draw controll will take care of updates.
   const mapData = useSelectedMower((s) => s?.map);
+  const rpc = useSelectedMower((s) => s?.rpc);
   useEffect(() => {
     if (draw && mapData && !editMode) {
       const features = mapToFeatures(mapData);
@@ -31,6 +32,15 @@ export default function MapPage() {
       setFeatures(features);
     }
   }, [draw, mapData, editMode, setFeatures]);
+
+  const saveMapToMower = useCallback(async () => {
+    try {
+      await rpc?.map.replace(featuresToMap(mapData!, features));
+      // TODO: Show success toast
+    } catch (error) {
+      console.error('Error saving map to mower:', error);
+    }
+  }, [rpc, mapData, features]);
 
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
@@ -53,6 +63,7 @@ export default function MapPage() {
       <PageContent sx={{flex: 1, position: 'relative'}}>
         <MowerMap
           mapData={mapData}
+          saveMapToMower={saveMapToMower}
           sx={{...outerCardStyles, backgroundColor: 'black', backdropFilter: 'unset', height: '100%'}}
         />
       </PageContent>

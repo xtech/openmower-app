@@ -24,7 +24,13 @@ import {AreaSettingsDialog} from './AreaSettingsDialog';
 import MergeDialog from './MergeDialog';
 import SubtractDialog from './SubtractDialog';
 
-export default function EditControls({areas}: {areas: AreaFeature[]}) {
+export default function EditControls({
+  areas,
+  saveMapToMower,
+}: {
+  areas: AreaFeature[];
+  saveMapToMower: () => Promise<void>;
+}) {
   const {setEditMode, trashEnabled, setFeatures, drawMode, setDrawWorkflow} = useMapContext();
   const draw = useMapboxDraw();
   const selectedIds = useMapSelection();
@@ -33,6 +39,11 @@ export default function EditControls({areas}: {areas: AreaFeature[]}) {
   const areaSettingsDialog = useDialog(AreaSettingsDialog);
   const mergeDialog = useDialog(MergeDialog);
   const subtractDialog = useDialog(SubtractDialog);
+
+  const handleSave = useCallback(async () => {
+    await saveMapToMower();
+    setEditMode(false);
+  }, [saveMapToMower, setEditMode]);
 
   const updateAreaGeometry = useCallback(
     (targetId: string, geometry: Geometry | undefined, removeOtherAreas: boolean = false) => {
@@ -79,7 +90,7 @@ export default function EditControls({areas}: {areas: AreaFeature[]}) {
         icon={SaveIcon}
         title="Save"
         style={{color: theme.palette.success.main}}
-        onClick={() => setEditMode(false)}
+        onClick={handleSave}
       />
       <ControlButton
         position="top-left"
