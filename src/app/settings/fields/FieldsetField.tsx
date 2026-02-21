@@ -1,6 +1,6 @@
 import {Box, Typography} from '@mui/material';
-import {FieldRenderer} from './FieldRenderer';
-import type {FieldsetField as FieldsetFieldType} from './types';
+import {FieldRenderer} from '../FieldRenderer';
+import type {FieldsetField as FieldsetFieldType} from '../types';
 
 interface FieldsetFieldProps {
   field: FieldsetFieldType;

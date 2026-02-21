@@ -1,7 +1,7 @@
 import {Box, TextField as MuiTextField} from '@mui/material';
-import {SettingsFieldWrapper} from './SettingsFieldWrapper';
-import {useSettingsField} from './useSettingsField';
-import type {NumberField as NumberFieldType} from './types';
+import {SettingsFieldWrapper} from '../SettingsFieldWrapper';
+import type {NumberField as NumberFieldType} from '../types';
+import {useSettingsField} from '../useSettingsField';
 
 interface NumberFieldProps {
   field: NumberFieldType;

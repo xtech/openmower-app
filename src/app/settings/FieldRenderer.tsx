@@ -1,9 +1,9 @@
 import {Box, Typography} from '@mui/material';
-import {CheckboxField} from './CheckboxField';
-import {FieldsetField} from './FieldsetField';
-import {NumberField} from './NumberField';
-import {RadioField} from './RadioField';
-import {TextField} from './TextField';
+import {CheckboxField} from './fields/CheckboxField';
+import {FieldsetField} from './fields/FieldsetField';
+import {NumberField} from './fields/NumberField';
+import {RadioField} from './fields/RadioField';
+import {TextField} from './fields/TextField';
 import type {BaseField, Field} from './types';
 
 interface FieldRendererProps {

@@ -1,7 +1,7 @@
 import {Box, TextField as MuiTextField} from '@mui/material';
-import {SettingsFieldWrapper} from './SettingsFieldWrapper';
-import {useSettingsField} from './useSettingsField';
-import type {TextField as TextFieldType} from './types';
+import {SettingsFieldWrapper} from '../SettingsFieldWrapper';
+import type {TextField as TextFieldType} from '../types';
+import {useSettingsField} from '../useSettingsField';
 
 interface TextFieldProps {
   field: TextFieldType;

@@ -10,7 +10,7 @@ import merge from 'lodash.merge';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {FormProvider, useForm, useWatch} from 'react-hook-form';
 import {parse as parseYaml} from 'yaml';
-import {FieldsetField} from './FieldsetField';
+import {FieldsetField} from './fields/FieldsetField';
 import {SettingsContext} from './SettingsContext';
 import {getNestedValue, setNestedValue} from './settingsUtils';
 import type {Field, FieldsetField as FieldsetFieldType} from './types';

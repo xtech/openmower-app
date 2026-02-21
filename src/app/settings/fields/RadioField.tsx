@@ -1,15 +1,7 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Typography,
-} from '@mui/material';
-import {SettingsFieldWrapper} from './SettingsFieldWrapper';
-import {useSettingsField} from './useSettingsField';
-import type {RadioField as RadioFieldType} from './types';
+import {FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, Typography} from '@mui/material';
+import {SettingsFieldWrapper} from '../SettingsFieldWrapper';
+import type {RadioField as RadioFieldType} from '../types';
+import {useSettingsField} from '../useSettingsField';
 
 interface RadioFieldProps {
   field: RadioFieldType;
@@ -28,14 +20,8 @@ export function RadioField({field, path}: RadioFieldProps) {
     <SettingsFieldWrapper path={path} currentValue={controllerField.value} formatDefaultValue={formatDefaultValue}>
       <FormControl component="fieldset" sx={{mb: 3, width: '100%'}}>
         <FormLabel component="legend">{field.label}</FormLabel>
-        {field.description && (
-          <FormHelperText sx={{mt: 0.5, mb: 1}}>{field.description}</FormHelperText>
-        )}
-        <RadioGroup
-          name={field.name}
-          value={controllerField.value ?? ''}
-          onChange={(e) => onChange(e.target.value)}
-        >
+        {field.description && <FormHelperText sx={{mt: 0.5, mb: 1}}>{field.description}</FormHelperText>}
+        <RadioGroup name={field.name} value={controllerField.value ?? ''} onChange={(e) => onChange(e.target.value)}>
           {field.options.map((option) => (
             <div key={option.value}>
               <FormControlLabel value={option.value} control={<Radio />} label={option.label} />
