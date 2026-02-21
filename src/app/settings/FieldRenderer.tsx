@@ -9,33 +9,33 @@ import type {BaseField, Field} from './types';
 interface FieldRendererProps {
   field: Field;
   level?: number;
+  pathPrefix: string;
 }
 
-export function FieldRenderer({field, level = 0}: FieldRendererProps) {
-  // Don't render invisible fields
+export function FieldRenderer({field, level = 0, pathPrefix}: FieldRendererProps) {
   if (field.isVisible === false) {
     return null;
   }
 
-  // Handle by inputType for more reliable field rendering
+  const path = `${pathPrefix}.${field.name}`;
+
   switch (field.inputType) {
     case 'fieldset':
-      return <FieldsetField field={field} level={level} />;
+      return <FieldsetField field={field} level={level} pathPrefix={path} />;
 
     case 'radio':
-      return <RadioField field={field} />;
+      return <RadioField field={field} path={path} />;
 
     case 'checkbox':
-      return <CheckboxField field={field} />;
+      return <CheckboxField field={field} path={path} />;
 
     case 'number':
-      return <NumberField field={field} />;
+      return <NumberField field={field} path={path} />;
 
     case 'text':
-      return <TextField field={field} />;
+      return <TextField field={field} path={path} />;
 
     default:
-      // Fallback for unknown field types
       const unknownField = field as BaseField;
       return (
         <Box sx={{mb: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1}}>

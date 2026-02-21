@@ -48,6 +48,7 @@
     "react": "19.1.0",
     "react-dialog-async": "^2.6.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.71.2",
     "sweepline-intersections": "^2.0.1",
     "use-immer": "^0.11.0",
     "utm": "^1.1.1",

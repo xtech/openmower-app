@@ -5,27 +5,24 @@ import type {FieldsetField as FieldsetFieldType} from './types';
 interface FieldsetFieldProps {
   field: FieldsetFieldType;
   level?: number;
+  pathPrefix: string;
 }
 
-export function FieldsetField({field, level = 0}: FieldsetFieldProps) {
-  // Top-level fieldsets are handled by the accordion, so we only render nested ones here
+export function FieldsetField({field, level = 0, pathPrefix}: FieldsetFieldProps) {
   const isTopLevel = level === 0;
 
   if (isTopLevel) {
     return (
       <>
         {field.fields.map((subField) => (
-          <FieldRenderer key={subField.name} field={subField} level={level + 1} />
+          <FieldRenderer key={subField.name} field={subField} level={level + 1} pathPrefix={pathPrefix} />
         ))}
       </>
     );
   }
 
-  // Calculate the sticky top position based on nesting level
-  // Level 1 (first nested): 64px (accordion header height)
-  // Level 2+: 64px + 40px per additional level
   const stickyTop = 64 + (level - 1) * 40;
-  const zIndex = 100 - level; // Higher levels have higher z-index
+  const zIndex = 100 - level;
 
   return (
     <Box
@@ -60,7 +57,7 @@ export function FieldsetField({field, level = 0}: FieldsetFieldProps) {
       )}
       <Box sx={{pl: 1}}>
         {field.fields.map((subField) => (
-          <FieldRenderer key={subField.name} field={subField} level={level + 1} />
+          <FieldRenderer key={subField.name} field={subField} level={level + 1} pathPrefix={pathPrefix} />
         ))}
       </Box>
     </Box>
