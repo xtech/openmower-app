@@ -3,8 +3,9 @@
 import {useSelectedMower} from '@/stores/mowersStore';
 import JsonSchemaDereferencer from '@json-schema-tools/dereferencer';
 import {ExpandMore as ExpandMoreIcon} from '@mui/icons-material';
-import {Accordion, AccordionDetails, AccordionSummary, Box, CircularProgress, Paper, Typography} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Box, CircularProgress, FormControlLabel, Paper, Switch, Typography} from '@mui/material';
 import {createHeadlessForm} from '@remoteoss/json-schema-form';
+import type {ValidationResult} from '@remoteoss/json-schema-form';
 import mergeAllOf from 'json-schema-merge-allof';
 import merge from 'lodash.merge';
 import {useCallback, useEffect, useRef, useState} from 'react';
@@ -12,7 +13,7 @@ import {FormProvider, useForm, useWatch} from 'react-hook-form';
 import {parse as parseYaml} from 'yaml';
 import {FieldsetField} from './fields/FieldsetField';
 import {SettingsContext} from './SettingsContext';
-import {getNestedValue, setNestedValue} from './settingsUtils';
+import {deepMergeNoArrayMerge, getNestedValue, setNestedValue} from './settingsUtils';
 import type {Field, FieldsetField as FieldsetFieldType} from './types';
 
 // TODO: Make this dynamic.
@@ -21,6 +22,7 @@ const RELEVANT_DEFAULTS = ['defaults.yaml', 'boards/v1.yaml', 'mowers/YardForce5
 interface FormState {
   fields: Field[];
   defaults: Record<string, unknown>;
+  handleValidation: (value: Record<string, unknown>) => ValidationResult;
 }
 
 export function SettingsForm() {
@@ -60,9 +62,13 @@ export function SettingsForm() {
           throw new Error('Dereferenced schema is not an object');
         }
         const mergedSchema = mergeAllOf(dereferencedSchema);
-        const {fields: formFields} = createHeadlessForm(mergedSchema);
+        const {fields: formFields, handleValidation} = createHeadlessForm(mergedSchema);
 
-        setFormState({fields: formFields as unknown as Field[], defaults});
+        setFormState({
+          fields: formFields as unknown as Field[],
+          defaults,
+          handleValidation: handleValidation as (value: Record<string, unknown>) => ValidationResult,
+        });
         methods.reset(defaults);
         confirmedFieldsRef.current = new Set<string>();
         setConfirmedFields(new Set<string>());
@@ -95,9 +101,8 @@ export function SettingsForm() {
       });
       const defaultValue = formState ? getNestedValue(formState.defaults, path) : undefined;
       methods.resetField(path as never, {defaultValue: defaultValue as never});
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
-    [formState],
+    [formState, methods],
   );
 
   /** Returns a nested object containing only the confirmed (pinned) field values. */
@@ -178,7 +183,12 @@ export function SettingsForm() {
             </Accordion>
           ))}
 
-          <ConfirmedValuesDebug confirmedFieldsRef={confirmedFieldsRef} getConfirmedValues={getConfirmedValues} />
+          <ConfirmedValuesDebug
+            confirmedFieldsRef={confirmedFieldsRef}
+            getConfirmedValues={getConfirmedValues}
+            defaults={formState.defaults}
+            handleValidation={formState.handleValidation}
+          />
         </Box>
       </FormProvider>
     </SettingsContext.Provider>
@@ -188,20 +198,37 @@ export function SettingsForm() {
 interface ConfirmedValuesDebugProps {
   confirmedFieldsRef: React.RefObject<Set<string>>;
   getConfirmedValues: () => Record<string, unknown>;
+  defaults: Record<string, unknown>;
+  handleValidation: (value: Record<string, unknown>) => ValidationResult;
 }
 
-function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues}: ConfirmedValuesDebugProps) {
+function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults, handleValidation}: ConfirmedValuesDebugProps) {
   // Re-render whenever any watched value changes so the panel stays live.
   useWatch({});
+
+  const [showMerged, setShowMerged] = useState(false);
 
   const confirmed = getConfirmedValues();
   const isEmpty = confirmedFieldsRef.current.size === 0;
 
+  const merged = deepMergeNoArrayMerge(defaults, confirmed);
+  const displayed = showMerged ? merged : confirmed;
+
+  const {formErrors} = handleValidation(merged);
+
   return (
     <Paper variant="outlined" sx={{mt: 4, p: 2, bgcolor: 'background.default'}}>
-      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-        Config to be persisted:
-      </Typography>
+      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1}}>
+        <Typography variant="subtitle2" color="text.secondary">
+          Config to be persisted:
+        </Typography>
+        <FormControlLabel
+          control={<Switch size="small" checked={showMerged} onChange={(e) => setShowMerged(e.target.checked)} />}
+          label={<Typography variant="caption">Show merged with defaults</Typography>}
+          labelPlacement="start"
+          sx={{m: 0, gap: 1}}
+        />
+      </Box>
       <Box
         component="pre"
         sx={{
@@ -213,8 +240,28 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues}: Confirme
           color: isEmpty ? 'text.disabled' : 'text.primary',
         }}
       >
-        {isEmpty ? '(no changes)' : JSON.stringify(confirmed, null, 2)}
+        {isEmpty && !showMerged ? '(no changes)' : JSON.stringify(displayed, null, 2)}
       </Box>
+      {formErrors && Object.keys(formErrors).length > 0 && (
+        <Box sx={{mt: 2}}>
+          <Typography variant="subtitle2" color="error" gutterBottom>
+            Validation errors:
+          </Typography>
+          <Box
+            component="pre"
+            sx={{
+              m: 0,
+              fontSize: '0.75rem',
+              fontFamily: 'monospace',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-all',
+              color: 'error.main',
+            }}
+          >
+            {JSON.stringify(formErrors, null, 2)}
+          </Box>
+        </Box>
+      )}
     </Paper>
   );
 }

@@ -26,3 +26,33 @@ export function setNestedValue(obj: Record<string, unknown>, path: string, value
 export function deepEqual(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
+
+/**
+ * Deep merge where arrays are replaced wholesale (not merged element-by-element).
+ */
+export function deepMergeNoArrayMerge(
+  target: Record<string, unknown>,
+  source: Record<string, unknown>,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {...target};
+  for (const key of Object.keys(source)) {
+    const srcVal = source[key];
+    const tgtVal = result[key];
+    if (
+      srcVal !== null &&
+      typeof srcVal === 'object' &&
+      !Array.isArray(srcVal) &&
+      tgtVal !== null &&
+      typeof tgtVal === 'object' &&
+      !Array.isArray(tgtVal)
+    ) {
+      result[key] = deepMergeNoArrayMerge(
+        tgtVal as Record<string, unknown>,
+        srcVal as Record<string, unknown>,
+      );
+    } else {
+      result[key] = srcVal;
+    }
+  }
+  return result;
+}
