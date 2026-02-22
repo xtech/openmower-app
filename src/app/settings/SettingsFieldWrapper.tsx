@@ -1,5 +1,5 @@
 import {RestartAlt as RestartAltIcon} from '@mui/icons-material';
-import {Box, IconButton, Tooltip} from '@mui/material';
+import {Box, FormHelperText, IconButton, Tooltip} from '@mui/material';
 import {useSettingsContext} from './SettingsContext';
 import {deepEqual, getNestedValue} from './settingsUtils';
 
@@ -16,7 +16,7 @@ export function SettingsFieldWrapper({
   children,
   formatDefaultValue,
 }: SettingsFieldWrapperProps) {
-  const {defaults, confirmedFields, onFieldReset} = useSettingsContext();
+  const {defaults, confirmedFields, flatFormErrors, onFieldReset} = useSettingsContext();
 
   const isConfirmed = confirmedFields.has(path);
   const defaultValue = getNestedValue(defaults, path);
@@ -24,7 +24,10 @@ export function SettingsFieldWrapper({
   const isModified = isConfirmed && !deepEqual(currentValue, defaultValue);
   const isPinnedAtDefault = isConfirmed && deepEqual(currentValue, defaultValue);
 
-  const borderColor = isModified ? 'primary.main' : isPinnedAtDefault ? '#c8e6c9' : 'transparent';
+  const fieldError = isConfirmed ? (flatFormErrors?.[path] ?? null) : null;
+  const hasError = !!fieldError;
+
+  const borderColor = hasError ? 'error.main' : isModified ? 'primary.main' : isPinnedAtDefault ? '#c8e6c9' : 'divider';
 
   const defaultDisplay = formatDefaultValue ? formatDefaultValue(defaultValue) : formatValue(defaultValue);
   const tooltipTitle = isModified
@@ -41,11 +44,18 @@ export function SettingsFieldWrapper({
         gap: 0.5,
         borderLeft: '3px solid',
         borderColor,
-        pl: 1,
+        pl: 2,
         transition: 'border-color 0.15s',
       }}
     >
-      <Box sx={{flex: 1}}>{children}</Box>
+      <Box sx={{flex: 1}}>
+        {children}
+        {hasError && (
+          <FormHelperText error sx={{mt: -1, mb: 1, mx: 0}}>
+            {fieldError}
+          </FormHelperText>
+        )}
+      </Box>
       <Tooltip title={tooltipTitle} placement="left">
         <IconButton
           size="small"

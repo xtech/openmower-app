@@ -9,7 +9,7 @@ interface CheckboxFieldProps {
 }
 
 export function CheckboxField({field, path}: CheckboxFieldProps) {
-  const {controllerField, onChange} = useSettingsField(path, false);
+  const {controllerField, hasError, onChange} = useSettingsField(path, false);
 
   return (
     <SettingsFieldWrapper path={path} currentValue={controllerField.value}>
@@ -23,6 +23,7 @@ export function CheckboxField({field, path}: CheckboxFieldProps) {
             />
           }
           label={field.label}
+          sx={hasError ? {color: 'error.main'} : undefined}
         />
         {field.description && <FormHelperText sx={{ml: 4, mt: -1}}>{field.description}</FormHelperText>}
       </Box>

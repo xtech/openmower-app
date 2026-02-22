@@ -29,8 +29,6 @@ export function FieldsetField({field, level = 0, pathPrefix}: FieldsetFieldProps
       sx={{
         mb: 3,
         pl: 2,
-        borderLeft: '2px solid',
-        borderColor: 'divider',
       }}
     >
       <Typography
@@ -43,9 +41,9 @@ export function FieldsetField({field, level = 0, pathPrefix}: FieldsetFieldProps
           bgcolor: 'background.default',
           py: 1,
           zIndex,
-          ml: -2,
+          ml: -3,
           mr: -1,
-          px: 2,
+          px: 3,
         }}
       >
         {field.label}
@@ -55,7 +53,7 @@ export function FieldsetField({field, level = 0, pathPrefix}: FieldsetFieldProps
           {field.description}
         </Typography>
       )}
-      <Box sx={{pl: 1}}>
+      <Box sx={{pl: 2}}>
         {field.fields.map((subField) => (
           <FieldRenderer key={subField.name} field={subField} level={level + 1} pathPrefix={pathPrefix} />
         ))}

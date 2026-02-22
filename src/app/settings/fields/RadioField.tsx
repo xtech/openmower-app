@@ -9,7 +9,7 @@ interface RadioFieldProps {
 }
 
 export function RadioField({field, path}: RadioFieldProps) {
-  const {controllerField, onChange} = useSettingsField(path);
+  const {controllerField, hasError, onChange} = useSettingsField(path);
 
   const formatDefaultValue = (value: unknown) => {
     const match = field.options.find((o) => o.value === value);
@@ -19,7 +19,7 @@ export function RadioField({field, path}: RadioFieldProps) {
   return (
     <SettingsFieldWrapper path={path} currentValue={controllerField.value} formatDefaultValue={formatDefaultValue}>
       <FormControl component="fieldset" sx={{mb: 3, width: '100%'}}>
-        <FormLabel component="legend">{field.label}</FormLabel>
+        <FormLabel component="legend" sx={hasError ? {color: 'error.main', '&.Mui-focused': {color: 'error.main'}} : undefined}>{field.label}</FormLabel>
         {field.description && <FormHelperText sx={{mt: 0.5, mb: 1}}>{field.description}</FormHelperText>}
         <RadioGroup name={field.name} value={controllerField.value ?? ''} onChange={(e) => onChange(e.target.value)}>
           {field.options.map((option) => (

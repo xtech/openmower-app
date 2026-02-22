@@ -9,7 +9,7 @@ interface NumberFieldProps {
 }
 
 export function NumberField({field, path}: NumberFieldProps) {
-  const {controllerField, onChange} = useSettingsField(path);
+  const {controllerField, hasError, onChange} = useSettingsField(path);
 
   const unit = field['x-unit'] ? ` (${field['x-unit']})` : '';
 
@@ -37,6 +37,13 @@ export function NumberField({field, path}: NumberFieldProps) {
               sx: {whiteSpace: 'pre-wrap'},
             },
           }}
+          sx={hasError ? {
+            '& .MuiOutlinedInput-root fieldset': {borderColor: 'error.main'},
+            '& .MuiOutlinedInput-root:hover fieldset': {borderColor: 'error.main'},
+            '& .MuiOutlinedInput-root.Mui-focused fieldset': {borderColor: 'error.main'},
+            '& .MuiInputLabel-root': {color: 'error.main'},
+            '& .MuiInputLabel-root.Mui-focused': {color: 'error.main'},
+          } : undefined}
         />
       </Box>
     </SettingsFieldWrapper>

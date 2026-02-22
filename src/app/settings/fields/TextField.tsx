@@ -9,7 +9,7 @@ interface TextFieldProps {
 }
 
 export function TextField({field, path}: TextFieldProps) {
-  const {controllerField, onChange} = useSettingsField(path);
+  const {controllerField, hasError, onChange} = useSettingsField(path);
 
   return (
     <SettingsFieldWrapper path={path} currentValue={controllerField.value}>
@@ -27,6 +27,13 @@ export function TextField({field, path}: TextFieldProps) {
               sx: {whiteSpace: 'pre-wrap'},
             },
           }}
+          sx={hasError ? {
+            '& .MuiOutlinedInput-root fieldset': {borderColor: 'error.main'},
+            '& .MuiOutlinedInput-root:hover fieldset': {borderColor: 'error.main'},
+            '& .MuiOutlinedInput-root.Mui-focused fieldset': {borderColor: 'error.main'},
+            '& .MuiInputLabel-root': {color: 'error.main'},
+            '& .MuiInputLabel-root.Mui-focused': {color: 'error.main'},
+          } : undefined}
         />
       </Box>
     </SettingsFieldWrapper>

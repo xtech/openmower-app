@@ -3,7 +3,7 @@
 import {useSelectedMower} from '@/stores/mowersStore';
 import JsonSchemaDereferencer from '@json-schema-tools/dereferencer';
 import {ExpandMore as ExpandMoreIcon} from '@mui/icons-material';
-import {Accordion, AccordionDetails, AccordionSummary, Box, CircularProgress, FormControlLabel, Paper, Switch, Typography} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Box, Button, CircularProgress, FormControlLabel, Paper, Switch, Typography} from '@mui/material';
 import {createHeadlessForm} from '@remoteoss/json-schema-form';
 import type {ValidationResult} from '@remoteoss/json-schema-form';
 import mergeAllOf from 'json-schema-merge-allof';
@@ -37,7 +37,7 @@ export function SettingsForm() {
   // Using a ref for the authoritative set (for getConfirmedValues) and state for re-renders.
   const confirmedFieldsRef = useRef(new Set<string>());
   const [confirmedFields, setConfirmedFields] = useState(new Set<string>());
-
+  const [flatFormErrors, setFlatFormErrors] = useState<Record<string, string> | null>(null);
   useEffect(() => {
     async function initializeForm() {
       if (!rpc) {
@@ -64,11 +64,12 @@ export function SettingsForm() {
         const mergedSchema = mergeAllOf(dereferencedSchema);
         const {fields: formFields, handleValidation} = createHeadlessForm(mergedSchema);
 
-        setFormState({
+        const newFormState = {
           fields: formFields as unknown as Field[],
           defaults,
           handleValidation: handleValidation as (value: Record<string, unknown>) => ValidationResult,
-        });
+        };
+        setFormState(newFormState);
         methods.reset(defaults);
         confirmedFieldsRef.current = new Set<string>();
         setConfirmedFields(new Set<string>());
@@ -133,20 +134,39 @@ export function SettingsForm() {
 
   const topLevelFieldsets = formState.fields.filter((field) => field.type === 'fieldset') as FieldsetFieldType[];
 
+  const hasErrors = !!flatFormErrors && Object.keys(flatFormErrors).length > 0;
+  const hasChanges = confirmedFields.size > 0;
+
   return (
     <SettingsContext.Provider
       value={{
         defaults: formState.defaults,
         confirmedFields,
+        flatFormErrors,
         onFieldChange,
         onFieldReset,
       }}
     >
       <FormProvider {...methods}>
+        <FormErrorsSync
+          formState={formState}
+          confirmedFieldsRef={confirmedFieldsRef}
+          onErrors={setFlatFormErrors}
+        />
         <Box sx={{p: {xs: 2, md: 3}}}>
-          <Typography variant="h4" gutterBottom>
-            Settings
-          </Typography>
+          <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
+            <Typography variant="h4">Settings</Typography>
+            <Button
+              variant="contained"
+              disabled={!hasChanges || hasErrors}
+              onClick={() => {
+                // TODO: wire up save
+                console.log('save', getConfirmedValues());
+              }}
+            >
+              Save
+            </Button>
+          </Box>
 
           {topLevelFieldsets.map((fieldset) => (
             <Accordion
@@ -187,7 +207,7 @@ export function SettingsForm() {
             confirmedFieldsRef={confirmedFieldsRef}
             getConfirmedValues={getConfirmedValues}
             defaults={formState.defaults}
-            handleValidation={formState.handleValidation}
+            flatFormErrors={flatFormErrors}
           />
         </Box>
       </FormProvider>
@@ -199,10 +219,54 @@ interface ConfirmedValuesDebugProps {
   confirmedFieldsRef: React.RefObject<Set<string>>;
   getConfirmedValues: () => Record<string, unknown>;
   defaults: Record<string, unknown>;
-  handleValidation: (value: Record<string, unknown>) => ValidationResult;
+  flatFormErrors: Record<string, string> | null;
 }
 
-function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults, handleValidation}: ConfirmedValuesDebugProps) {
+interface FormErrorsSyncProps {
+  formState: FormState;
+  confirmedFieldsRef: React.RefObject<Set<string>>;
+  onErrors: (errors: Record<string, string> | null) => void;
+}
+
+function FormErrorsSync({formState, confirmedFieldsRef, onErrors}: FormErrorsSyncProps) {
+  const allValues = useWatch({}) as Record<string, unknown>;
+
+  const confirmedNested: Record<string, unknown> = {};
+  for (const path of confirmedFieldsRef.current) {
+    setNestedValue(confirmedNested, path, getNestedValue(allValues, path));
+  }
+  const merged = deepMergeNoArrayMerge(formState.defaults, confirmedNested);
+  const {formErrors: errors} = formState.handleValidation(merged);
+
+  let flat: Record<string, string> | null = null;
+  if (errors && Object.keys(errors).length > 0) {
+    flat = {};
+    const f = flat;
+    function flatten(obj: Record<string, unknown>, prefix = '') {
+      for (const key of Object.keys(obj)) {
+        const val = obj[key];
+        const path = prefix ? `${prefix}.${key}` : key;
+        if (typeof val === 'string') {
+          f[path] = val;
+        } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+          flatten(val as Record<string, unknown>, path);
+        }
+      }
+    }
+    flatten(errors as Record<string, unknown>);
+  }
+
+  // Notify parent only when errors actually change (serialized comparison avoids infinite loops)
+  const serialized = JSON.stringify(flat);
+  useEffect(() => {
+    onErrors(flat);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serialized]);
+
+  return null;
+}
+
+function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults, flatFormErrors}: ConfirmedValuesDebugProps) {
   // Re-render whenever any watched value changes so the panel stays live.
   useWatch({});
 
@@ -213,8 +277,6 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults,
 
   const merged = deepMergeNoArrayMerge(defaults, confirmed);
   const displayed = showMerged ? merged : confirmed;
-
-  const {formErrors} = handleValidation(merged);
 
   return (
     <Paper variant="outlined" sx={{mt: 4, p: 2, bgcolor: 'background.default'}}>
@@ -242,7 +304,7 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults,
       >
         {isEmpty && !showMerged ? '(no changes)' : JSON.stringify(displayed, null, 2)}
       </Box>
-      {formErrors && Object.keys(formErrors).length > 0 && (
+      {flatFormErrors && Object.keys(flatFormErrors).length > 0 && (
         <Box sx={{mt: 2}}>
           <Typography variant="subtitle2" color="error" gutterBottom>
             Validation errors:
@@ -258,7 +320,7 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults,
               color: 'error.main',
             }}
           >
-            {JSON.stringify(formErrors, null, 2)}
+            {JSON.stringify(flatFormErrors, null, 2)}
           </Box>
         </Box>
       )}
