@@ -1,5 +1,7 @@
 import {RestartAlt as RestartAltIcon} from '@mui/icons-material';
 import {Box, FormHelperText, IconButton, Tooltip} from '@mui/material';
+import type {FieldError} from 'react-hook-form';
+import {useFormContext} from 'react-hook-form';
 import {useSettingsContext} from './SettingsContext';
 import {deepEqual, getNestedValue} from './settingsUtils';
 
@@ -16,7 +18,10 @@ export function SettingsFieldWrapper({
   children,
   formatDefaultValue,
 }: SettingsFieldWrapperProps) {
-  const {defaults, confirmedFields, flatFormErrors, onFieldReset} = useSettingsContext();
+  const {defaults, confirmedFields, onFieldReset} = useSettingsContext();
+  const {
+    formState: {errors},
+  } = useFormContext();
 
   const isConfirmed = confirmedFields.has(path);
   const defaultValue = getNestedValue(defaults, path);
@@ -24,10 +29,24 @@ export function SettingsFieldWrapper({
   const isModified = isConfirmed && !deepEqual(currentValue, defaultValue);
   const isPinnedAtDefault = isConfirmed && deepEqual(currentValue, defaultValue);
 
-  const fieldError = isConfirmed ? (flatFormErrors?.[path] ?? null) : null;
-  const hasError = !!fieldError;
+  const fieldErrorObj = getNestedValue(errors, path) as FieldError | undefined;
+  const errorMessage = fieldErrorObj?.message;
 
-  const borderColor = hasError ? 'error.main' : isModified ? 'primary.main' : isPinnedAtDefault ? '#c8e6c9' : 'divider';
+  const hasError = isConfirmed && !!errorMessage;
+
+  const borderColor = hasError
+    ? 'error.main'
+    : isModified
+      ? 'primary.main'
+      : isPinnedAtDefault
+        ? 'success.light'
+        : 'transparent';
+
+  const bgColor = hasError
+    ? 'rgba(244, 67, 54, 0.02)'
+    : isModified
+      ? 'rgba(76, 175, 80, 0.02)'
+      : 'transparent';
 
   const defaultDisplay = formatDefaultValue ? formatDefaultValue(defaultValue) : formatValue(defaultValue);
   const tooltipTitle = isModified
@@ -45,30 +64,37 @@ export function SettingsFieldWrapper({
         borderLeft: '3px solid',
         borderColor,
         pl: 2,
-        transition: 'border-color 0.15s',
+        py: 0.5,
+        borderRadius: '0 8px 8px 0',
+        bgcolor: bgColor,
+        transition: 'all 0.2s ease',
       }}
     >
       <Box sx={{flex: 1}}>
         {children}
-        {hasError && (
+        {hasError && errorMessage && (
           <FormHelperText error sx={{mt: -1, mb: 1, mx: 0}}>
-            {fieldError}
+            {errorMessage}
           </FormHelperText>
         )}
       </Box>
       <Tooltip title={tooltipTitle} placement="left">
-        <IconButton
-          size="small"
-          onClick={() => onFieldReset(path)}
-          sx={{
-            mt: 1,
-            visibility: isConfirmed ? 'visible' : 'hidden',
-            color: isConfirmed ? 'primary.main' : 'action.disabled',
-            '&:hover': {color: 'primary.main'},
-          }}
-        >
-          <RestartAltIcon fontSize="small" />
-        </IconButton>
+        <span>
+          <IconButton
+            size="small"
+            onClick={() => onFieldReset(path)}
+            sx={{
+              mt: 1,
+              opacity: isConfirmed ? 1 : 0,
+              transition: 'opacity 0.15s',
+              color: isModified ? 'primary.main' : 'action.active',
+              '&:hover': {color: 'primary.main', bgcolor: 'primary.main', backgroundColor: 'rgba(76, 175, 80, 0.08)'},
+            }}
+            disabled={!isConfirmed}
+          >
+            <RestartAltIcon fontSize="small" />
+          </IconButton>
+        </span>
       </Tooltip>
     </Box>
   );

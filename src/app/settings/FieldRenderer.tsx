@@ -3,6 +3,7 @@ import {CheckboxField} from './fields/CheckboxField';
 import {FieldsetField} from './fields/FieldsetField';
 import {NumberField} from './fields/NumberField';
 import {RadioField} from './fields/RadioField';
+import {SelectField} from './fields/SelectField';
 import {TextField} from './fields/TextField';
 import type {BaseField, Field} from './types';
 
@@ -26,6 +27,9 @@ export function FieldRenderer({field, level = 0, pathPrefix}: FieldRendererProps
     case 'radio':
       return <RadioField field={field} path={path} />;
 
+    case 'select':
+      return <SelectField field={field} path={path} />;
+
     case 'checkbox':
       return <CheckboxField field={field} path={path} />;
 
@@ -35,15 +39,16 @@ export function FieldRenderer({field, level = 0, pathPrefix}: FieldRendererProps
     case 'text':
       return <TextField field={field} path={path} />;
 
-    default:
+    default: {
       const unknownField = field as BaseField;
       return (
-        <Box sx={{mb: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1}}>
+        <Box sx={{mb: 2, p: 2, bgcolor: 'grey.100', borderRadius: 2}}>
           <Typography variant="body2" color="text.secondary">
             Unsupported field type: {unknownField.inputType || unknownField.type} (
             {unknownField.label || unknownField.name})
           </Typography>
         </Box>
       );
+    }
   }
 }

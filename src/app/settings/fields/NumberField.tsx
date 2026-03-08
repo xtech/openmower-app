@@ -26,6 +26,7 @@ export function NumberField({field, path}: NumberFieldProps) {
             const parsed = field.jsonType === 'integer' ? parseInt(e.target.value, 10) : parseFloat(e.target.value);
             onChange(isNaN(parsed) ? '' : parsed);
           }}
+          error={hasError}
           helperText={field.description}
           inputProps={{
             min: field.minimum,
@@ -37,13 +38,6 @@ export function NumberField({field, path}: NumberFieldProps) {
               sx: {whiteSpace: 'pre-wrap'},
             },
           }}
-          sx={hasError ? {
-            '& .MuiOutlinedInput-root fieldset': {borderColor: 'error.main'},
-            '& .MuiOutlinedInput-root:hover fieldset': {borderColor: 'error.main'},
-            '& .MuiOutlinedInput-root.Mui-focused fieldset': {borderColor: 'error.main'},
-            '& .MuiInputLabel-root': {color: 'error.main'},
-            '& .MuiInputLabel-root.Mui-focused': {color: 'error.main'},
-          } : undefined}
         />
       </Box>
     </SettingsFieldWrapper>

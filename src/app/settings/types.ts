@@ -36,10 +36,16 @@ export interface TextField extends BaseField {
   inputType: 'text';
 }
 
+export interface SelectField extends BaseField {
+  type: 'select';
+  inputType: 'select';
+  options: FieldOption[];
+}
+
 export interface FieldsetField extends BaseField {
   type: 'fieldset';
   inputType: 'fieldset';
   fields: Field[];
 }
 
-export type Field = RadioField | CheckboxField | NumberField | TextField | FieldsetField;
+export type Field = RadioField | CheckboxField | NumberField | TextField | SelectField | FieldsetField;

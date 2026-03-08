@@ -21,19 +21,13 @@ export function TextField({field, path}: TextFieldProps) {
           label={field.label}
           value={controllerField.value ?? ''}
           onChange={(e) => onChange(e.target.value)}
+          error={hasError}
           helperText={field.description}
           slotProps={{
             formHelperText: {
               sx: {whiteSpace: 'pre-wrap'},
             },
           }}
-          sx={hasError ? {
-            '& .MuiOutlinedInput-root fieldset': {borderColor: 'error.main'},
-            '& .MuiOutlinedInput-root:hover fieldset': {borderColor: 'error.main'},
-            '& .MuiOutlinedInput-root.Mui-focused fieldset': {borderColor: 'error.main'},
-            '& .MuiInputLabel-root': {color: 'error.main'},
-            '& .MuiInputLabel-root.Mui-focused': {color: 'error.main'},
-          } : undefined}
         />
       </Box>
     </SettingsFieldWrapper>

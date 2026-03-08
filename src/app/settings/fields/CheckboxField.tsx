@@ -20,10 +20,10 @@ export function CheckboxField({field, path}: CheckboxFieldProps) {
               checked={!!controllerField.value}
               onChange={(e) => onChange(e.target.checked)}
               name={field.name}
+              color={hasError ? 'error' : 'primary'}
             />
           }
           label={field.label}
-          sx={hasError ? {color: 'error.main'} : undefined}
         />
         {field.description && <FormHelperText sx={{ml: 4, mt: -1}}>{field.description}</FormHelperText>}
       </Box>
