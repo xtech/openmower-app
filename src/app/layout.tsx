@@ -1,5 +1,7 @@
 import {loadAppConfig} from '@/lib/actions';
 import {Box} from '@mui/material';
+
+export const dynamic = 'force-dynamic';
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
 import {ThemeProvider} from '@mui/material/styles';
 import type {Metadata} from 'next';
