@@ -9,5 +9,6 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "json.schemaDownload.enable": true
 }
