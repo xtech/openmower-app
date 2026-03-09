@@ -111,6 +111,9 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         mapStyle={mapStyles[showSatelliteLayer ? 'satellite' : 'white']}
         initialAttributionControl={false}
         maxZoom={25}
+        initialPitchWithRotate={false}
+        dragRotate={false}
+        onLoad={(e) => e.target.touchZoomRotate.disableRotation()}
       >
         <DrawControl
           displayControlsDefault={false}
