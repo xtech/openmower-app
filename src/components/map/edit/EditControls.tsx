@@ -1,4 +1,5 @@
 import {useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
+import {CancelConfirmDialog} from './CancelConfirmDialog';
 import theme from '@/theme';
 import type {AreaFeature} from '@/types/geojson';
 import {removeMiniCoords} from '@/utils/area-utils';
@@ -31,7 +32,7 @@ export default function EditControls({
   areas: AreaFeature[];
   saveMapToMower: () => Promise<void>;
 }) {
-  const {setEditMode, trashEnabled, setFeatures, drawMode, setDrawWorkflow} = useMapContext();
+  const {setEditMode, trashEnabled, setFeatures, drawMode, setDrawWorkflow, hasUnsavedChanges} = useMapContext();
   const draw = useMapboxDraw();
   const selectedIds = useMapSelection();
   const selectedAreas = areas.filter((area) => selectedIds.includes(area.id as string));
@@ -39,11 +40,20 @@ export default function EditControls({
   const areaSettingsDialog = useDialog(AreaSettingsDialog);
   const mergeDialog = useDialog(MergeDialog);
   const subtractDialog = useDialog(SubtractDialog);
+  const cancelConfirmDialog = useDialog(CancelConfirmDialog);
 
   const handleSave = useCallback(async () => {
     await saveMapToMower();
     setEditMode(false);
   }, [saveMapToMower, setEditMode]);
+
+  const handleCancel = useCallback(async () => {
+    if (hasUnsavedChanges) {
+      const confirmed = await cancelConfirmDialog.open();
+      if (!confirmed) return;
+    }
+    setEditMode(false);
+  }, [hasUnsavedChanges, cancelConfirmDialog, setEditMode]);
 
   const updateAreaGeometry = useCallback(
     (targetId: string, geometry: Geometry | undefined, removeOtherAreas: boolean = false) => {
@@ -97,7 +107,7 @@ export default function EditControls({
         icon={CircleXIcon}
         title="Cancel"
         style={{color: theme.palette.error.main}}
-        onClick={() => setEditMode(false)}
+        onClick={handleCancel}
       />
       <ControlButton
         position="top-left"

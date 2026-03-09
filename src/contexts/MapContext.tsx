@@ -1,13 +1,16 @@
 import MapboxDraw, {type DrawMode} from '@mapbox/mapbox-gl-draw';
+import {Draft} from 'immer';
 import {Feature, FeatureCollection} from 'geojson';
 import {useMap as useMapLibreMap} from 'maplibre-react-components';
-import {createContext, Dispatch, SetStateAction, useContext, useEffect, useState} from 'react';
+import {createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState} from 'react';
 import {Updater, useImmer} from 'use-immer';
+
+type SetFeatures = (recipe: FeatureCollection | ((draft: Draft<FeatureCollection>) => void), userChange?: boolean) => void;
 
 interface MapContextType {
   id: string;
   features: FeatureCollection;
-  setFeatures: Updater<FeatureCollection>;
+  setFeatures: SetFeatures;
   editMode: boolean;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   drawMode: DrawMode;
@@ -16,6 +19,7 @@ interface MapContextType {
   setDrawWorkflow: Updater<Workflow | null>;
   trashEnabled: boolean;
   setTrashEnabled: Dispatch<SetStateAction<boolean>>;
+  hasUnsavedChanges: boolean;
 }
 
 interface SplitPolygonWorkflow {
@@ -29,11 +33,21 @@ export const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapContextProvider = ({id, children}: {id: string; children: React.ReactNode}) => {
   // Note that here is where we keep the correct order of features (mapbox-gl-draw doesn't maintain it).
-  const [features, setFeatures] = useImmer<FeatureCollection>({type: 'FeatureCollection', features: []});
+  const [features, setFeaturesImmer] = useImmer<FeatureCollection>({type: 'FeatureCollection', features: []});
   const [editMode, setEditMode] = useState(false);
   const [drawMode, setDrawMode] = useState<DrawMode>(MapboxDraw.constants.modes.STATIC);
   const [drawWorkflow, setDrawWorkflow] = useImmer<Workflow | null>(null);
   const [trashEnabled, setTrashEnabled] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  const setFeatures = useCallback<SetFeatures>(
+    (recipe, userChange = true) => {
+      setFeaturesImmer(recipe as Parameters<typeof setFeaturesImmer>[0]);
+      setHasUnsavedChanges(userChange);
+    },
+    [setFeaturesImmer],
+  );
+
   return (
     <MapContext
       value={{
@@ -48,6 +62,7 @@ export const MapContextProvider = ({id, children}: {id: string; children: React.
         setDrawWorkflow,
         trashEnabled,
         setTrashEnabled,
+        hasUnsavedChanges,
       }}
     >
       {children}

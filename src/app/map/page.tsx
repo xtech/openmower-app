@@ -29,7 +29,7 @@ export default function MapPage() {
     if (draw && mapData && !editMode) {
       const features = mapToFeatures(mapData);
       draw.set(features);
-      setFeatures(features);
+      setFeatures(features, false);
     }
   }, [draw, mapData, editMode, setFeatures]);
 
