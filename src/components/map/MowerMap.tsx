@@ -110,7 +110,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         style={{width: '100%', height: '100%'}}
         mapStyle={mapStyles[showSatelliteLayer ? 'satellite' : 'white']}
         initialAttributionControl={false}
-        maxZoom={24}
+        maxZoom={25}
       >
         <DrawControl
           displayControlsDefault={false}
