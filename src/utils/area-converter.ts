@@ -13,6 +13,19 @@ import area from '@turf/area';
 import type {Feature, FeatureCollection, Point, Polygon} from 'geojson';
 import {produce} from 'immer';
 
+// Remove consecutive duplicate or near-duplicate points (within 1mm) — floating point artifacts from the mower.
+// Compares against the last *kept* point so removal is transitive.
+const DEDUPE_EPSILON = 0.001; // meters
+function dedupePoints(points: RelativePoint[]): RelativePoint[] {
+  return points.reduce<RelativePoint[]>((acc, p) => {
+    const prev = acc[acc.length - 1];
+    if (!prev || Math.abs(p.x - prev.x) >= DEDUPE_EPSILON || Math.abs(p.y - prev.y) >= DEDUPE_EPSILON) {
+      acc.push(p);
+    }
+    return acc;
+  }, []);
+}
+
 function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps> {
   return {
     type: 'Feature',
@@ -20,7 +33,7 @@ function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps>
     properties: area.properties,
     geometry: {
       type: 'Polygon',
-      coordinates: [pointsToAbsolute(area.outline, datum)],
+      coordinates: [pointsToAbsolute(dedupePoints(area.outline), datum)],
     },
   };
 }
