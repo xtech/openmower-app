@@ -1,6 +1,7 @@
 import type {MowerConfig} from '@/components/types';
 import {OpenMowerRpc} from '@/lib/rpc';
 import {generateId} from '@/utils/area-utils';
+import {immerable} from 'immer';
 import mqtt, {MqttClient} from 'mqtt';
 import {create, useStore} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
@@ -24,6 +25,8 @@ import {
 export type MqttStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'offline';
 
 class Mower {
+  [immerable] = true;
+
   readonly id: string;
   readonly name: string;
   readonly description: string;
