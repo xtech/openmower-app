@@ -21,10 +21,13 @@ import {
   type State,
 } from './schemas';
 
+export type MqttStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'offline';
+
 class Mower {
   readonly id: string;
   readonly name: string;
   readonly description: string;
+  readonly mqttUrl: string;
   readonly mqttClient: MqttClient;
   readonly mqttPrefix: string;
   readonly rpc: OpenMowerRpc;
@@ -36,6 +39,7 @@ class Mower {
     this.id = config.id;
     this.name = config.name;
     this.description = config.description;
+    this.mqttUrl = config.mqtt_ws_url;
     this.mqttClient = mqttClient;
     this.mqttPrefix = config.mqtt_prefix;
     this.rpc = new OpenMowerRpc(mqttClient, config.mqtt_prefix);
@@ -49,6 +53,7 @@ class Mower {
 
 interface MowersStore {
   mowers: Mower[];
+  mqttStatuses: Record<string, MqttStatus>;
   selected: number;
   loadMowers: () => void;
 }
@@ -56,6 +61,7 @@ interface MowersStore {
 export const useMowersStore = create<MowersStore>()(
   immer((set, get) => ({
     mowers: [],
+    mqttStatuses: {},
     selected: 0,
     loadMowers: () => {
       for (const oldMower of get().mowers) {
@@ -81,12 +87,32 @@ export const useMowersStore = create<MowersStore>()(
           }
         }
 
-        client.on('error', (error) => {
-          // console.error('MQTT error', error.message);
+        const setMqttStatus = (status: MqttStatus) => {
+          set((state) => {
+            for (const clientMower of clientMowers) {
+              state.mqttStatuses[mowers[clientMower.idx].id] = status;
+            }
+          });
+        };
+
+        client.on('error', () => {
+          setMqttStatus('disconnected');
+        });
+
+        client.on('close', () => {
+          setMqttStatus('disconnected');
+        });
+
+        client.on('offline', () => {
+          setMqttStatus('offline');
+        });
+
+        client.on('reconnect', () => {
+          setMqttStatus('reconnecting');
         });
 
         client.on('connect', () => {
-          console.log('connected');
+          setMqttStatus('connected');
           for (const clientMower of clientMowers) {
             client.subscribe(clientMower.prefix + 'capabilities/json');
             client.subscribe(clientMower.prefix + 'robot_state/json');
