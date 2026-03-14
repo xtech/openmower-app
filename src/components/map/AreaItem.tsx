@@ -30,6 +30,7 @@ export default function AreaItem({
   dragging = false,
   ...props
 }: AreaItemProps & SortableItemProps) {
+  const inactive = area.properties.active === false;
   return (
     <ListItem
       style={style}
@@ -41,6 +42,7 @@ export default function AreaItem({
         borderColor: theme.palette.divider,
         backgroundColor: dragging ? theme.palette.secondary.main : selected ? theme.palette.secondary.dark : undefined,
         color: dragging ? theme.palette.secondary.contrastText : undefined,
+        opacity: inactive ? 0.5 : 1,
         touchAction: 'none',
         '&:last-child': {
           borderBottom: 'none',
