@@ -108,7 +108,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         id={id}
         ref={mapRef}
         style={{width: '100%', height: '100%'}}
-        mapStyle={mapStyles[showSatelliteLayer ? 'satellite' : 'white']}
+        mapStyle={mapStyles[mapData.datum && showSatelliteLayer ? 'satellite' : 'white']}
         initialAttributionControl={false}
         maxZoom={25}
         initialPitchWithRotate={false}
@@ -137,13 +137,15 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         {/* Right controls */}
         <RFullscreenControl />
         <ControlButton position="top-right" icon={FocusIcon} title="Fit to bounds" onClick={() => fitToBounds()} />
-        <ControlButton
-          position="top-right"
-          title="Toggle satellite layer"
-          icon={GlobeIcon}
-          active={showSatelliteLayer}
-          onClick={() => setShowSatelliteLayer(!showSatelliteLayer)}
-        />
+        {mapData.datum && (
+          <ControlButton
+            position="top-right"
+            title="Toggle satellite layer"
+            icon={GlobeIcon}
+            active={showSatelliteLayer}
+            onClick={() => setShowSatelliteLayer(!showSatelliteLayer)}
+          />
+        )}
         <ControlButton
           position="top-right"
           icon={LayoutListIcon}
