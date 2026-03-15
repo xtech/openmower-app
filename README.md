@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Overview
 
-## Getting Started
+This is a completely new app for your OpenMower robotic lawnmower.
 
-First, run the development server:
+At this time, "only" the map editor and some debug information are enabled.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This assumes you're on a recent OpenMowerOS v2 image.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Go to `http://<mower-ip>:5001/compose/openmower` in your browser.
+2. Switch to edit mode.
+3. In the `compose.yaml` editor, add the following lines above the `# Dockge-specific extras shown in the UI` line:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```yaml
+     app:
+       image: ghcr.io/xtech/openmower-app:edge
+       container_name: app
+       ports:
+         - 3000:3000
+       restart: unless-stopped
+   ```
 
-## Learn More
+   Double-check the indentation, `app` should be indented 2 spaces, just like the other containers.
 
-To learn more about Next.js, take a look at the following resources:
+4. Add the new URL:
+   ```yaml
+   x-dockge:
+     urls:
+       - http://${HOSTNAME}:8080
+       - http://${HOSTNAME}:3000
+   ```
+5. Click the `Deploy` button.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can now access the app at `http://<mower-ip>:3000` in your browser.
