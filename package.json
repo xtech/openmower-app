@@ -23,7 +23,7 @@
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
     "@mui/material-nextjs": "^7.3.9",
-    "@remoteoss/json-schema-form": "^1.2.10",
+    "@remoteoss/json-schema-form": "^1.2.11",
     "@turf/area": "^7.3.4",
     "@turf/bbox": "^7.3.4",
     "@turf/boolean-point-in-polygon": "^7.3.4",
@@ -41,19 +41,19 @@
     "json-schema-merge-allof": "^0.8.1",
     "lodash.merge": "^4.6.2",
     "lucide-react": "^0.577.0",
-    "maplibre-gl": "^5.20.1",
+    "maplibre-gl": "^5.21.0",
     "maplibre-react-components": "^0.2.6",
     "mqtt": "^5.15.0",
-    "next": "16.1.6",
+    "next": "16.2.1",
     "react": "19.2.4",
     "react-dialog-async": "^3.2.0",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.71.2",
     "sweepline-intersections": "^2.0.1",
     "use-immer": "^0.11.0",
-    "yaml": "^2.8.2",
+    "yaml": "^2.8.3",
     "zod": "^4.3.6",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -67,7 +67,7 @@
     "@types/react-dom": "19.2.3",
     "@types/utm": "^1.1.4",
     "eslint": "^9.39.4",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.1",
     "typescript": "^5"
   },
   "overrides": {
