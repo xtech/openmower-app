@@ -1,6 +1,7 @@
 import type {MowerConfig} from '@/components/types';
 import {OpenMowerRpc} from '@/lib/rpc';
 import {generateId} from '@/utils/area-utils';
+import {BSON} from 'bson';
 import {immerable} from 'immer';
 import mqtt, {MqttClient} from 'mqtt';
 import {create, useStore} from 'zustand';
@@ -51,6 +52,11 @@ class Mower {
   hasCapability(capability: string, minLevel: number = 1): boolean {
     const level = this.capabilities[capability];
     return level !== undefined && level >= minLevel;
+  }
+
+  publishTeleop(vx: number, vz: number) {
+    const payload = BSON.serialize({vx, vz});
+    this.mqttClient.publish(this.mqttPrefix + 'teleop', Buffer.from(payload.buffer));
   }
 }
 

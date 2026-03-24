@@ -36,6 +36,7 @@
     "@turf/union": "^7.3.4",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/mapbox__mapbox-gl-draw": "^1.4.9",
+    "bson": "^7.2.0",
     "geodesy": "^2.4.0",
     "immer": "^11.1.4",
     "json-schema-merge-allof": "^0.8.1",

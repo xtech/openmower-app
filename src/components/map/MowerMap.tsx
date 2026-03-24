@@ -1,6 +1,7 @@
 'use client';
 
 import {useMapboxDraw, useMapContext} from '@/contexts/MapContext';
+import {useSelectedMower} from '@/stores/mowersStore';
 import {fallbackDatum, MapData, type AreaProps} from '@/stores/schemas';
 import type {AreaFeature} from '@/types/geojson';
 import {generateId, splitPolygonWithLine} from '@/utils/area-utils';
@@ -25,6 +26,8 @@ import {drawStyles} from './drawStyles';
 import {AreaSettingsDialog} from './edit/AreaSettingsDialog';
 import EditControls from './edit/EditControls';
 import {mapStyles} from './mapStyles';
+import MowerMarker from './MowerMarker';
+import TeleopControls from './teleop/TeleopControls';
 import type {BBox} from './types';
 
 interface MowerMapProps {
@@ -37,6 +40,8 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   const {id, editMode, setEditMode, features, setFeatures, drawWorkflow, setDrawWorkflow} = useMapContext();
   const mapRef = useRef<Map>(null);
   const draw = useMapboxDraw();
+  const currentState = useSelectedMower((s) => s?.state.current_state);
+  const showTeleop = currentState === 'AREA_RECORDING' && !editMode;
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
     [features],
@@ -188,8 +193,10 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
             <AreasList areas={areas} />
           </Dialog>
         )}
+        <MowerMarker datum={mapData.datum} />
         <DialogOutlet />
       </RMap>
+      {showTeleop && <TeleopControls />}
     </Box>
   );
 }

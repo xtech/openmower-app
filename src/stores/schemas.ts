@@ -19,6 +19,11 @@ const percentage = z
   .max(1)
   .transform((v) => Math.round(v * 100));
 
+const gpsPercentage = z
+  .number()
+  .max(1)
+  .transform((v) => Math.round(Math.max(0, v) * 100));
+
 export const stateSchema = z.object({
   battery_percentage: percentage,
   current_state: z.string(),
@@ -28,7 +33,7 @@ export const stateSchema = z.object({
   current_path_index: z.number(),
   current_sub_state: z.string(),
   emergency: numericBoolean,
-  gps_percentage: percentage,
+  gps_percentage: gpsPercentage,
   is_charging: numericBoolean,
   pose: z.object({
     heading: z.number(),
