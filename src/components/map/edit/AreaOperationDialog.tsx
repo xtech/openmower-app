@@ -1,6 +1,5 @@
 import {AreaProps} from '@/stores/schemas';
-import theme from '@/theme';
-import {Box, Button, DialogActions, DialogContent, List} from '@mui/material';
+import {Box, Button, DialogActions, DialogContent, List, useTheme} from '@mui/material';
 import {Feature, Polygon} from 'geojson';
 import AreaItem from '../AreaItem';
 import MapDialog from '../MapDialog';
@@ -40,6 +39,7 @@ export function AreaSelection({
   selectedAreaId: string;
   setSelectedAreaId: (id: string) => void;
 }) {
+  const theme = useTheme();
   return (
     <Box sx={{border: 1, borderColor: theme.palette.divider, borderRadius: 1, overflowY: 'auto'}}>
       <List sx={{p: 0}}>

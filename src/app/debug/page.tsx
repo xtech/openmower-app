@@ -19,7 +19,7 @@ import {
   VisibilityOff as VisibilityOffIcon,
   WifiOff as WifiOffIcon,
 } from '@mui/icons-material';
-import {Box, Card, CardContent, Chip, CircularProgress, Divider, IconButton, Tooltip, Typography} from '@mui/material';
+import {Box, Card, CardContent, Chip, CircularProgress, Divider, IconButton, Tooltip, Typography, useTheme} from '@mui/material';
 import React, {useEffect, useRef, useState} from 'react';
 
 type PingState = {latency: number | null; error: string | null; loading: boolean};
@@ -41,8 +41,8 @@ function SplitBadge({label, value}: {label: string; value: React.ReactNode}) {
         sx={{
           px: 1,
           py: 0.25,
-          bgcolor: 'text.secondary',
-          color: 'background.paper',
+          bgcolor: 'text.primary',
+          color: 'background.default',
           fontWeight: 700,
           fontFamily: 'sans-serif',
         }}
@@ -304,6 +304,7 @@ function MapSection({map}: {map: MapData}) {
 }
 
 export default function DebugPage() {
+  const theme = useTheme();
   const mowers = useMowers();
   const mqttStatuses = useMowersStore((s) => s.mqttStatuses);
   const connectedCount = mowers.filter((m) => mqttStatuses[m.id] === 'connected').length;
@@ -325,7 +326,7 @@ export default function DebugPage() {
         ) : (
           <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
             {mowers.map((mower) => (
-              <Card key={mower.id} sx={outerCardStyles}>
+              <Card key={mower.id} sx={outerCardStyles(theme)}>
                 <CardContent>
                   <Typography variant="h5" fontWeight={700} gutterBottom>
                     {mower.name}

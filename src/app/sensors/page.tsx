@@ -11,7 +11,7 @@ import {
   Thermostat as TempIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import {Box, Card, CardContent, Chip, LinearProgress, Typography} from '@mui/material';
+import {Box, Card, CardContent, Chip, LinearProgress, Typography, useTheme} from '@mui/material';
 
 // Mock data - in real app this would come from API
 const mockSensorData = {
@@ -41,6 +41,7 @@ const mockSensorData = {
 };
 
 export default function SensorsPage() {
+  const theme = useTheme();
   const getBatteryHealthColor = (health: string) => {
     switch (health) {
       case 'good':
@@ -94,7 +95,7 @@ export default function SensorsPage() {
       <PageContent>
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
           {/* System Status Overview */}
-          <Card sx={outerCardStyles}>
+          <Card sx={outerCardStyles(theme)}>
             <CardContent>
               <Typography variant="h6" component="h2" gutterBottom>
                 System Status
@@ -123,7 +124,7 @@ export default function SensorsPage() {
           </Card>
 
           {/* Battery Status */}
-          <Card sx={outerCardStyles}>
+          <Card sx={outerCardStyles(theme)}>
             <CardContent>
               <Typography variant="h6" component="h2" gutterBottom>
                 Battery Status
@@ -187,7 +188,7 @@ export default function SensorsPage() {
           </Card>
 
           {/* Motor Status */}
-          <Card sx={outerCardStyles}>
+          <Card sx={outerCardStyles(theme)}>
             <CardContent>
               <Typography variant="h6" component="h2" gutterBottom>
                 Motor Status
@@ -256,7 +257,7 @@ export default function SensorsPage() {
           </Card>
 
           {/* Sensor Status */}
-          <Card sx={outerCardStyles}>
+          <Card sx={outerCardStyles(theme)}>
             <CardContent>
               <Typography variant="h6" component="h2" gutterBottom>
                 Sensor Status

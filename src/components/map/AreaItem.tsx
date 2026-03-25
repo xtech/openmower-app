@@ -1,8 +1,7 @@
 import {formatAreaSize} from '@/app/map/page';
 import {AreaProps} from '@/stores/schemas';
-import theme from '@/theme';
 import type {DraggableSyntheticListeners} from '@dnd-kit/core';
-import {Box, ListItem, Typography} from '@mui/material';
+import {Box, ListItem, Typography, useTheme} from '@mui/material';
 import {area as turfArea} from '@turf/area';
 import {Feature, Polygon} from 'geojson';
 import {CircleSlashIcon, MenuIcon, RouteIcon, ScissorsIcon, SquareDashedIcon, type LucideIcon} from 'lucide-react';
@@ -37,6 +36,7 @@ export default function AreaItem({
   dragging = false,
   ...props
 }: AreaItemProps & SortableItemProps) {
+  const theme = useTheme();
   const inactive = area.properties.active === false;
   const {icon: Icon, color, strokeWidth} = TYPE_CONFIG[area.properties.type ?? 'draft'];
   return (
@@ -48,8 +48,14 @@ export default function AreaItem({
         cursor: 'pointer',
         borderBottom: '1px solid',
         borderColor: theme.palette.divider,
-        backgroundColor: dragging ? theme.palette.secondary.main : selected ? theme.palette.secondary.dark : undefined,
-        color: dragging ? theme.palette.secondary.contrastText : undefined,
+        backgroundColor: dragging
+          ? theme.palette.secondary.main
+          : selected
+            ? theme.palette.mode === 'dark'
+              ? theme.palette.secondary.main
+              : theme.palette.secondary.dark
+            : undefined,
+        color: dragging || selected ? theme.palette.secondary.contrastText : undefined,
         opacity: inactive ? 0.5 : 1,
         touchAction: 'none',
         '&:last-child': {
@@ -84,7 +90,7 @@ export default function AreaItem({
               alignItems: 'center',
               justifyContent: 'center',
               width: 48,
-              color: dragging ? theme.palette.secondary.contrastText : '#AAAAAA',
+              color: dragging ? theme.palette.secondary.contrastText : theme.palette.text.secondary,
             }}
           >
             <MenuIcon size={16} />

@@ -1,13 +1,12 @@
 import {loadAppConfig} from '@/lib/actions';
 import {Box} from '@mui/material';
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
-import {ThemeProvider} from '@mui/material/styles';
 import type {Metadata} from 'next';
 import {Roboto} from 'next/font/google';
 import {DialogProvider} from 'react-dialog-async';
 import {ConfigInitializer} from '../components/ConfigInitializer';
+import ThemeRegistry from '../components/ThemeRegistry';
 import Navigation from '../components/navigation/Navigation';
-import theme from '../theme';
 import './globals.css';
 
 export const dynamic = 'force-dynamic';
@@ -31,11 +30,18 @@ export default async function RootLayout({
 }>) {
   const config = await loadAppConfig();
   return (
-    <html lang="en" className={roboto.variable}>
-      <body>
+    <html lang="en" className={roboto.variable} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        {/* Runs before React hydrates — sets body background immediately so the
+            blank-before-mount period matches the final theme colour */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',d?'dark':'light');document.body.style.background=d?'#121212':'#fafafa';}catch(e){}})()`,
+          }}
+        />
         <ConfigInitializer config={config} />
-        <ThemeProvider theme={theme}>
-          <AppRouterCacheProvider>
+        <AppRouterCacheProvider>
+          <ThemeRegistry>
             <DialogProvider>
               <Box sx={{display: 'flex', height: '100dvh'}}>
                 <Navigation />
@@ -55,8 +61,8 @@ export default async function RootLayout({
                 </Box>
               </Box>
             </DialogProvider>
-          </AppRouterCacheProvider>
-        </ThemeProvider>
+          </ThemeRegistry>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

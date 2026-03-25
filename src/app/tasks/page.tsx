@@ -142,7 +142,7 @@ export default function TasksPage() {
         <Box sx={{display: 'flex', gap: 4, flexDirection: isMobile ? 'column' : 'row'}}>
           {/* Task List */}
           <Box sx={{flex: 1}}>
-            <Card sx={outerCardStyles}>
+            <Card sx={outerCardStyles(theme)}>
               <CardContent>
                 {/* Task List Header */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4}}>
@@ -359,7 +359,7 @@ export default function TasksPage() {
 
           {/* Task Details Sidebar */}
           <Box sx={{width: isMobile ? '100%' : '400px'}}>
-            <Card sx={outerCardStyles}>
+            <Card sx={outerCardStyles(theme)}>
               <CardContent>
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 3}}>
                   <Avatar sx={{bgcolor: theme.palette.info.main, width: 40, height: 40}}>

@@ -1,15 +1,15 @@
 // import {useMapContext} from '@/contexts/MapContext'; // TODO: Uncomment when implementing persistence
 import {useMapContext, useMapSelection} from '@/contexts/MapContext';
 import {AreaProps} from '@/stores/schemas';
-import theme from '@/theme';
 import {DndContext, DragEndEvent, DragOverlay} from '@dnd-kit/core';
 import {restrictToFirstScrollableAncestor, restrictToVerticalAxis} from '@dnd-kit/modifiers';
 import {arrayMove, SortableContext, verticalListSortingStrategy} from '@dnd-kit/sortable';
-import {Card, CardContent, CardHeader, List} from '@mui/material';
+import {Card, CardContent, CardHeader, List, useTheme} from '@mui/material';
 import {Feature, Polygon} from 'geojson';
 import SortableAreaItem from './edit/SortableAreaItem';
 
 export default function AreasList({areas}: {areas: Feature<Polygon, AreaProps>[]}) {
+  const theme = useTheme();
   const selectedIds = useMapSelection();
   const {editMode, setFeatures} = useMapContext();
 

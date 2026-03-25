@@ -10,7 +10,7 @@ interface HeaderStatProps {
 export default function HeaderStat({icon, value, label}: HeaderStatProps) {
   return (
     <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-      <Avatar sx={{bgcolor: 'rgba(255,255,255,0.2)', width: 48, height: 48}}>{icon}</Avatar>
+      <Avatar sx={{bgcolor: 'rgba(255,255,255,0.2)', color: 'white', width: 48, height: 48}}>{icon}</Avatar>
       <Box>
         <Typography variant="h4" fontWeight="bold">
           {value}

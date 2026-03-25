@@ -1,5 +1,5 @@
 import {useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
-import theme from '@/theme';
+import {useTheme} from '@mui/material';
 import type {AreaFeature} from '@/types/geojson';
 import {removeMiniCoords} from '@/utils/area-utils';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
@@ -55,6 +55,7 @@ export default function EditControls({
   const subtractDialog = useDialog(SubtractDialog);
   const cancelConfirmDialog = useDialog(CancelConfirmDialog);
 
+  const theme = useTheme();
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = useCallback(async () => {

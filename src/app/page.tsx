@@ -150,7 +150,7 @@ export default function Dashboard() {
                 <Card
                   key={mower.id}
                   sx={{
-                    ...outerCardStyles,
+                    ...outerCardStyles(theme),
                     flex: '1 1 450px',
                     minWidth: 0,
                     transition: 'all 0.3s ease',

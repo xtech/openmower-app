@@ -12,12 +12,14 @@ import {AreaProps} from '@/stores/schemas';
 import {CheckCircle as CheckIcon, LocationOn as LocationIcon, PlayArrow as PlayIcon} from '@mui/icons-material';
 import {Feature, Polygon} from 'geojson';
 import {useCallback, useEffect, useMemo} from 'react';
+import {useTheme} from '@mui/material';
 
 export function formatAreaSize(squareMeters: number): string {
   return `${Math.round(squareMeters)}m²`;
 }
 
 export default function MapPage() {
+  const theme = useTheme();
   const draw = useMapboxDraw();
   const {features, setFeatures, editMode} = useMapContext();
 
@@ -64,7 +66,13 @@ export default function MapPage() {
         <MowerMap
           mapData={mapData}
           saveMapToMower={saveMapToMower}
-          sx={{...outerCardStyles, backgroundColor: 'black', backdropFilter: 'unset', height: '100%'}}
+          sx={{
+            ...outerCardStyles(theme),
+            backgroundColor: 'black',
+            backdropFilter: 'unset',
+            height: '100%',
+            outline: theme.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.3)' : undefined,
+          }}
         />
       </PageContent>
     </Page>
