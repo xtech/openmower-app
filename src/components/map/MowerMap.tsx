@@ -200,9 +200,9 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
           <DockingStationMarker key={station.id} station={station} datum={datum} isDocked={isDocked} />
         ))}
         <MowerMarker datum={datum} isDocked={isDocked} />
+        {showTeleop && <TeleopControls />}
         <DialogOutlet />
       </RMap>
-      {showTeleop && <TeleopControls />}
     </Box>
   );
 }
