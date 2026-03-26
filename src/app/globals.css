@@ -30,6 +30,9 @@ a {
   display: none !important;
 }
 
+.docking-station-marker { z-index: 1; }
+.mower-marker { z-index: 2; }
+
 .maplibregl-ctrl-top-left .maplibregl-ctrl + .maplibregl-ctrl,
 .maplibregl-ctrl-top-right .maplibregl-ctrl + .maplibregl-ctrl {
   margin-top: 4px !important;

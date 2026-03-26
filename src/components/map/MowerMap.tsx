@@ -21,6 +21,7 @@ import {DialogOutlet, useDialog} from 'react-dialog-async';
 import {shallow} from 'zustand/vanilla/shallow';
 import AreasList from './AreasList';
 import ControlButton from './ControlButton';
+import DockingStationMarker from './DockingStationMarker';
 import {DrawControl} from './DrawControl';
 import {drawStyles} from './drawStyles';
 import {AreaSettingsDialog} from './edit/AreaSettingsDialog';
@@ -37,6 +38,7 @@ interface MowerMapProps {
 }
 
 export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
+  const datum = mapData.datum ?? fallbackDatum;
   const {id, editMode, setEditMode, features, setFeatures, drawWorkflow, setDrawWorkflow} = useMapContext();
   const mapRef = useRef<Map>(null);
   const draw = useMapboxDraw();
@@ -70,7 +72,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
     if (features.features.length > 0) {
       bounds.current = bbox(features) as BBox;
     } else {
-      const {long, lat} = mapData.datum ?? fallbackDatum;
+      const {long, lat} = datum;
       bounds.current = [long, lat, long, lat] as BBox;
     }
     // If the bounds have changed, fit to bounds (except in edit mode).
@@ -193,7 +195,10 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
             <AreasList areas={areas} />
           </Dialog>
         )}
-        <MowerMarker datum={mapData.datum} />
+        {mapData.docking_stations.map((station) => (
+          <DockingStationMarker key={station.id} station={station} datum={datum} />
+        ))}
+        <MowerMarker datum={datum} />
         <DialogOutlet />
       </RMap>
       {showTeleop && <TeleopControls />}

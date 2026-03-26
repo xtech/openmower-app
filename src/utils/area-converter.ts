@@ -4,13 +4,12 @@ import {
   datumToRelative,
   pointsToAbsolute,
   pointsToRelative,
-  pointToAbsolute,
   type AbsolutePoint,
   type RelativePoint,
   type UtmPoint,
 } from '@/utils/coordinates';
 import area from '@turf/area';
-import type {Feature, FeatureCollection, Point, Polygon} from 'geojson';
+import type {Feature, FeatureCollection, Polygon} from 'geojson';
 import {produce} from 'immer';
 
 // Remove consecutive duplicate or near-duplicate points (within 1mm) — floating point artifacts from the mower.
@@ -46,18 +45,6 @@ function featureToArea(feature: AreaFeature, datum: UtmPoint): Area {
   };
 }
 
-function pointToFeature(type: string, point: RelativePoint, datum: UtmPoint): Feature<Point> {
-  return {
-    type: 'Feature',
-    properties: {
-      type: type,
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: pointToAbsolute(point, datum),
-    },
-  };
-}
 
 function convertDatum(datum: {lat: number; long: number}) {
   return datumToRelative([datum.long, datum.lat]);
@@ -70,10 +57,7 @@ export function mapToFeatures(map?: MapData): FeatureCollection {
   const datum = convertDatum(map.datum ?? fallbackDatum);
   return {
     type: 'FeatureCollection',
-    features: [
-      ...map.docking_stations.map((dock) => pointToFeature('docking_station', dock.position, datum)),
-      ...map.areas.map((area) => areaToFeature(area, datum)),
-    ],
+    features: [...map.areas.map((area) => areaToFeature(area, datum))],
   };
 }
 
