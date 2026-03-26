@@ -9,6 +9,7 @@ const KNOB_RADIUS = 25;
 const DEAD_ZONE = 8;
 const DPAD_ZONE_START = 0.55;
 const DPAD_RAMP_DURATION_MS = 1500;
+const ANGULAR_FACTOR = 1.6;
 
 type DpadDirection = 'up' | 'down' | 'left' | 'right' | null;
 
@@ -53,9 +54,9 @@ export default function VirtualJoystick({onVelocityChange}: VirtualJoystickProps
       case 'down':
         return {vx: -t, vz: 0};
       case 'left':
-        return {vx: 0, vz: t};
+        return {vx: 0, vz: t * ANGULAR_FACTOR};
       case 'right':
-        return {vx: 0, vz: -t};
+        return {vx: 0, vz: -t * ANGULAR_FACTOR};
     }
   }, []);
 
@@ -116,7 +117,7 @@ export default function VirtualJoystick({onVelocityChange}: VirtualJoystickProps
         onVelocityChange(0, 0);
       } else {
         const vx = -(dy / maxDist);
-        const vz = -(dx / maxDist);
+        const vz = -(dx / maxDist) * ANGULAR_FACTOR;
         onVelocityChange(vx, vz);
       }
     },
