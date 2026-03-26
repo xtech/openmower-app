@@ -43,6 +43,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   const mapRef = useRef<Map>(null);
   const draw = useMapboxDraw();
   const currentState = useSelectedMower((s) => s?.state.current_state);
+  const isDocked = useSelectedMower((s) => s?.state.is_charging ?? false);
   const showTeleop = currentState === 'AREA_RECORDING' && !editMode;
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
@@ -196,9 +197,9 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
           </Dialog>
         )}
         {mapData.docking_stations.map((station) => (
-          <DockingStationMarker key={station.id} station={station} datum={datum} />
+          <DockingStationMarker key={station.id} station={station} datum={datum} isDocked={isDocked} />
         ))}
-        <MowerMarker datum={datum} />
+        <MowerMarker datum={datum} isDocked={isDocked} />
         <DialogOutlet />
       </RMap>
       {showTeleop && <TeleopControls />}

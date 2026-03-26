@@ -2,8 +2,10 @@
 
 import {type MapData} from '@/stores/schemas';
 import MapMarker from './MapMarker';
+import {MOWER_LENGTH_M, MowerArrow} from './MowerMarker';
 
-const DOCK_SIZE_M = 0.7;
+const DOCK_PADDING_M = 0.45;
+const DOCK_SIZE_M = MOWER_LENGTH_M + DOCK_PADDING_M;
 const MIN_SIZE_PX = 20;
 
 interface DockingStation {
@@ -14,9 +16,10 @@ interface DockingStation {
 interface DockingStationMarkerProps {
   station: DockingStation;
   datum: NonNullable<MapData['datum']>;
+  isDocked?: boolean;
 }
 
-export default function DockingStationMarker({station, datum}: DockingStationMarkerProps) {
+export default function DockingStationMarker({station, datum, isDocked = false}: DockingStationMarkerProps) {
   return (
     <MapMarker
       position={station.position}
@@ -26,29 +29,23 @@ export default function DockingStationMarker({station, datum}: DockingStationMar
       datum={datum}
       className="docking-station-marker"
     >
-      {(sizePx) => (
-        <svg width={sizePx} height={sizePx} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/*
-            House with entry (open bottom) at the bottom — mower drives in from below.
-            At heading=0 this points up (north), consistent with the mower arrow convention.
-          */}
-          {/* Roof */}
-          <polygon points="16,2 30,14 2,14" fill="#FFA726" stroke="#fff" strokeWidth="1.5" strokeLinejoin="round" />
-          {/* Walls */}
-          <rect
-            x="4"
-            y="14"
-            width="24"
-            height="14"
-            fill="#FFA726"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-          />
-          {/* Doorway opening (entry from bottom) */}
-          <rect x="11" y="20" width="10" height="8" fill="none" stroke="#fff" strokeWidth="1.5" />
-        </svg>
-      )}
+      {(sizePx) => {
+        const opacity = isDocked ? 0.6 : 0.3;
+        return (
+          <svg width={sizePx} height={sizePx} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 2 L30 14 L26 14 L26 29 L6 29 L6 14 L2 14 Z"
+              fill="#F5A523"
+              fillOpacity={opacity}
+              stroke="#F5A523"
+              strokeWidth={1.5}
+              strokeOpacity={opacity}
+              strokeLinejoin="round"
+            />
+            {isDocked && <MowerArrow scale={MOWER_LENGTH_M / DOCK_SIZE_M} fill="#4CAF50" />}
+          </svg>
+        );
+      }}
     </MapMarker>
   );
 }
