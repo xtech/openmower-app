@@ -208,7 +208,7 @@ function RpcSection({rpc}: {rpc: OpenMowerRpc}) {
       </Box>
       <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
         <PingRow label="Ping" onPing={() => rpc.rpc.ping()} />
-        <PingRow label="Meta Ping" onPing={() => rpc.meta.rpc.ping()} />
+        {process.env.NEXT_PUBLIC_IS_DEV && <PingRow label="Meta Ping" onPing={() => rpc.meta.rpc.ping()} />}
       </Box>
     </Box>
   );
