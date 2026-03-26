@@ -6,7 +6,6 @@ import {MOWER_LENGTH_M, MowerArrow} from './MowerMarker';
 
 const DOCK_PADDING_M = 0.45;
 const DOCK_SIZE_M = MOWER_LENGTH_M + DOCK_PADDING_M;
-const MIN_SIZE_PX = 20;
 
 interface DockingStation {
   position: {x: number; y: number};
@@ -25,7 +24,6 @@ export default function DockingStationMarker({station, datum, isDocked = false}:
       position={station.position}
       heading={station.heading}
       sizeM={DOCK_SIZE_M}
-      minSizePx={MIN_SIZE_PX}
       datum={datum}
       className="docking-station-marker"
     >

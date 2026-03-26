@@ -6,7 +6,6 @@ import {useMemo} from 'react';
 import MapMarker from './MapMarker';
 
 export const MOWER_LENGTH_M = 0.55;
-const MIN_SIZE_PX = 16;
 
 interface MowerArrowProps {
   /** Scale factor relative to full size (default 1) */
@@ -57,7 +56,6 @@ export default function MowerMarker({datum, isDocked}: MowerMarkerProps) {
       position={position}
       heading={pose.heading}
       sizeM={MOWER_LENGTH_M}
-      minSizePx={MIN_SIZE_PX}
       datum={datum}
       className="mower-marker"
     >
