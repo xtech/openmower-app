@@ -40,6 +40,14 @@ export default function DockingStationMarker({station, datum, isDocked = false}:
               strokeOpacity={opacity}
               strokeLinejoin="round"
             />
+            <path
+              d="M7.5 13.75 L24.5 13.75 M13 28 L13 22 L19 22 L19 28"
+              stroke="#F5A523"
+              strokeWidth={0.75}
+              strokeOpacity={opacity}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
             {isDocked && <MowerArrow scale={MOWER_LENGTH_M / DOCK_SIZE_M} fill="#4CAF50" />}
           </svg>
         );
