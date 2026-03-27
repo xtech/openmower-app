@@ -58,9 +58,9 @@ TimeoutStopSec=120s
 ExecStartPre=/bin/rm -f %t/container-openmower-app.pid %t/container-openmower-app.ctr-id
 
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-openmower-app.pid --cidfile %t/container-openmower-app.ctr-id --cgroups=no-conmon \
-  --replace --detach --tty --privileged \
+  --replace --detach --tty \
   --name openmower-app \
-  --network=host \
+  --publish 3000:3000/tcp \
   --label io.containers.autoupdate=image \
   ghcr.io/xtech/openmower-app:edge
 
@@ -74,6 +74,7 @@ WantedBy=multi-user.target default.target
 
 Then enable the service and start it:
 ```bash
-sudo systemctl enable openmower-app.service
-sudo systemctl start openmower-app.service
+sudo systemctl enable --now openmower-app.service
 ```
+
+You can now access the app at `http://<mower-ip>:3000` in your browser.
