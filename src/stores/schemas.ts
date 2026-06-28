@@ -67,6 +67,12 @@ const areaSchema = z.object({
     name: z.string().optional(),
     type: z.enum(['mow', 'nav', 'obstacle', 'draft']).default('draft'),
     active: z.boolean().default(true),
+    // Per-area overrides for mowing areas. When a field is omitted, ROS falls back to the
+    // corresponding global config default (see open_mower_ros MowingBehavior::overrideOrGlobal).
+    angle: z.number().optional(), // radians; replaces the auto-detected mow orientation
+    outline_count: z.int().gte(0).optional(),
+    outline_overlap_count: z.int().gte(0).optional(),
+    outline_offset: z.number().optional(), // meters
   }),
   outline: polygonSchema,
 });
