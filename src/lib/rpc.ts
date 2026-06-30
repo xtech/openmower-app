@@ -25,6 +25,20 @@ export interface ObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19 {
   timestamp: NumberHo1ClIqD;
   [k: string]: any;
 }
+export interface ObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHr {
+  step_index?: NumberHo1ClIqD;
+  area_id?: StringDoaGddGA;
+  angle?: NumberHo1ClIqD;
+  offset?: NumberHo1ClIqD;
+  [k: string]: any;
+}
+export type UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0D = ObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHr[];
+export interface ObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpo {
+  is_outline?: BooleanVyG3AETh;
+  points?: UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5G;
+  [k: string]: any;
+}
+export type UnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6 = ObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpo[];
 type AlwaysTrue = any;
 export interface ObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfB {
   id: StringDoaGddGA;
@@ -53,6 +67,17 @@ export interface ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumbe
   [k: string]: any;
 }
 export type UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK = ObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19[];
+export interface ObjectOfUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0DStringDoaGddGA61SsNSC5 {
+  job_id?: StringDoaGddGA;
+  steps?: UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0D;
+  [k: string]: any;
+}
+export interface ObjectOfNumberHo1ClIqDUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6StringDoaGddGAR79If3A2 {
+  job_id?: StringDoaGddGA;
+  step_index?: NumberHo1ClIqD;
+  paths?: UnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6;
+  [k: string]: any;
+}
 export type UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup = ObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfB[];
 /**
  *
@@ -65,7 +90,7 @@ export interface ObjectHicl3T4F { [key: string]: any; }
  * Generated! Represents an alias to any of the provided schemas
  *
  */
-export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGAStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4F = ObjectHAgrRKSz | StringDoaGddGA | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F;
+export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGAStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKObjectOfUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0DStringDoaGddGA61SsNSC5ObjectOfNumberHo1ClIqDUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6StringDoaGddGAR79If3A2UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4F = ObjectHAgrRKSz | StringDoaGddGA | NumberHo1ClIqD | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | ObjectOfUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0DStringDoaGddGA61SsNSC5 | ObjectOfNumberHo1ClIqDUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6StringDoaGddGAR79If3A2 | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F;
 
 export class OpenMowerRpc extends OpenMowerBaseRpc {
   rpc = {
@@ -111,6 +136,21 @@ export class OpenMowerRpc extends OpenMowerBaseRpc {
       * List available job history entries.
       */
       list: async (): Promise<UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK> => this.call('position.history.list'),
+    }),
+  };
+  planned_path = {
+    /**
+    * List a planned-path job's steps (metadata only); fetch each area's geometry via planned_path.history.step.
+    */
+    history: Object.assign(async (args: {job_id?: StringDoaGddGA}): Promise<ObjectOfUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDPm14NNHrptS2Tk0DStringDoaGddGA61SsNSC5> => this.call('planned_path.history', args), {
+      /**
+      * Returns one area/step's planned-path geometry for a job (bounded per-area payload).
+      */
+      step: async (args: {job_id: StringDoaGddGA, step_index: NumberHo1ClIqD}): Promise<ObjectOfNumberHo1ClIqDUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GBooleanVyG3AEThV8C6Hkpokk7AmLb6StringDoaGddGAR79If3A2> => this.call('planned_path.history.step', args),
+      /**
+      * List available planned-path job history entries.
+      */
+      list: async (): Promise<UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK> => this.call('planned_path.history.list'),
     }),
   };
   events = {
