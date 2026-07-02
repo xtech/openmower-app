@@ -2,7 +2,7 @@
 
 import {TooltipTextField} from '@/components/ui/TooltipTextField';
 import {displaySortKey, useMap, useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
-import {AreaProps} from '@/stores/schemas';
+import {AreaProps, areaSchema} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import {ExpandMore as ExpandMoreIcon, InfoOutlined as InfoOutlinedIcon} from '@mui/icons-material';
 import {
@@ -29,6 +29,7 @@ import {
 } from '@mui/material';
 import {useEffect, useState} from 'react';
 import {AsyncDialogProps} from 'react-dialog-async';
+import {z} from 'zod/v4';
 import MapDialog from '../MapDialog';
 
 const RAD_TO_DEG = 180 / Math.PI;
@@ -78,6 +79,22 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
   const overrideCount = [outlineCount, outlineOverlapCount, outlineOffset, angleDeg].filter(
     (v) => v.trim() !== '',
   ).length;
+
+  const propsShape = areaSchema.shape.properties.shape;
+  const angleDegSchema = z.number().min(-180).max(180);
+  const validateField = (
+    schema: {safeParse: (v: unknown) => {success: boolean; error?: {issues: {message: string}[]}}},
+    raw: string,
+  ): string => {
+    if (raw.trim() === '') return '';
+    const result = schema.safeParse(Number(raw));
+    return result.success ? '' : (result.error?.issues[0].message ?? 'Invalid value');
+  };
+  const outlineCountError = validateField(propsShape.outline_count, outlineCount);
+  const outlineOverlapCountError = validateField(propsShape.outline_overlap_count, outlineOverlapCount);
+  const outlineOffsetError = validateField(propsShape.outline_offset, outlineOffset);
+  const angleDegError = validateField(angleDegSchema, angleDeg);
+  const hasErrors = !!(outlineCountError || outlineOverlapCountError || outlineOffsetError || angleDegError);
 
   const handleSave = () => {
     if (!map || !draw || selectedIds.length === 0) return;
@@ -176,7 +193,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
             >
               <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, flex: 1}}>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Overrides
+                  Mowing settings overrides
                 </Typography>
                 {overrideCount > 0 && (
                   <Chip label={overrideCount} size="small" color="primary" sx={{height: 20, minWidth: 20}} />
@@ -203,9 +220,11 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   }}
                   arrow
                 >
-                  <IconButton size="small" tabIndex={-1} onClick={(e) => e.stopPropagation()}>
-                    <InfoOutlinedIcon fontSize="small" />
-                  </IconButton>
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <IconButton size="small" tabIndex={-1} component="span">
+                      <InfoOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </span>
                 </Tooltip>
               </Box>
             </AccordionSummary>
@@ -225,6 +244,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
                   }}
+                  error={!!outlineCountError}
+                  helperText={outlineCountError}
                   tooltip="How many outlines should the mower drive. It's not recommended to set this below 4."
                 />
                 <TooltipTextField
@@ -241,6 +262,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
                   }}
+                  error={!!outlineOverlapCountError}
+                  helperText={outlineOverlapCountError}
                   tooltip="Number of outlines to overlap."
                 />
                 <TooltipTextField
@@ -257,6 +280,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
                   }}
+                  error={!!outlineOffsetError}
+                  helperText={outlineOffsetError}
                   tooltip="Offset applied to the outline. Positive values move it inwards (i.e. safety margin)."
                 />
                 <TooltipTextField
@@ -273,6 +298,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
                   }}
+                  error={!!angleDegError}
+                  helperText={angleDegError}
                   tooltip="Fixed mowing direction (0° = east). Empty = auto-detect from the first 2 m of the outline."
                 />
               </Box>
@@ -282,7 +309,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={() => handleClose()}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" disabled={name === ''}>
+        <Button onClick={handleSave} variant="contained" disabled={name === '' || hasErrors}>
           Save
         </Button>
       </DialogActions>

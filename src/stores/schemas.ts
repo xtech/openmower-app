@@ -61,7 +61,7 @@ export type Datum = z.infer<typeof datumSchema>;
 
 const pointSchema = z.object({x: z.number(), y: z.number()});
 const polygonSchema = z.array(pointSchema);
-const areaSchema = z.object({
+export const areaSchema = z.object({
   id: z.string(),
   properties: z.looseObject({
     name: z.string().optional(),
