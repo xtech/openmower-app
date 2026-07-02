@@ -51,7 +51,7 @@ export function TooltipTextField({tooltip, slotProps, ...props}: TooltipTextFiel
         ...slotProps,
         input: {
           endAdornment: infoAdornment,
-          ...(slotProps as Record<string, unknown>)?.input,
+          ...(slotProps?.input as object | undefined),
         },
       }}
     />
