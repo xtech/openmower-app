@@ -1,9 +1,10 @@
 'use client';
 
+import {TooltipTextField} from '@/components/ui/TooltipTextField';
 import {displaySortKey, useMap, useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
 import {AreaProps} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import {ExpandMore as ExpandMoreIcon} from '@mui/icons-material';
+import {ExpandMore as ExpandMoreIcon, InfoOutlined as InfoOutlinedIcon} from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -16,11 +17,14 @@ import {
   DialogTitle,
   FormControl,
   FormControlLabel,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Switch,
   TextField,
+  Tooltip,
+  tooltipClasses,
   Typography,
 } from '@mui/material';
 import {useEffect, useState} from 'react';
@@ -48,8 +52,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
   const [outlineOverlapCount, setOutlineOverlapCount] = useState('');
   const [outlineOffset, setOutlineOffset] = useState('');
   const [angleDeg, setAngleDeg] = useState('');
-  // Advanced overrides are collapsed by default, expanded automatically when the area already has any set.
-  const [advancedExpanded, setAdvancedExpanded] = useState(false);
+  // Overrides are collapsed by default, expanded automatically when the area already has any set.
+  const [overridesExpanded, setOverridesExpanded] = useState(false);
 
   // Initialize form values when dialog opens or selected area changes
   useEffect(() => {
@@ -63,7 +67,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
     setOutlineOverlapCount(properties.outline_overlap_count != null ? String(properties.outline_overlap_count) : '');
     setOutlineOffset(properties.outline_offset != null ? String(properties.outline_offset) : '');
     setAngleDeg(properties.angle != null ? radToDegString(properties.angle) : '');
-    setAdvancedExpanded(
+    setOverridesExpanded(
       properties.outline_count != null ||
         properties.outline_overlap_count != null ||
         properties.outline_offset != null ||
@@ -153,8 +157,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
 
         {type === 'mow' && (
           <Accordion
-            expanded={advancedExpanded}
-            onChange={(_, expanded) => setAdvancedExpanded(expanded)}
+            expanded={overridesExpanded}
+            onChange={(_, expanded) => setOverridesExpanded(expanded)}
             disableGutters
             sx={{
               mt: 2,
@@ -170,71 +174,108 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
               expandIcon={<ExpandMoreIcon />}
               sx={{bgcolor: 'background.paper', '&:hover': {bgcolor: 'action.hover'}, minHeight: 48}}
             >
-              <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+              <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, flex: 1}}>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Advanced
+                  Overrides
                 </Typography>
                 {overrideCount > 0 && (
                   <Chip label={overrideCount} size="small" color="primary" sx={{height: 20, minWidth: 20}} />
                 )}
+                <Box sx={{flex: 1}} />
+                <Tooltip
+                  title="When non-empty, these values override the global mowing settings."
+                  enterTouchDelay={0}
+                  leaveTouchDelay={4000}
+                  placement="top"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: 'grey.900',
+                        color: 'common.white',
+                        fontSize: '0.8rem',
+                        lineHeight: 1.5,
+                        maxWidth: 260,
+                        px: 1.5,
+                        py: 1,
+                        [`& .${tooltipClasses.arrow}`]: {color: 'grey.900'},
+                      },
+                    },
+                  }}
+                  arrow
+                >
+                  <IconButton size="small" tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+                    <InfoOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </AccordionSummary>
             <AccordionDetails sx={{pt: 0}}>
-              <Typography variant="body2" color="text.secondary" sx={{mb: 1}}>
-                Per-area overrides for the global mowing settings. Leave empty to use the global default.
-              </Typography>
-              <TextField
-                label="Outline count"
-                type="number"
-                value={outlineCount}
-                onChange={(e) => setOutlineCount(e.target.value)}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                placeholder="Global default"
-                inputProps={{min: 0, step: 1}}
-                slotProps={{inputLabel: {shrink: true}}}
-                helperText="How many outlines should the mower drive. It's not recommended to set this below 4."
-              />
-              <TextField
-                label="Outline overlap count"
-                type="number"
-                value={outlineOverlapCount}
-                onChange={(e) => setOutlineOverlapCount(e.target.value)}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                placeholder="Global default"
-                inputProps={{min: 0, step: 1}}
-                slotProps={{inputLabel: {shrink: true}}}
-                helperText="Number of outlines to overlap."
-              />
-              <TextField
-                label="Outline offset (m)"
-                type="number"
-                value={outlineOffset}
-                onChange={(e) => setOutlineOffset(e.target.value)}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                placeholder="Global default"
-                inputProps={{step: 'any'}}
-                slotProps={{inputLabel: {shrink: true}}}
-                helperText="Offset applied to the outline. Positive values move it inwards (i.e. safety margin)."
-              />
-              <TextField
-                label="Mow angle (°)"
-                type="number"
-                value={angleDeg}
-                onChange={(e) => setAngleDeg(e.target.value)}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                placeholder="Auto-detect"
-                inputProps={{min: -180, max: 180, step: 'any'}}
-                slotProps={{inputLabel: {shrink: true}}}
-                helperText="Fixed mowing direction (0° = east). Empty = auto-detect from the first 2 m of the outline."
-              />
+              <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 1}}>
+                <TooltipTextField
+                  label="Outline count"
+                  type="number"
+                  value={outlineCount}
+                  onChange={(e) => setOutlineCount(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{min: 0, step: 1}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  tooltip="How many outlines should the mower drive. It's not recommended to set this below 4."
+                />
+                <TooltipTextField
+                  label="Outline overlap count"
+                  type="number"
+                  value={outlineOverlapCount}
+                  onChange={(e) => setOutlineOverlapCount(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{min: 0, step: 1}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  tooltip="Number of outlines to overlap."
+                />
+                <TooltipTextField
+                  label="Outline offset (m)"
+                  type="number"
+                  value={outlineOffset}
+                  onChange={(e) => setOutlineOffset(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{step: 0.01}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  tooltip="Offset applied to the outline. Positive values move it inwards (i.e. safety margin)."
+                />
+                <TooltipTextField
+                  label="Mow angle (°)"
+                  type="number"
+                  value={angleDeg}
+                  onChange={(e) => setAngleDeg(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Auto-detect"
+                  inputProps={{min: -180, max: 180, step: 'any'}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  tooltip="Fixed mowing direction (0° = east). Empty = auto-detect from the first 2 m of the outline."
+                />
+              </Box>
             </AccordionDetails>
           </Accordion>
         )}
