@@ -1,8 +1,8 @@
 'use client';
 
 import type {OpenMowerRpc} from '@/lib/rpc';
-import {useMowersStore, useSelectedMower} from '@/stores/mowersStore';
-import {simStateSchema, type SimState} from '@/stores/schemas';
+import {useSelectedMower} from '@/stores/mowersStore';
+import type {SimState} from '@/stores/schemas';
 import {useCallback, useState} from 'react';
 
 export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'twist' | 'displace';
@@ -28,7 +28,6 @@ export function useSimControl(): SimControl {
   const mowerId = useSelectedMower((m) => m?.id);
   const rpc = useSelectedMower((m) => m?.rpc);
   const simState = useSelectedMower((m) => m?.simState) ?? null;
-  const updateSimState = useMowersStore((s) => s.updateSimState);
 
   const [pending, setPending] = useState<SimAction | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -39,16 +38,14 @@ export function useSimControl(): SimControl {
       setPending(action);
       setError(null);
       try {
-        const raw = await fn(rpc);
-        // Every mutating sim RPC returns the full updated state as its result.
-        updateSimState(mowerId, simStateSchema.parse(raw));
+        await fn(rpc);
       } catch (e) {
         setError(e instanceof Error ? e.message : 'RPC failed');
       } finally {
         setPending(null);
       }
     },
-    [rpc, mowerId, updateSimState],
+    [rpc, mowerId],
   );
 
   return {

@@ -100,7 +100,6 @@ interface MowersStore {
   selected: number;
   loadMowers: () => void;
   fetchEventsForDate: (mowerId: string, date: string) => Promise<void>;
-  updateSimState: (mowerId: string, simState: SimState) => void;
 }
 
 export const useMowersStore = create<MowersStore>()(
@@ -304,14 +303,6 @@ export const useMowersStore = create<MowersStore>()(
       } catch {
         // server may not support events.history yet
       }
-    },
-    updateSimState: (mowerId, simState) => {
-      set((state) => {
-        const target = state.mowers.find((m) => m.id === mowerId);
-        if (target) {
-          target.simState = simState;
-        }
-      });
     },
   })),
 );

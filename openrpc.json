@@ -263,17 +263,6 @@
       }
     },
     {
-      "name": "sim.state.get",
-      "summary": "Get the current simulation control state. Only available against the simulator.",
-      "params": [],
-      "result": {
-        "name": "state",
-        "schema": {
-          "$ref": "#/components/schemas/SimState"
-        }
-      }
-    },
-    {
       "name": "sim.emergency.set",
       "summary": "Trigger or clear a latched emergency in the simulator.",
       "paramStructure": "by-name",
@@ -288,9 +277,10 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -309,9 +299,10 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -338,9 +329,10 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -359,9 +351,10 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -370,9 +363,10 @@
       "summary": "Drive the simulated robot onto the dock and start charging.",
       "params": [],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -407,9 +401,10 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     },
@@ -444,53 +439,12 @@
         }
       ],
       "result": {
-        "name": "state",
+        "name": "result",
+        "description": "No result is returned if successful.",
         "schema": {
-          "$ref": "#/components/schemas/SimState"
+          "type": "null"
         }
       }
     }
-  ],
-  "components": {
-    "schemas": {
-      "SimState": {
-        "type": "object",
-        "properties": {
-          "emergency_active": {
-            "type": "boolean"
-          },
-          "emergency_latch": {
-            "type": "boolean"
-          },
-          "emergency_reason": {
-            "type": "number"
-          },
-          "movement_allowed": {
-            "type": "boolean"
-          },
-          "gps_good": {
-            "type": "boolean"
-          },
-          "battery_volts": {
-            "type": "number"
-          },
-          "battery_percentage": {
-            "type": "number"
-          },
-          "charging": {
-            "type": "boolean"
-          },
-          "twist_override": {
-            "type": "boolean"
-          },
-          "override_linear": {
-            "type": "number"
-          },
-          "override_angular": {
-            "type": "number"
-          }
-        }
-      }
-    }
-  }
+  ]
 }
