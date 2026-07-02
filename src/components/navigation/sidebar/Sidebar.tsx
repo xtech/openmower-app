@@ -26,7 +26,8 @@ export default function Sidebar({open, onClose}: SidebarProps) {
   const selectedMowerId = useSelectedMower((s) => s?.id);
   const selectedMower = mowerConfigs.find((mower) => mower.id === selectedMowerId);
   const mowerCapabilities = useSelectedMower((s) => s?.capabilities);
-  const navigationItems = createNavigationItems(mowerCapabilities);
+  const simAvailable = useSelectedMower((s) => s?.simState != null);
+  const navigationItems = createNavigationItems(mowerCapabilities, simAvailable);
 
   const handleMowerMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMowerMenuAnchor(event.currentTarget);

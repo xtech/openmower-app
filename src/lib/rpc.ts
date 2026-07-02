@@ -60,12 +60,26 @@ export type UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumb
  *
  */
 export interface ObjectHicl3T4F { [key: string]: any; }
+export interface ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O {
+  emergency_active?: BooleanVyG3AETh;
+  emergency_latch?: BooleanVyG3AETh;
+  emergency_reason?: NumberHo1ClIqD;
+  movement_allowed?: BooleanVyG3AETh;
+  gps_good?: BooleanVyG3AETh;
+  battery_volts?: NumberHo1ClIqD;
+  battery_percentage?: NumberHo1ClIqD;
+  charging?: BooleanVyG3AETh;
+  twist_override?: BooleanVyG3AETh;
+  override_linear?: NumberHo1ClIqD;
+  override_angular?: NumberHo1ClIqD;
+  [k: string]: any;
+}
 /**
  *
  * Generated! Represents an alias to any of the provided schemas
  *
  */
-export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGAStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4F = ObjectHAgrRKSz | StringDoaGddGA | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F;
+export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGABooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNumberHo1ClIqDStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4FObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5OObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O = ObjectHAgrRKSz | StringDoaGddGA | BooleanVyG3AETh | NumberHo1ClIqD | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F | ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O;
 
 export class OpenMowerRpc extends OpenMowerBaseRpc {
   rpc = {
@@ -123,5 +137,53 @@ export class OpenMowerRpc extends OpenMowerBaseRpc {
       */
       list: async (): Promise<UnorderedSetOfStringDoaGddGADvj0XlFa> => this.call('events.history.list'),
     }),
+  };
+  sim = {
+    state: {
+      /**
+      * Get the current simulation control state. Only available against the simulator.
+      */
+      get: async (): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.state.get'),
+    },
+    emergency: {
+      /**
+      * Trigger or clear a latched emergency in the simulator.
+      */
+      set: async (args: {active: BooleanVyG3AETh}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.emergency.set', args),
+    },
+    movement: {
+      /**
+      * Allow or block physical movement to simulate a stuck robot.
+      */
+      set: async (args: {allowed: BooleanVyG3AETh}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.movement.set', args),
+    },
+    battery: {
+      /**
+      * Set the simulated battery. Pass `full` to snap to an extreme, or `volts` for an exact pack voltage.
+      */
+      set: async (args: {full?: BooleanVyG3AETh, volts?: NumberHo1ClIqD}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.battery.set', args),
+    },
+    gps: {
+      /**
+      * Set the simulated GPS quality.
+      */
+      set: async (args: {good: BooleanVyG3AETh}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.gps.set', args),
+    },
+    dock: {
+      /**
+      * Drive the simulated robot onto the dock and start charging.
+      */
+      move: async (): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.dock.move'),
+    },
+    twist: {
+      /**
+      * Override the commanded twist (like cmd_vel). enabled=false releases the override.
+      */
+      set: async (args: {linear?: NumberHo1ClIqD, angular?: NumberHo1ClIqD, enabled?: BooleanVyG3AETh}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.twist.set', args),
+    },
+    /**
+    * Teleport the robot by (dx, dy) meters and dheading radians to simulate a GPS jump.
+    */
+    displace: async (args: {dx?: NumberHo1ClIqD, dy?: NumberHo1ClIqD, dheading?: NumberHo1ClIqD}): Promise<ObjectOfBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThBooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNf3Pcd5O> => this.call('sim.displace', args),
   };
 }

@@ -28,12 +28,14 @@ import {
   mapDefaults,
   mapSchema,
   positionSchema,
+  simStateSchema,
   stateDefaults,
   stateSchema,
   type Capabilities,
   type Datum,
   type MapData,
   type PositionWithAttributes,
+  type SimState,
   type StateOptionalPose,
   type TrackAttributes,
 } from './schemas';
@@ -58,6 +60,9 @@ class Mower {
   track: TrackPipeline = new TrackPipeline();
   jobList: {job_id: string; epoch: number}[] | null = null;
   events: MowerEventState = mowerEventDefaults;
+  // null until a retained sim/state/json message arrives — also used as the
+  // "is this a simulator?" feature-detection flag.
+  simState: SimState | null = null;
 
   constructor(config: MowerConfig, mqttClient: MqttClient) {
     this.id = config.id;
@@ -95,6 +100,7 @@ interface MowersStore {
   selected: number;
   loadMowers: () => void;
   fetchEventsForDate: (mowerId: string, date: string) => Promise<void>;
+  updateSimState: (mowerId: string, simState: SimState) => void;
 }
 
 export const useMowersStore = create<MowersStore>()(
@@ -161,6 +167,7 @@ export const useMowersStore = create<MowersStore>()(
             client.subscribe(clientMower.prefix + 'position/json');
             client.subscribe(clientMower.prefix + 'params/json');
             client.subscribe(clientMower.prefix + 'events/json');
+            client.subscribe(clientMower.prefix + 'sim/state/json');
             mowers[clientMower.idx].rpc.events.history
               .list()
               .then((dates) => {
@@ -264,6 +271,13 @@ export const useMowersStore = create<MowersStore>()(
                   applyLiveEvent(state.mowers[idx].events, parsed.data);
                 }
               });
+            } else if (partialTopic === 'sim/state/json') {
+              set((state) => {
+                const parsed = simStateSchema.safeParse(JSON.parse(payload.toString()));
+                if (parsed.success) {
+                  state.mowers[idx].simState = parsed.data;
+                }
+              });
             }
           }
         });
@@ -290,6 +304,14 @@ export const useMowersStore = create<MowersStore>()(
       } catch {
         // server may not support events.history yet
       }
+    },
+    updateSimState: (mowerId, simState) => {
+      set((state) => {
+        const target = state.mowers.find((m) => m.id === mowerId);
+        if (target) {
+          target.simState = simState;
+        }
+      });
     },
   })),
 );

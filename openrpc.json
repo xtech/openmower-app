@@ -261,6 +261,236 @@
           "description": "Keys are relative file paths, values are YAML file contents as strings"
         }
       }
+    },
+    {
+      "name": "sim.state.get",
+      "summary": "Get the current simulation control state. Only available against the simulator.",
+      "params": [],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.emergency.set",
+      "summary": "Trigger or clear a latched emergency in the simulator.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "active",
+          "description": "true triggers a latched emergency, false clears it.",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.movement.set",
+      "summary": "Allow or block physical movement to simulate a stuck robot.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "allowed",
+          "description": "true = robot moves normally, false = robot is stuck.",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.battery.set",
+      "summary": "Set the simulated battery. Pass `full` to snap to an extreme, or `volts` for an exact pack voltage.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "full",
+          "description": "true = full charge voltage, false = empty (min) voltage. Ignored when `volts` is given.",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "volts",
+          "description": "Exact pack voltage to set (V). Takes precedence over `full`.",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.gps.set",
+      "summary": "Set the simulated GPS quality.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "good",
+          "description": "true = RTK fix (~2 cm), false = no RTK fix (~1 m).",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.dock.move",
+      "summary": "Drive the simulated robot onto the dock and start charging.",
+      "params": [],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.twist.set",
+      "summary": "Override the commanded twist (like cmd_vel). enabled=false releases the override.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "linear",
+          "description": "Linear velocity in m/s (default 0).",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "angular",
+          "description": "Angular velocity in rad/s (default 0).",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "enabled",
+          "description": "Enable the override (default true); false hands control back to the diff drive.",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
+    },
+    {
+      "name": "sim.displace",
+      "summary": "Teleport the robot by (dx, dy) meters and dheading radians to simulate a GPS jump.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "dx",
+          "description": "X offset in meters (default 0).",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "dy",
+          "description": "Y offset in meters (default 0).",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "dheading",
+          "description": "Heading offset in radians (default 0).",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "state",
+        "schema": {
+          "$ref": "#/components/schemas/SimState"
+        }
+      }
     }
-  ]
+  ],
+  "components": {
+    "schemas": {
+      "SimState": {
+        "type": "object",
+        "properties": {
+          "emergency_active": {
+            "type": "boolean"
+          },
+          "emergency_latch": {
+            "type": "boolean"
+          },
+          "emergency_reason": {
+            "type": "number"
+          },
+          "movement_allowed": {
+            "type": "boolean"
+          },
+          "gps_good": {
+            "type": "boolean"
+          },
+          "battery_volts": {
+            "type": "number"
+          },
+          "battery_percentage": {
+            "type": "number"
+          },
+          "charging": {
+            "type": "boolean"
+          },
+          "twist_override": {
+            "type": "boolean"
+          },
+          "override_linear": {
+            "type": "number"
+          },
+          "override_angular": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
 }

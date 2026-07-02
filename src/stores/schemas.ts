@@ -49,6 +49,27 @@ export type State = z.infer<typeof stateSchema>;
 export type StateOptionalPose = Omit<State, 'pose'> & {pose?: State['pose']};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// Simulation control (from sim/state/json topic and sim.* RPCs)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const simStateSchema = z.object({
+  emergency_active: z.boolean(),
+  emergency_latch: z.boolean(),
+  emergency_reason: z.number().int(),
+  movement_allowed: z.boolean(),
+  gps_good: z.boolean(),
+  battery_volts: z.number(),
+  // Normalized 0.0–1.0 (unlike robot_state, kept raw here and formatted in the UI).
+  battery_percentage: z.number(),
+  charging: z.boolean(),
+  twist_override: z.boolean(),
+  override_linear: z.number(),
+  override_angular: z.number(),
+});
+
+export type SimState = z.infer<typeof simStateSchema>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Map
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
