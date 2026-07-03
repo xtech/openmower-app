@@ -58,9 +58,7 @@ export const simStateSchema = z.object({
   emergency_reason: z.number().int(),
   movement_allowed: z.boolean(),
   gps_good: z.boolean(),
-  battery_volts: z.number(),
-  // Normalized 0.0–1.0 (unlike robot_state, kept raw here and formatted in the UI).
-  battery_percentage: z.number(),
+  battery_voltage: z.number(),
   charging: z.boolean(),
   twist_override: z.boolean(),
   override_linear: z.number(),
@@ -222,3 +220,22 @@ export const stateDefaults: StateOptionalPose = {
   is_charging: false,
   pose: undefined,
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// ROS params
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const rosParamsSchema = z
+  .object({
+    '/ll/services/power/battery_full_voltage': z.number(),
+    '/ll/services/power/battery_empty_voltage': z.number(),
+    '/ll/services/power/battery_critical_voltage': z.number(),
+    '/ll/services/power/battery_critical_high_voltage': z.number(),
+    '/ll/services/gps/datum_lat': z.number(),
+    '/ll/services/gps/datum_long': z.number(),
+    '/ll/services/gps/datum_height': z.number(),
+  })
+  .partial()
+  .catchall(z.unknown());
+
+export type RosParams = z.infer<typeof rosParamsSchema>;

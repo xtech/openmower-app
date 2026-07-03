@@ -308,21 +308,13 @@
     },
     {
       "name": "sim.battery.set",
-      "summary": "Set the simulated battery. Pass `full` to snap to an extreme, or `volts` for an exact pack voltage.",
+      "summary": "Set the simulated battery pack voltage.",
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "full",
-          "description": "true = full charge voltage, false = empty (min) voltage. Ignored when `volts` is given.",
-          "required": false,
-          "schema": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "volts",
-          "description": "Exact pack voltage to set (V). Takes precedence over `full`.",
-          "required": false,
+          "name": "voltage",
+          "description": "Exact pack voltage to set (V).",
+          "required": true,
           "schema": {
             "type": "number"
           }

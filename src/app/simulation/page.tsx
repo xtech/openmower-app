@@ -1,20 +1,21 @@
 'use client';
 
-import BatteryGauge from '@/components/simulation/BatteryGauge';
-import DockCard from '@/components/simulation/DockCard';
-import DisplaceCard from '@/components/simulation/DisplaceCard';
-import EmergencyCard from '@/components/simulation/EmergencyCard';
-import TwistCard from '@/components/simulation/TwistCard';
-import ToggleCard from '@/components/simulation/ToggleCard';
 import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
+import BatteryGauge from '@/components/simulation/BatteryGauge';
+import DisplaceCard from '@/components/simulation/DisplaceCard';
+import DockCard from '@/components/simulation/DockCard';
+import EmergencyCard from '@/components/simulation/EmergencyCard';
+import ToggleCard from '@/components/simulation/ToggleCard';
+import TwistCard from '@/components/simulation/TwistCard';
 import {useSimControl} from '@/hooks/useSimControl';
 import {outerCardStyles} from '@/lib/cardStyles';
+import {useSelectedMower} from '@/stores/mowersStore';
 import {
   BatteryFull as BatteryIcon,
+  ReportProblem as EmergencyIcon,
   GpsFixed as GpsFixedIcon,
   GpsOff as GpsOffIcon,
   MoveDown as MoveIcon,
-  ReportProblem as EmergencyIcon,
   ScienceOutlined as ScienceIcon,
   DoNotDisturbOn as StuckIcon,
 } from '@mui/icons-material';
@@ -22,6 +23,7 @@ import {Alert, Box, Card, CardContent, Snackbar, Typography, useTheme} from '@mu
 
 export default function SimulationPage() {
   const theme = useTheme();
+  const robotBattery = useSelectedMower((m) => m?.state.battery_percentage ?? null);
   const {
     simState,
     available,
@@ -29,8 +31,7 @@ export default function SimulationPage() {
     error,
     setEmergency,
     setMovementAllowed,
-    setBatteryFull,
-    setBatteryVolts,
+    setBatteryVoltage,
     setGpsGood,
     moveToDock,
     setTwist,
@@ -40,12 +41,12 @@ export default function SimulationPage() {
   return (
     <Page>
       <PageHeader title="Simulation" subtitle="Drive the simulated mower into interesting test states">
+        <HeaderStat icon={<BatteryIcon />} value={robotBattery !== null ? `${robotBattery}%` : '—'} label="Battery" />
         <HeaderStat
-          icon={<BatteryIcon />}
-          value={simState ? `${Math.round(simState.battery_percentage * 100)}%` : '—'}
-          label="Battery"
+          icon={<GpsFixedIcon />}
+          value={simState ? (simState.gps_good ? 'RTK' : 'No fix') : '—'}
+          label="GPS"
         />
-        <HeaderStat icon={<GpsFixedIcon />} value={simState ? (simState.gps_good ? 'RTK' : 'No fix') : '—'} label="GPS" />
         <HeaderStat
           icon={<EmergencyIcon />}
           value={simState ? (simState.emergency_latch ? 'Latched' : 'Clear') : '—'}
@@ -63,8 +64,8 @@ export default function SimulationPage() {
                   Simulator not detected
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{maxWidth: 420, mx: 'auto'}}>
-                  These controls are only available when connected to the{' '}
-                  <code>mower_simulation</code> node. Waiting for a retained <code>sim/state/json</code> message…
+                  These controls are only available when connected to the <code>mower_simulation</code> node. Waiting
+                  for a retained <code>sim/state/json</code> message…
                 </Typography>
               </Box>
             </CardContent>
@@ -89,13 +90,10 @@ export default function SimulationPage() {
                 <Card sx={outerCardStyles(theme)}>
                   <CardContent>
                     <BatteryGauge
-                      percentage={simState.battery_percentage}
-                      volts={simState.battery_volts}
+                      voltage={simState.battery_voltage}
                       charging={simState.charging}
                       pending={pending === 'battery'}
-                      onFull={() => setBatteryFull(true)}
-                      onEmpty={() => setBatteryFull(false)}
-                      onSetVolts={setBatteryVolts}
+                      onSetVoltage={setBatteryVoltage}
                     />
                   </CardContent>
                 </Card>
@@ -159,11 +157,7 @@ export default function SimulationPage() {
         )}
       </PageContent>
 
-      <Snackbar
-        open={!!error}
-        autoHideDuration={4000}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-      >
+      <Snackbar open={!!error} autoHideDuration={4000} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
         <Alert severity="error" variant="filled">
           {error}
         </Alert>

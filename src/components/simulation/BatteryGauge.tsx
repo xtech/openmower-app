@@ -24,22 +24,16 @@ import {
 } from '@mui/material';
 import type {Theme} from '@mui/material/styles';
 import {useState} from 'react';
+import {useSelectedMower} from '@/stores/mowersStore';
+
+const VOLTAGE_MARGIN = 2;
 
 interface BatteryGaugeProps {
-  percentage: number; // 0..1
-  volts: number;
+  voltage: number;
   charging: boolean;
   pending: boolean;
-  onFull: () => void;
-  onEmpty: () => void;
-  onSetVolts: (volts: number) => void;
+  onSetVoltage: (voltage: number) => void;
 }
-
-// 7-cell pack: empty ≈ 22.4 V, full ≈ 29.26 V. Criticals sit just outside that.
-const CRIT_LOW_VOLTS = 21.0;
-const CRIT_HIGH_VOLTS = 30.0;
-const MIN_VOLTS = 18;
-const MAX_VOLTS = 32;
 
 function levelColor(pct: number, theme: Theme): string {
   if (pct <= 0.15) return theme.palette.error.main;
@@ -48,33 +42,38 @@ function levelColor(pct: number, theme: Theme): string {
 }
 
 export default function BatteryGauge({
-  percentage,
-  volts,
+  voltage,
   charging,
   pending,
-  onFull,
-  onEmpty,
-  onSetVolts,
+  onSetVoltage,
 }: BatteryGaugeProps) {
+  const params = useSelectedMower((m) => m?.params ?? {});
+  const percentage = useSelectedMower((m) => (m?.state.battery_percentage ?? 0) / 100);
+  const fullVoltage = params['/ll/services/power/battery_full_voltage'];
+  const emptyVoltage = params['/ll/services/power/battery_empty_voltage'];
+  const critLowVoltage = params['/ll/services/power/battery_critical_voltage'];
+  const critHighVoltage = params['/ll/services/power/battery_critical_high_voltage'];
+  const minVoltage = critLowVoltage !== undefined ? critLowVoltage - VOLTAGE_MARGIN : undefined;
+  const maxVoltage = critHighVoltage !== undefined ? critHighVoltage + VOLTAGE_MARGIN : undefined;
   const theme = useTheme();
   const pct = Math.max(0, Math.min(1, percentage));
   const color = charging ? theme.palette.info.main : levelColor(pct, theme);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [voltInput, setVoltInput] = useState(volts.toFixed(2));
+  const [voltageInput, setVoltageInput] = useState(voltage.toFixed(2));
 
   const openDialog = () => {
-    setVoltInput(volts.toFixed(2));
+    setVoltageInput(voltage.toFixed(2));
     setDialogOpen(true);
   };
 
-  const parsed = parseFloat(voltInput);
+  const parsed = parseFloat(voltageInput);
   const valid = Number.isFinite(parsed);
 
   const submit = () => {
-    if (!valid) return;
-    const clamped = Math.min(MAX_VOLTS, Math.max(MIN_VOLTS, parsed));
-    onSetVolts(clamped);
+    if (!valid || minVoltage === undefined || maxVoltage === undefined) return;
+    const clamped = Math.min(maxVoltage, Math.max(minVoltage, parsed));
+    onSetVoltage(clamped);
     setDialogOpen(false);
   };
 
@@ -183,23 +182,31 @@ export default function BatteryGauge({
             {Math.round(pct * 100)}%
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{mt: 0.5, fontFamily: 'monospace'}}>
-            {volts.toFixed(2)} V
+            {voltage.toFixed(2)} V
           </Typography>
         </Box>
 
         <Box sx={{flex: 1, display: 'flex', flexDirection: 'column', gap: 1, minWidth: 120}}>
-          <Button size="small" variant="outlined" color="error" startIcon={<CritIcon />} disabled={pending} onClick={() => onSetVolts(CRIT_LOW_VOLTS)}>
-            Crit low
-          </Button>
-          <Button size="small" variant="outlined" color="warning" startIcon={<EmptyIcon />} disabled={pending} onClick={onEmpty}>
-            Empty
-          </Button>
-          <Button size="small" variant="outlined" color="success" startIcon={<FullIcon />} disabled={pending} onClick={onFull}>
-            Full
-          </Button>
-          <Button size="small" variant="outlined" color="error" startIcon={<CritIcon />} disabled={pending} onClick={() => onSetVolts(CRIT_HIGH_VOLTS)}>
-            Crit high
-          </Button>
+          {critLowVoltage !== undefined && (
+            <Button size="small" variant="outlined" color="error" startIcon={<CritIcon />} disabled={pending} onClick={() => onSetVoltage(critLowVoltage)}>
+              Crit low
+            </Button>
+          )}
+          {emptyVoltage !== undefined && (
+            <Button size="small" variant="outlined" color="warning" startIcon={<EmptyIcon />} disabled={pending} onClick={() => onSetVoltage(emptyVoltage)}>
+              Empty
+            </Button>
+          )}
+          {fullVoltage !== undefined && (
+            <Button size="small" variant="outlined" color="success" startIcon={<FullIcon />} disabled={pending} onClick={() => onSetVoltage(fullVoltage)}>
+              Full
+            </Button>
+          )}
+          {critHighVoltage !== undefined && (
+            <Button size="small" variant="outlined" color="error" startIcon={<CritIcon />} disabled={pending} onClick={() => onSetVoltage(critHighVoltage)}>
+              Crit high
+            </Button>
+          )}
         </Box>
       </Box>
 
@@ -210,36 +217,38 @@ export default function BatteryGauge({
             autoFocus
             fullWidth
             label="Pack voltage"
-            value={voltInput}
-            onChange={(e) => setVoltInput(e.target.value)}
+            value={voltageInput}
+            onChange={(e) => setVoltageInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
-            error={voltInput !== '' && !valid}
+            error={voltageInput !== '' && !valid}
             slotProps={{
               input: {endAdornment: <InputAdornment position="end">V</InputAdornment>},
               htmlInput: {inputMode: 'decimal', pattern: '[0-9]*[.,]?[0-9]*'},
             }}
             sx={{mt: 1}}
           />
-          <Box sx={{px: 1, mt: 2}}>
-            <Slider
-              value={valid ? Math.min(MAX_VOLTS, Math.max(MIN_VOLTS, parsed)) : MIN_VOLTS}
-              min={MIN_VOLTS}
-              max={MAX_VOLTS}
-              step={0.1}
-              valueLabelDisplay="auto"
-              marks={[
-                {value: MIN_VOLTS, label: `${MIN_VOLTS}`},
-                {value: MAX_VOLTS, label: `${MAX_VOLTS}`},
-              ]}
-              onChange={(_, v) => setVoltInput((v as number).toFixed(1))}
-            />
-          </Box>
+          {minVoltage !== undefined && maxVoltage !== undefined && (
+            <Box sx={{px: 1, mt: 2}}>
+              <Slider
+                value={valid ? Math.min(maxVoltage, Math.max(minVoltage, parsed)) : minVoltage}
+                min={minVoltage}
+                max={maxVoltage}
+                step={0.1}
+                valueLabelDisplay="auto"
+                marks={[
+                  {value: minVoltage, label: minVoltage.toFixed(0)},
+                  {value: maxVoltage, label: maxVoltage.toFixed(0)},
+                ]}
+                onChange={(_, v) => setVoltageInput((v as number).toFixed(1))}
+              />
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} color="inherit">
             Cancel
           </Button>
-          <Button onClick={submit} variant="contained" disabled={!valid || pending}>
+          <Button onClick={submit} variant="contained" disabled={!valid || pending || minVoltage === undefined || maxVoltage === undefined}>
             Set
           </Button>
         </DialogActions>

@@ -28,6 +28,7 @@ import {
   mapDefaults,
   mapSchema,
   positionSchema,
+  rosParamsSchema,
   simStateSchema,
   stateDefaults,
   stateSchema,
@@ -35,6 +36,7 @@ import {
   type Datum,
   type MapData,
   type PositionWithAttributes,
+  type RosParams,
   type SimState,
   type StateOptionalPose,
   type TrackAttributes,
@@ -55,7 +57,7 @@ class Mower {
   capabilities: Capabilities = {};
   state: StateOptionalPose = stateDefaults;
   map: MapData = mapDefaults;
-  params: Record<string, unknown> = {};
+  params: RosParams = {};
   position: PositionWithAttributes | null = null;
   track: TrackPipeline = new TrackPipeline();
   jobList: {job_id: string; epoch: number}[] | null = null;
@@ -245,7 +247,7 @@ export const useMowersStore = create<MowersStore>()(
             } else if (partialTopic === 'params/json') {
               set((state) => {
                 const mower = state.mowers[idx];
-                mower.params = JSON.parse(payload.toString()) as Record<string, unknown>;
+                mower.params = rosParamsSchema.parse(JSON.parse(payload.toString()));
                 mower.map.datum ??= mower.getDatumFromParams();
               });
             } else if (partialTopic === 'position/json') {
@@ -256,12 +258,6 @@ export const useMowersStore = create<MowersStore>()(
                 if (parsed.attributes.session_id) {
                   mower.track.addPoint(parsed);
                 }
-              });
-            } else if (partialTopic === 'params/json') {
-              set((state) => {
-                const mower = state.mowers[idx];
-                mower.params = JSON.parse(payload.toString()) as Record<string, unknown>;
-                mower.map.datum ??= mower.getDatumFromParams();
               });
             } else if (partialTopic === 'events/json') {
               set((state) => {

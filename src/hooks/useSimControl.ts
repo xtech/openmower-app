@@ -16,8 +16,7 @@ export interface SimControl {
   error: string | null;
   setEmergency: (active: boolean) => void;
   setMovementAllowed: (allowed: boolean) => void;
-  setBatteryFull: (full: boolean) => void;
-  setBatteryVolts: (volts: number) => void;
+  setBatteryVoltage: (voltage: number) => void;
   setGpsGood: (good: boolean) => void;
   moveToDock: () => void;
   setTwist: (linear: number, angular: number, enabled?: boolean) => void;
@@ -55,8 +54,7 @@ export function useSimControl(): SimControl {
     error,
     setEmergency: (active) => run('emergency', (r) => r.sim.emergency.set({active})),
     setMovementAllowed: (allowed) => run('movement', (r) => r.sim.movement.set({allowed})),
-    setBatteryFull: (full) => run('battery', (r) => r.sim.battery.set({full})),
-    setBatteryVolts: (volts) => run('battery', (r) => r.sim.battery.set({volts})),
+    setBatteryVoltage: (voltage) => run('battery', (r) => r.sim.battery.set({voltage})),
     setGpsGood: (good) => run('gps', (r) => r.sim.gps.set({good})),
     moveToDock: () => run('dock', (r) => r.sim.dock.move()),
     setTwist: (linear, angular, enabled = true) => run('twist', (r) => r.sim.twist.set({linear, angular, enabled})),
