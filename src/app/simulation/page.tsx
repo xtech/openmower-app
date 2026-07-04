@@ -34,7 +34,6 @@ export default function SimulationPage() {
     setBatteryVoltage,
     setGpsGood,
     moveToDock,
-    setTwist,
     displace,
   } = useSimControl();
 
@@ -141,14 +140,7 @@ export default function SimulationPage() {
 
                 <Card sx={outerCardStyles(theme)}>
                   <CardContent>
-                    <TwistCard
-                      active={simState.twist_override}
-                      linear={simState.override_linear}
-                      angular={simState.override_angular}
-                      pending={pending === 'twist'}
-                      onApply={setTwist}
-                      onRelease={() => setTwist(0, 0, false)}
-                    />
+                    <TwistCard />
                   </CardContent>
                 </Card>
               </Box>

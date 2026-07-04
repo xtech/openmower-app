@@ -5,7 +5,7 @@ import {useSelectedMower} from '@/stores/mowersStore';
 import type {SimState} from '@/stores/schemas';
 import {useCallback, useState} from 'react';
 
-export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'twist' | 'displace';
+export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'displace';
 
 export interface SimControl {
   /** null while no simulator has been detected (no retained sim/state/json message). */
@@ -19,7 +19,6 @@ export interface SimControl {
   setBatteryVoltage: (voltage: number) => void;
   setGpsGood: (good: boolean) => void;
   moveToDock: () => void;
-  setTwist: (linear: number, angular: number, enabled?: boolean) => void;
   displace: (dx: number, dy: number, dheading?: number) => void;
 }
 
@@ -57,7 +56,6 @@ export function useSimControl(): SimControl {
     setBatteryVoltage: (voltage) => run('battery', (r) => r.sim.battery.set({voltage})),
     setGpsGood: (good) => run('gps', (r) => r.sim.gps.set({good})),
     moveToDock: () => run('dock', (r) => r.sim.dock.move()),
-    setTwist: (linear, angular, enabled = true) => run('twist', (r) => r.sim.twist.set({linear, angular, enabled})),
     displace: (dx, dy, dheading = 0) => run('displace', (r) => r.sim.displace({dx, dy, dheading})),
   };
 }

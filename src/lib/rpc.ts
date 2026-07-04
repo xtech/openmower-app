@@ -65,7 +65,7 @@ export interface ObjectHicl3T4F { [key: string]: any; }
  * Generated! Represents an alias to any of the provided schemas
  *
  */
-export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGABooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNumberHo1ClIqDStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1F = ObjectHAgrRKSz | StringDoaGddGA | BooleanVyG3AETh | NumberHo1ClIqD | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F;
+export type AnyOfObjectHAgrRKSzStringDoaGddGAStringDoaGddGABooleanVyG3AEThBooleanVyG3AEThNumberHo1ClIqDBooleanVyG3AEThNumberHo1ClIqDNumberHo1ClIqDNumberHo1ClIqDStringZDJW5SIjUnorderedSetOfStringDoaGddGADvj0XlFaNullQu0Arl1FStringZDJW5SIjStringDoaGddGAObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1WsUnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvKUnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETupUnorderedSetOfStringDoaGddGADvj0XlFaObjectHicl3T4FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1FNullQu0Arl1F = ObjectHAgrRKSz | StringDoaGddGA | BooleanVyG3AETh | NumberHo1ClIqD | StringZDJW5SIj | UnorderedSetOfStringDoaGddGADvj0XlFa | NullQu0Arl1F | ObjectOfUnorderedSetOfObjectOfUnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GObjectOfStringDoaGddGAStringDoaGddGABooleanVyG3AETh8PZSKeKMFruGLaE4Gkga5QR4UnorderedSetOfUnorderedSetOfNumberHo1ClIqDAokMKuEfbuExLS5GA4JKc1Ws | UnorderedSetOfObjectOfNumberHo1ClIqDStringDoaGddGAJFf7IL19E3WiTXvK | UnorderedSetOfObjectOfNumberHo1ClIqDNumberHo1ClIqDStringDoaGddGANumberHo1ClIqDStringDoaGddGAStringDoaGddGAStringDoaGddGABooleanVyG3AEThEg3PskfBvWnyETup | ObjectHicl3T4F;
 
 export class OpenMowerRpc extends OpenMowerBaseRpc {
   rpc = {
@@ -154,12 +154,6 @@ export class OpenMowerRpc extends OpenMowerBaseRpc {
       * Drive the simulated robot onto the dock and start charging.
       */
       move: async (): Promise<void> => this.call('sim.dock.move'),
-    },
-    twist: {
-      /**
-      * Override the commanded twist (like cmd_vel). enabled=false releases the override.
-      */
-      set: async (args: {linear?: NumberHo1ClIqD, angular?: NumberHo1ClIqD, enabled?: BooleanVyG3AETh}): Promise<void> => this.call('sim.twist.set', args),
     },
     /**
     * Teleport the robot by (dx, dy) meters and dheading radians to simulate a GPS jump.

@@ -363,44 +363,6 @@
       }
     },
     {
-      "name": "sim.twist.set",
-      "summary": "Override the commanded twist (like cmd_vel). enabled=false releases the override.",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "linear",
-          "description": "Linear velocity in m/s (default 0).",
-          "required": false,
-          "schema": {
-            "type": "number"
-          }
-        },
-        {
-          "name": "angular",
-          "description": "Angular velocity in rad/s (default 0).",
-          "required": false,
-          "schema": {
-            "type": "number"
-          }
-        },
-        {
-          "name": "enabled",
-          "description": "Enable the override (default true); false hands control back to the diff drive.",
-          "required": false,
-          "schema": {
-            "type": "boolean"
-          }
-        }
-      ],
-      "result": {
-        "name": "result",
-        "description": "No result is returned if successful.",
-        "schema": {
-          "type": "null"
-        }
-      }
-    },
-    {
       "name": "sim.displace",
       "summary": "Teleport the robot by (dx, dy) meters and dheading radians to simulate a GPS jump.",
       "paramStructure": "by-name",
