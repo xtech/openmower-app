@@ -175,6 +175,136 @@
       }
     },
     {
+      "name": "planned_path.history",
+      "summary": "List a planned-path job's steps (metadata only); fetch each area's geometry via planned_path.history.step.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "job_id",
+          "description": "Job ID to fetch the planned path for. Omit to get the current/live job.",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string"
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step_index": {
+                    "type": "number"
+                  },
+                  "area_id": {
+                    "type": "string"
+                  },
+                  "angle": {
+                    "type": "number"
+                  },
+                  "offset": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "planned_path.history.step",
+      "summary": "Returns one area/step's planned-path geometry for a job (bounded per-area payload).",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "job_id",
+          "description": "Job ID.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "step_index",
+          "description": "Ordinal step/area index within the job.",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string"
+            },
+            "step_index": {
+              "type": "number"
+            },
+            "paths": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "is_outline": {
+                    "type": "boolean"
+                  },
+                  "points": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "planned_path.history.list",
+      "summary": "List available planned-path job history entries.",
+      "params": [],
+      "result": {
+        "name": "jobs",
+        "description": "Array of job history entries, each with a job_id and epoch timestamp. Sorted newest first.",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "job_id": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "job_id",
+              "timestamp"
+            ]
+          }
+        }
+      }
+    },
+    {
       "name": "events.history",
       "summary": "Returns events for today when called without params, or events for a specific date.",
       "paramStructure": "by-name",

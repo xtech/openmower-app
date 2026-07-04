@@ -31,9 +31,11 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
   const {
     showSatelliteLayer,
     showTrackLayer,
+    showPlannedPath,
     selectedJobId,
     setShowSatelliteLayer,
     setShowTrackLayer,
+    setShowPlannedPath,
     setSelectedJobId,
   } = useMapDisplayStore();
 
@@ -132,6 +134,18 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
             />
           }
           label="Satellite"
+        />
+
+        <FormControlLabel
+          sx={{mx: 0, px: 1, py: 0.5, width: '100%'}}
+          control={
+            <Switch
+              checked={showPlannedPath && !editMode}
+              onChange={(e) => setShowPlannedPath(e.target.checked)}
+              disabled={editMode}
+            />
+          }
+          label="Planned path"
         />
 
         {hasPositionCapability && (

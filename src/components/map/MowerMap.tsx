@@ -1,6 +1,7 @@
 'use client';
 
 import {useFitToBounds, useMapboxDraw, useMapContext, useMapHover} from '@/contexts/MapContext';
+import {useJobPlannedPath} from '@/hooks/useJobPlannedPath';
 import {useJobTrack} from '@/hooks/useJobTrack';
 import {useMapDisplayStore} from '@/stores/mapDisplayStore';
 import {useSelectedMower} from '@/stores/mowersStore';
@@ -33,6 +34,7 @@ import LayersButton from './LayersButton';
 import MapDialog from './MapDialog';
 import {mapStyles} from './mapStyles';
 import MowerMarker from './MowerMarker';
+import PlannedPathLayer from './PlannedPathLayer';
 import TeleopControls from './teleop/TeleopControls';
 import TrackLayer from './TrackLayer';
 
@@ -68,8 +70,10 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const {showSatelliteLayer, showTrackLayer, showAreaList, selectedJobId, setShowAreaList} = useMapDisplayStore();
+  const {showSatelliteLayer, showTrackLayer, showPlannedPath, showAreaList, selectedJobId, setShowAreaList} =
+    useMapDisplayStore();
   const {pastTrack, loading: trackLoading} = useJobTrack(selectedJobId);
+  const {plannedPath} = useJobPlannedPath(selectedJobId);
   const areaSettingsDialog = useDialog(AreaSettingsDialog);
   const padding = useMemo(() => ({top: 10, bottom: 10, left: 60, right: showAreaList ? 390 : 60}), [showAreaList]);
   const fitToBounds = useFitToBounds();
@@ -294,6 +298,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
           <DockingStationMarker key={station.id} station={station} datum={datumOrFallback} isDocked={isDocked} />
         ))}
         {mowerPosition && !isDocked && <MowerMarker position={mowerPosition} datum={datumOrFallback} />}
+        <PlannedPathLayer visible={showPlannedPath && !editMode} datum={datumOrFallback} plannedPath={plannedPath} />
         <TrackLayer visible={showTrackLayer && !editMode} pastTrack={pastTrack} loading={trackLoading} />
         {showTeleop && <TeleopControls />}
         <DialogOutlet />

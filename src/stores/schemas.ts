@@ -99,6 +99,35 @@ export const mapSchema = z.object({
 export type MapData = z.infer<typeof mapSchema>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// Planned path (slic3r planned path map layer)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// The planned mowing path, streamed over MQTT (map_layers/planned_path/json).
+// Points are [x, y] in metres in the map frame; `is_outline` marks perimeter passes.
+const xyTupleSchema = z.tuple([z.number(), z.number()]);
+
+const plannedPathEntrySchema = z.object({
+  is_outline: z.boolean(),
+  points: z.array(xyTupleSchema),
+});
+export type PlannedPathEntry = z.infer<typeof plannedPathEntrySchema>;
+
+export const plannedPathSchema = z.object({
+  job_id: z.string(),
+  paths: z.array(plannedPathEntrySchema),
+});
+export type PlannedPath = z.infer<typeof plannedPathSchema>;
+
+// The live map_layers/planned_path/json topic is only a signal: which job is current and which step
+// it is on. The actual geometry is fetched from history (planned_path.history / .step), so the plan
+// is held client-side and stays visible after the job is cancelled/finished (like the driven track).
+export const plannedPathSignalSchema = z.object({
+  job_id: z.string(),
+  step_index: z.number().optional(),
+});
+export type PlannedPathSignal = z.infer<typeof plannedPathSignalSchema>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Legacy map
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
