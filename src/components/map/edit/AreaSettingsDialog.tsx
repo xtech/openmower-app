@@ -1,24 +1,44 @@
 'use client';
 
+import {TooltipTextField} from '@/components/ui/TooltipTextField';
 import {displaySortKey, useMap, useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
-import {AreaProps} from '@/stores/schemas';
+import {AreaProps, areaSchema} from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import {ExpandMore as ExpandMoreIcon, InfoOutlined as InfoOutlinedIcon} from '@mui/icons-material';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
   Button,
+  Chip,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
   FormControlLabel,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   Switch,
   TextField,
+  Tooltip,
+  tooltipClasses,
+  Typography,
 } from '@mui/material';
 import {useEffect, useState} from 'react';
 import {AsyncDialogProps} from 'react-dialog-async';
+import {z} from 'zod/v4';
 import MapDialog from '../MapDialog';
+
+const RAD_TO_DEG = 180 / Math.PI;
+const DEG_TO_RAD = Math.PI / 180;
+
+// Format a stored radian angle as a degrees string for the input (2 decimals, no trailing noise).
+function radToDegString(rad: number): string {
+  return String(Math.round(rad * RAD_TO_DEG * 100) / 100);
+}
 
 export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
   const map = useMap();
@@ -28,6 +48,13 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
   const [name, setName] = useState('');
   const [type, setType] = useState<AreaProps['type']>('draft');
   const [active, setActive] = useState(true);
+  // Per-area mowing overrides — kept as strings so an empty field means "use the global default".
+  const [outlineCount, setOutlineCount] = useState('');
+  const [outlineOverlapCount, setOutlineOverlapCount] = useState('');
+  const [outlineOffset, setOutlineOffset] = useState('');
+  const [angleDeg, setAngleDeg] = useState('');
+  // Overrides are collapsed by default, expanded automatically when the area already has any set.
+  const [overridesExpanded, setOverridesExpanded] = useState(false);
 
   // Initialize form values when dialog opens or selected area changes
   useEffect(() => {
@@ -37,20 +64,67 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
     setName(properties.name ?? '');
     setType(properties.type ?? 'draft');
     setActive(properties.active ?? true);
+    setOutlineCount(properties.outline_count != null ? String(properties.outline_count) : '');
+    setOutlineOverlapCount(properties.outline_overlap_count != null ? String(properties.outline_overlap_count) : '');
+    setOutlineOffset(properties.outline_offset != null ? String(properties.outline_offset) : '');
+    setAngleDeg(properties.angle != null ? radToDegString(properties.angle) : '');
+    setOverridesExpanded(
+      properties.outline_count != null ||
+        properties.outline_overlap_count != null ||
+        properties.outline_offset != null ||
+        properties.angle != null,
+    );
   }, [draw, selectedIds]);
+
+  const overrideCount = [outlineCount, outlineOverlapCount, outlineOffset, angleDeg].filter(
+    (v) => v.trim() !== '',
+  ).length;
+
+  const propsShape = areaSchema.shape.properties.shape;
+  const angleDegSchema = z.number().min(-180).max(180);
+  const validateField = (
+    schema: {safeParse: (v: unknown) => {success: boolean; error?: {issues: {message: string}[]}}},
+    raw: string,
+  ): string => {
+    if (raw.trim() === '') return '';
+    const result = schema.safeParse(Number(raw));
+    return result.success ? '' : (result.error?.issues[0].message ?? 'Invalid value');
+  };
+  const outlineCountError = validateField(propsShape.outline_count, outlineCount);
+  const outlineOverlapCountError = validateField(propsShape.outline_overlap_count, outlineOverlapCount);
+  const outlineOffsetError = validateField(propsShape.outline_offset, outlineOffset);
+  const angleDegError = validateField(angleDegSchema, angleDeg);
+  const hasErrors = !!(outlineCountError || outlineOverlapCountError || outlineOffsetError || angleDegError);
 
   const handleSave = () => {
     if (!map || !draw || selectedIds.length === 0) return;
 
     const feature = draw.get(selectedIds[0])!;
     const index = features.features.findIndex((f) => f.id === feature.id);
-    feature.properties = {
+    const properties: Record<string, unknown> = {
       ...feature.properties,
       name,
       type,
       active,
       sort_key: displaySortKey(index, type, features.features),
     };
+
+    // Per-area mowing overrides. An empty input (or a non-mowing area) removes the key entirely so
+    // ROS falls back to the global config default. map.json stores angle in radians.
+    const applyOverride = (key: string, raw: string, parse: (s: string) => number) => {
+      const value = type === 'mow' ? parse(raw.trim()) : NaN;
+      if (Number.isFinite(value)) {
+        properties[key] = value;
+      } else {
+        delete properties[key];
+      }
+    };
+    applyOverride('outline_count', outlineCount, (s) => parseInt(s, 10));
+    applyOverride('outline_overlap_count', outlineOverlapCount, (s) => parseInt(s, 10));
+    applyOverride('outline_offset', outlineOffset, (s) => parseFloat(s));
+    applyOverride('angle', angleDeg, (s) => parseFloat(s) * DEG_TO_RAD);
+
+    feature.properties = properties;
     draw.add(feature);
     map.fire(MapboxDraw.constants.events.UPDATE, {features: [feature]});
 
@@ -97,10 +171,145 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
           label="Active"
           sx={{mt: 2}}
         />
+
+        {type === 'mow' && (
+          <Accordion
+            expanded={overridesExpanded}
+            onChange={(_, expanded) => setOverridesExpanded(expanded)}
+            disableGutters
+            sx={{
+              mt: 2,
+              '&:before': {display: 'none'},
+              borderRadius: '8px !important',
+              overflow: 'hidden',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxShadow: 'none',
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{bgcolor: 'background.paper', '&:hover': {bgcolor: 'action.hover'}, minHeight: 48}}
+            >
+              <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, flex: 1}}>
+                <Typography variant="subtitle2" fontWeight={600}>
+                  Mowing settings overrides
+                </Typography>
+                {overrideCount > 0 && (
+                  <Chip label={overrideCount} size="small" color="primary" sx={{height: 20, minWidth: 20}} />
+                )}
+                <Box sx={{flex: 1}} />
+                <Tooltip
+                  title="When non-empty, these values override the global mowing settings."
+                  enterTouchDelay={0}
+                  leaveTouchDelay={4000}
+                  placement="top"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: 'grey.900',
+                        color: 'common.white',
+                        fontSize: '0.8rem',
+                        lineHeight: 1.5,
+                        maxWidth: 260,
+                        px: 1.5,
+                        py: 1,
+                        [`& .${tooltipClasses.arrow}`]: {color: 'grey.900'},
+                      },
+                    },
+                  }}
+                  arrow
+                >
+                  <span onClick={(e) => e.stopPropagation()}>
+                    <IconButton size="small" tabIndex={-1} component="span">
+                      <InfoOutlinedIcon fontSize="small" />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails sx={{pt: 0}}>
+              <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 1}}>
+                <TooltipTextField
+                  label="Outline count"
+                  type="number"
+                  value={outlineCount}
+                  onChange={(e) => setOutlineCount(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{min: 0, step: 1}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  error={!!outlineCountError}
+                  helperText={outlineCountError}
+                  tooltip="How many outlines should the mower drive. It's not recommended to set this below 4."
+                />
+                <TooltipTextField
+                  label="Outline overlap count"
+                  type="number"
+                  value={outlineOverlapCount}
+                  onChange={(e) => setOutlineOverlapCount(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{min: 0, step: 1}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  error={!!outlineOverlapCountError}
+                  helperText={outlineOverlapCountError}
+                  tooltip="Number of outlines to overlap."
+                />
+                <TooltipTextField
+                  label="Outline offset (m)"
+                  type="number"
+                  value={outlineOffset}
+                  onChange={(e) => setOutlineOffset(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Global default"
+                  inputProps={{step: 0.01}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  error={!!outlineOffsetError}
+                  helperText={outlineOffsetError}
+                  tooltip="Offset applied to the outline. Positive values move it inwards (i.e. safety margin)."
+                />
+                <TooltipTextField
+                  label="Mow angle (°)"
+                  type="number"
+                  value={angleDeg}
+                  onChange={(e) => setAngleDeg(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Auto-detect"
+                  inputProps={{min: -180, max: 180, step: 'any'}}
+                  slotProps={{inputLabel: {shrink: true}}}
+                  sx={{
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
+                    '& input[type=number]': {MozAppearance: 'textfield'},
+                  }}
+                  error={!!angleDegError}
+                  helperText={angleDegError}
+                  tooltip="Fixed mowing direction (0° = east). Empty = auto-detect from the first 2 m of the outline."
+                />
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => handleClose()}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" disabled={name === ''}>
+        <Button onClick={handleSave} variant="contained" disabled={name === '' || hasErrors}>
           Save
         </Button>
       </DialogActions>
