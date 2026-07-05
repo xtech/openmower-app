@@ -17,7 +17,7 @@ import {FocusIcon, LayoutListIcon, PencilIcon} from 'lucide-react';
 import type {Map} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
-import {useCallback, useEffect, useEffectEvent, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useEffectEvent, useMemo, useRef, useState} from 'react';
 import {DialogOutlet, useDialog} from 'react-dialog-async';
 import AreasList from './AreasList';
 import ControlButton from './ControlButton';
@@ -33,6 +33,7 @@ import LayersButton from './LayersButton';
 import MapDialog from './MapDialog';
 import {mapStyles} from './mapStyles';
 import MowerMarker from './MowerMarker';
+import SimulatorButton from './SimulatorButton';
 import TeleopControls from './teleop/TeleopControls';
 import TrackLayer from './TrackLayer';
 
@@ -61,7 +62,9 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   const currentState = useSelectedMower((s) => s?.state.current_state);
   const isDocked = useSelectedMower((s) => s?.state.is_charging ?? false);
   const mowerPosition = useSelectedMower((s) => s?.position ?? s?.state.pose);
-  const showTeleop = currentState === 'AREA_RECORDING' && !editMode;
+  const simAvailable = useSelectedMower((s) => s?.simState != null);
+  const [manualDrive, setManualDrive] = useState(false);
+  const showTeleop = (currentState === 'AREA_RECORDING' || manualDrive) && !editMode;
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
     [features],
@@ -246,6 +249,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
           onClick={() => fitToBounds(false, padding)}
         />
         <LayersButton datum={datum} trackLoading={trackLoading} editMode={editMode} />
+        {simAvailable && <SimulatorButton manualDrive={manualDrive} onManualDriveChange={setManualDrive} />}
         <ControlButton
           position="top-right"
           icon={LayoutListIcon}
@@ -295,7 +299,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         ))}
         {mowerPosition && !isDocked && <MowerMarker position={mowerPosition} datum={datumOrFallback} />}
         <TrackLayer visible={showTrackLayer && !editMode} pastTrack={pastTrack} loading={trackLoading} />
-        {showTeleop && <TeleopControls />}
+        {showTeleop && <TeleopControls publishAtRest={manualDrive} simulatorMode={manualDrive} />}
         <DialogOutlet />
       </RMap>
     </Box>

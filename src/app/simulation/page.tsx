@@ -6,7 +6,6 @@ import DisplaceCard from '@/components/simulation/DisplaceCard';
 import DockCard from '@/components/simulation/DockCard';
 import EmergencyCard from '@/components/simulation/EmergencyCard';
 import ToggleCard from '@/components/simulation/ToggleCard';
-import TwistCard from '@/components/simulation/TwistCard';
 import {useSimControl} from '@/hooks/useSimControl';
 import {outerCardStyles} from '@/lib/cardStyles';
 import {useSelectedMower} from '@/stores/mowersStore';
@@ -135,12 +134,6 @@ export default function SimulationPage() {
                 <Card sx={outerCardStyles(theme)}>
                   <CardContent>
                     <DisplaceCard pending={pending === 'displace'} onDisplace={displace} />
-                  </CardContent>
-                </Card>
-
-                <Card sx={outerCardStyles(theme)}>
-                  <CardContent>
-                    <TwistCard />
                   </CardContent>
                 </Card>
               </Box>

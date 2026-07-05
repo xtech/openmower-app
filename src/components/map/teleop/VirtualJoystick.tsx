@@ -15,9 +15,10 @@ type DpadDirection = 'up' | 'down' | 'left' | 'right' | null;
 
 interface VirtualJoystickProps {
   onVelocityChange: (vx: number, vz: number) => void;
+  simulatorMode?: boolean;
 }
 
-export default function VirtualJoystick({onVelocityChange}: VirtualJoystickProps) {
+export default function VirtualJoystick({onVelocityChange, simulatorMode = false}: VirtualJoystickProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [knobPos, setKnobPos] = useState({x: 0, y: 0});
   const [dragging, setDragging] = useState(false);
@@ -153,8 +154,10 @@ export default function VirtualJoystick({onVelocityChange}: VirtualJoystickProps
         position: 'relative',
         touchAction: 'none',
         userSelect: 'none',
-        background: 'radial-gradient(circle, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.4) 100%)',
-        border: '2px solid rgba(255,255,255,0.3)',
+        background: simulatorMode
+          ? 'radial-gradient(circle, rgba(180,0,0,0.35) 0%, rgba(120,0,0,0.5) 100%)'
+          : 'radial-gradient(circle, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.4) 100%)',
+        border: simulatorMode ? '2px solid rgba(255,80,80,0.5)' : '2px solid rgba(255,255,255,0.3)',
         backdropFilter: 'blur(4px)',
       }}
     >
