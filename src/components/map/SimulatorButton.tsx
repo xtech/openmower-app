@@ -263,6 +263,7 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
         </Typography>
 
         {available && simState ? (
+          <>
           <Box sx={{display: 'flex', gap: 0, alignItems: 'flex-start'}}>
             {/* Left column */}
             <Box sx={{flex: 1, minWidth: 0}}>
@@ -288,30 +289,6 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
                   <Switch checked={simState.movement_allowed} onChange={(e) => setMovementAllowed(e.target.checked)} />
                 }
               />
-
-              <Divider sx={{my: 1}} />
-
-              {/* Emergency + Dock */}
-              <Box sx={{display: 'flex', gap: 1, px: 1.5, py: 0.75}}>
-                <Button
-                  size="small"
-                  variant={simState.emergency_latch ? 'contained' : 'outlined'}
-                  color={simState.emergency_latch ? 'error' : 'inherit'}
-                  onClick={() => setEmergency(!simState.emergency_latch)}
-                  sx={{flex: 1, textTransform: 'none'}}
-                >
-                  {simState.emergency_latch ? 'Clear emergency' : 'Trigger emergency'}
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  color="inherit"
-                  onClick={moveToDock}
-                  sx={{flex: 1, textTransform: 'none'}}
-                >
-                  {simState.charging ? 'Charging…' : 'Move to dock'}
-                </Button>
-              </Box>
 
               <Divider sx={{my: 1}} />
 
@@ -411,6 +388,28 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
               </Box>
             </Box>
           </Box>
+          <Divider sx={{mt: 1}} />
+          <Box sx={{display: 'flex', gap: 1, px: 1.5, py: 0.75, justifyContent: 'flex-end'}}>
+            <Button
+              size="small"
+              variant={simState.emergency_latch ? 'contained' : 'outlined'}
+              color={simState.emergency_latch ? 'error' : 'inherit'}
+              onClick={() => setEmergency(!simState.emergency_latch)}
+              sx={{textTransform: 'none', fontSize: '0.8rem'}}
+            >
+              {simState.emergency_latch ? 'Clear emergency' : 'Trigger emergency'}
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              color="inherit"
+              onClick={moveToDock}
+              sx={{textTransform: 'none', fontSize: '0.8rem'}}
+            >
+              {simState.charging ? 'Charging…' : 'Move to dock'}
+            </Button>
+          </Box>
+          </>
         ) : (
           <>
             <Divider sx={{my: 1}} />
