@@ -16,8 +16,7 @@ export default function MobileBottomBar({onMenuOpen}: MobileBottomBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const mowerCapabilities = useSelectedMower((s) => s?.capabilities);
-  const simAvailable = useSelectedMower((s) => s?.simState != null);
-  const navigationItems = createNavigationItems(mowerCapabilities, simAvailable);
+  const navigationItems = createNavigationItems(mowerCapabilities);
   const activeEmergency = useSelectedMowerActiveEmergency();
 
   const handleNavigation = (path: string) => {
