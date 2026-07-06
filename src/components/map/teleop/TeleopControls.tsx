@@ -5,12 +5,11 @@ import {Box, useMediaQuery, useTheme} from '@mui/material';
 import VirtualJoystick from './VirtualJoystick';
 
 interface TeleopControlsProps {
-  publishAtRest?: boolean;
   simulatorMode?: boolean;
 }
 
-export default function TeleopControls({publishAtRest = false, simulatorMode = false}: TeleopControlsProps) {
-  const {setVelocity} = useTeleop({publishAtRest});
+export default function TeleopControls({simulatorMode = false}: TeleopControlsProps) {
+  const {setVelocity} = useTeleop();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 

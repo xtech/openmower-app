@@ -299,7 +299,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
         ))}
         {mowerPosition && !isDocked && <MowerMarker position={mowerPosition} datum={datumOrFallback} />}
         <TrackLayer visible={showTrackLayer && !editMode} pastTrack={pastTrack} loading={trackLoading} />
-        {showTeleop && <TeleopControls publishAtRest={manualDrive} simulatorMode={manualDrive} />}
+        {showTeleop && <TeleopControls simulatorMode={manualDrive} />}
         <DialogOutlet />
       </RMap>
     </Box>
