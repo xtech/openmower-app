@@ -351,6 +351,28 @@
       }
     },
     {
+      "name": "sim.joy_override.set",
+      "summary": "Enable or disable joystick (manual drive) override in the simulator.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "description": "true = joystick override active (manual drive), false = normal autonomous operation.",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "result",
+        "description": "No result is returned if successful.",
+        "schema": {
+          "type": "null"
+        }
+      }
+    },
+    {
       "name": "sim.dock.move",
       "summary": "Drive the simulated robot onto the dock and start charging.",
       "params": [],

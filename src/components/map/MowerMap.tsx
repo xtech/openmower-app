@@ -17,7 +17,7 @@ import {FocusIcon, LayoutListIcon, PencilIcon} from 'lucide-react';
 import type {Map} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import {RFullscreenControl, RMap} from 'maplibre-react-components';
-import {useCallback, useEffect, useEffectEvent, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useEffectEvent, useMemo, useRef} from 'react';
 import {DialogOutlet, useDialog} from 'react-dialog-async';
 import AreasList from './AreasList';
 import ControlButton from './ControlButton';
@@ -63,7 +63,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   const isDocked = useSelectedMower((s) => s?.state.is_charging ?? false);
   const mowerPosition = useSelectedMower((s) => s?.position ?? s?.state.pose);
   const simAvailable = useSelectedMower((s) => s?.simState != null);
-  const [manualDrive, setManualDrive] = useState(false);
+  const manualDrive = useSelectedMower((s) => s?.simState?.joy_override ?? false);
   const showTeleop = (currentState === 'AREA_RECORDING' || manualDrive) && !editMode;
   const areas = useMemo(
     () => features.features.filter((feature) => feature.geometry.type === 'Polygon') as Feature<Polygon, AreaProps>[],
@@ -249,7 +249,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
           onClick={() => fitToBounds(false, padding)}
         />
         <LayersButton datum={datum} trackLoading={trackLoading} editMode={editMode} />
-        {simAvailable && <SimulatorButton manualDrive={manualDrive} onManualDriveChange={setManualDrive} />}
+        {simAvailable && <SimulatorButton />}
         <ControlButton
           position="top-right"
           icon={LayoutListIcon}

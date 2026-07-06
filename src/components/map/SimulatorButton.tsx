@@ -26,10 +26,6 @@ import {useRControl} from 'maplibre-react-components';
 import {useCallback, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 
-interface SimulatorButtonProps {
-  manualDrive: boolean;
-  onManualDriveChange: (enabled: boolean) => void;
-}
 
 const STEPS = [0.25, 0.5, 1, 2];
 
@@ -204,7 +200,7 @@ function BatterySlider({
 
 const rowSx = {mx: 0, px: 1, py: 0.25, width: '100%', justifyContent: 'space-between'} as const;
 
-export default function SimulatorButton({manualDrive, onManualDriveChange}: SimulatorButtonProps) {
+export default function SimulatorButton() {
   const {container} = useRControl({position: 'bottom-right'});
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -212,7 +208,7 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
 
   const theme = useTheme();
 
-  const {simState, available, setEmergency, setMovementAllowed, setBatteryVoltage, setGpsGood, moveToDock, displace} =
+  const {simState, available, setEmergency, setMovementAllowed, setBatteryVoltage, setGpsGood, setJoyOverride, moveToDock, displace} =
     useSimControl();
 
   const params = useSelectedMower((m) => m?.params ?? {});
@@ -223,7 +219,7 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
   const batteryPct = useSelectedMower((m) => m?.state.battery_percentage ?? null);
 
   const hasActivity =
-    manualDrive || simState?.emergency_latch || simState?.gps_good === false || simState?.movement_allowed === false;
+    simState?.joy_override || simState?.emergency_latch || simState?.gps_good === false || simState?.movement_allowed === false;
 
   const content = (
     <>
@@ -271,7 +267,7 @@ export default function SimulatorButton({manualDrive, onManualDriveChange}: Simu
               <FormControlLabel
                 sx={rowSx}
                 labelPlacement="start"
-                control={<Switch checked={manualDrive} onChange={(e) => onManualDriveChange(e.target.checked)} />}
+                control={<Switch checked={simState.joy_override} onChange={(e) => setJoyOverride(e.target.checked)} />}
                 label="Manual drive"
               />
 

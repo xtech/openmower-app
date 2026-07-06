@@ -5,7 +5,7 @@ import {useSelectedMower} from '@/stores/mowersStore';
 import type {SimState} from '@/stores/schemas';
 import {useCallback, useState} from 'react';
 
-export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'displace';
+export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'displace' | 'joy_override';
 
 export interface SimControl {
   /** null while no simulator has been detected (no retained sim/state/json message). */
@@ -18,6 +18,7 @@ export interface SimControl {
   setMovementAllowed: (allowed: boolean) => void;
   setBatteryVoltage: (voltage: number) => void;
   setGpsGood: (good: boolean) => void;
+  setJoyOverride: (enabled: boolean) => void;
   moveToDock: () => void;
   displace: (dx: number, dy: number, dheading?: number) => void;
 }
@@ -55,6 +56,7 @@ export function useSimControl(): SimControl {
     setMovementAllowed: (allowed) => run('movement', (r) => r.sim.movement.set({allowed})),
     setBatteryVoltage: (voltage) => run('battery', (r) => r.sim.battery.set({voltage})),
     setGpsGood: (good) => run('gps', (r) => r.sim.gps.set({good})),
+    setJoyOverride: (enabled) => run('joy_override', (r) => r.sim.joy_override.set({enabled})),
     moveToDock: () => run('dock', (r) => r.sim.dock.move()),
     displace: (dx, dy, dheading = 0) => run('displace', (r) => r.sim.displace({dx, dy, dheading})),
   };

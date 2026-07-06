@@ -60,6 +60,7 @@ export const simStateSchema = z.object({
   gps_good: z.boolean(),
   battery_voltage: z.number(),
   charging: z.boolean(),
+  joy_override: z.boolean(),
 });
 
 export type SimState = z.infer<typeof simStateSchema>;
