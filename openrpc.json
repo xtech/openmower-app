@@ -421,6 +421,57 @@
           "type": "null"
         }
       }
+    },
+    {
+      "name": "ext.planner.plan",
+      "summary": "Run the coverage planner; return per-stage geometry, lineage and timings.",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "area",
+          "description": "Working-area outline as [[x, y], ...] in local metres.",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {"type": "array", "items": {"type": "number"}}
+          }
+        },
+        {
+          "name": "obstacles",
+          "description": "Obstacle outlines, each [[x, y], ...].",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {"type": "array", "items": {"type": "number"}}
+            }
+          }
+        },
+        {
+          "name": "nav_areas",
+          "description": "Drivable-but-not-mowed areas, each [[x, y], ...].",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {"type": "array", "items": {"type": "number"}}
+            }
+          }
+        },
+        {
+          "name": "params",
+          "description": "Mower and planner parameters.",
+          "required": false,
+          "schema": {"type": "object"}
+        }
+      ],
+      "result": {
+        "name": "plan",
+        "description": "Stages, lineage DAG, per-stage timings and the validator report.",
+        "schema": {"type": "object"}
+      }
     }
   ]
 }

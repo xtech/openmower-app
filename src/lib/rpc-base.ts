@@ -20,7 +20,11 @@ export default class OpenMowerRpcBase {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pendingRequests = new Map<string, PendingRequest<any>>();
 
-  constructor(private mqtt: MqttClient, private prefix: string) {}
+  constructor(
+    private mqtt: MqttClient,
+    private prefix: string,
+    private timeoutMs: number = 10000,
+  ) {}
 
   protected call<T>(method: string, params?: object): Promise<T> {
     const id = generateId();
@@ -41,7 +45,7 @@ export default class OpenMowerRpcBase {
         timeout: setTimeout(() => {
           this.pendingRequests.delete(id);
           reject(new Error('RPC timeout'));
-        }, 10000),
+        }, this.timeoutMs),
       };
       this.pendingRequests.set(id, request);
     });
