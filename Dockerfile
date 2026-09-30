@@ -6,11 +6,11 @@ WORKDIR /app
 
 FROM base AS builder
 
-COPY --chown=node:node package*.json .
-RUN npm ci
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --frozen-lockfile
 
 COPY --chown=node:node . .
-RUN npm run build
+RUN pnpm run build
 
 ###############################################################################
 

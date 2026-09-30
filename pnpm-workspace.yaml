@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: false
+  sharp: true
+  unrs-resolver: true
+
+overrides:
+  mapbox-gl: npm:maplibre-gl@^5.20.1

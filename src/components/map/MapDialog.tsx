@@ -1,5 +1,5 @@
 import {Dialog, type DialogProps} from '@mui/material';
-import merge from 'lodash/merge';
+import merge from 'lodash.merge';
 import {useMemo} from 'react';
 
 export default function MapDialog(props: DialogProps) {
