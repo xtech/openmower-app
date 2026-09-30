@@ -46,7 +46,7 @@ export default function SelectedMower({selectedMower, onMowerMenuOpen}: Selected
           <MowerIcon fontSize="small" />
         </Avatar>
         <Box sx={{flex: 1, minWidth: 0}}>
-          <Typography variant="body2" fontWeight="600" color="text.primary" noWrap>
+          <Typography variant="body2" color="text.primary" noWrap sx={{fontWeight: '600'}}>
             {selectedMower.name}
           </Typography>
         </Box>

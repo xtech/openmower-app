@@ -151,7 +151,7 @@ export default function TasksPage() {
                       <AssignmentIcon />
                     </Avatar>
                     <Box>
-                      <Typography variant="h5" component="h2" fontWeight="600">
+                      <Typography variant="h5" component="h2" sx={{fontWeight: '600'}}>
                         Mowing Tasks
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -203,7 +203,7 @@ export default function TasksPage() {
                           <Box sx={{flex: 1}}>
                             {/* Task Header */}
                             <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 2}}>
-                              <Typography variant="h6" fontWeight="600">
+                              <Typography variant="h6" sx={{fontWeight: '600'}}>
                                 {task.name}
                               </Typography>
                               <Chip
@@ -233,7 +233,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Area
                                 </Typography>
-                                <Typography variant="body1" fontWeight="500">
+                                <Typography variant="body1" sx={{fontWeight: '500'}}>
                                   {task.area}
                                 </Typography>
                               </Box>
@@ -241,7 +241,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Pattern
                                 </Typography>
-                                <Typography variant="body1" fontWeight="500">
+                                <Typography variant="body1" sx={{fontWeight: '500'}}>
                                   {task.pattern}
                                 </Typography>
                               </Box>
@@ -249,7 +249,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Est. Time
                                 </Typography>
-                                <Typography variant="body1" fontWeight="500">
+                                <Typography variant="body1" sx={{fontWeight: '500'}}>
                                   {task.estimatedTime}
                                 </Typography>
                               </Box>
@@ -259,8 +259,8 @@ export default function TasksPage() {
                                 </Typography>
                                 <Typography
                                   variant="body1"
-                                  fontWeight="500"
                                   color={task.efficiency > 80 ? 'success.main' : 'warning.main'}
+                                  sx={{fontWeight: '500'}}
                                 >
                                   {task.efficiency}%
                                 </Typography>
@@ -270,18 +270,18 @@ export default function TasksPage() {
                             {/* Schedule Info */}
                             <Box sx={{display: 'flex', gap: 3, flexWrap: 'wrap'}}>
                               <Box>
-                                <Typography variant="caption" color="text.secondary" display="block">
+                                <Typography variant="caption" color="text.secondary" sx={{display: 'block'}}>
                                   Next Run
                                 </Typography>
-                                <Typography variant="body2" fontWeight="500">
+                                <Typography variant="body2" sx={{fontWeight: '500'}}>
                                   {task.nextRun}
                                 </Typography>
                               </Box>
                               <Box>
-                                <Typography variant="caption" color="text.secondary" display="block">
+                                <Typography variant="caption" color="text.secondary" sx={{display: 'block'}}>
                                   Last Run
                                 </Typography>
-                                <Typography variant="body2" fontWeight="500">
+                                <Typography variant="body2" sx={{fontWeight: '500'}}>
                                   {task.lastRun}
                                 </Typography>
                               </Box>
@@ -365,7 +365,7 @@ export default function TasksPage() {
                   <Avatar sx={{bgcolor: theme.palette.info.main, width: 40, height: 40}}>
                     <CheckIcon />
                   </Avatar>
-                  <Typography variant="h5" component="h3" fontWeight="600">
+                  <Typography variant="h5" component="h3" sx={{fontWeight: '600'}}>
                     Task Details
                   </Typography>
                 </Box>
@@ -382,7 +382,7 @@ export default function TasksPage() {
                             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                               Task Name
                             </Typography>
-                            <Typography variant="h6" fontWeight="600">
+                            <Typography variant="h6" sx={{fontWeight: '600'}}>
                               {task.name}
                             </Typography>
                           </Box>

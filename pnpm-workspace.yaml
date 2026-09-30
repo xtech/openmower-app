@@ -3,5 +3,7 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 
+minimumReleaseAge: 1440
+
 overrides:
   mapbox-gl: npm:maplibre-gl@^5.20.1

@@ -192,7 +192,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
               sx={{bgcolor: 'background.paper', '&:hover': {bgcolor: 'action.hover'}, minHeight: 48}}
             >
               <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, flex: 1}}>
-                <Typography variant="subtitle2" fontWeight={600}>
+                <Typography variant="subtitle2" sx={{fontWeight: 600}}>
                   Mowing settings overrides
                 </Typography>
                 {overrideCount > 0 && (
@@ -238,8 +238,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  inputProps={{min: 0, step: 1}}
-                  slotProps={{inputLabel: {shrink: true}}}
+                  slotProps={{htmlInput: {min: 0, step: 1}, inputLabel: {shrink: true}}}
                   sx={{
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
@@ -256,8 +255,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  inputProps={{min: 0, step: 1}}
-                  slotProps={{inputLabel: {shrink: true}}}
+                  slotProps={{htmlInput: {min: 0, step: 1}, inputLabel: {shrink: true}}}
                   sx={{
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
@@ -274,8 +272,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  inputProps={{step: 0.01}}
-                  slotProps={{inputLabel: {shrink: true}}}
+                  slotProps={{htmlInput: {step: 0.01}, inputLabel: {shrink: true}}}
                   sx={{
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},
@@ -292,8 +289,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Auto-detect"
-                  inputProps={{min: -180, max: 180, step: 'any'}}
-                  slotProps={{inputLabel: {shrink: true}}}
+                  slotProps={{htmlInput: {min: -180, max: 180, step: 'any'}, inputLabel: {shrink: true}}}
                   sx={{
                     '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
                     '& input[type=number]': {MozAppearance: 'textfield'},

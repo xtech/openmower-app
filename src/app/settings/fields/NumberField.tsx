@@ -28,12 +28,12 @@ export function NumberField({field, path}: NumberFieldProps) {
           }}
           error={hasError}
           helperText={field.description}
-          inputProps={{
-            min: field.minimum,
-            max: field.maximum,
-            step: field.jsonType === 'integer' ? 1 : 'any',
-          }}
           slotProps={{
+            htmlInput: {
+              min: field.minimum,
+              max: field.maximum,
+              step: field.jsonType === 'integer' ? 1 : 'any',
+            },
             formHelperText: {
               sx: {whiteSpace: 'pre-wrap'},
             },

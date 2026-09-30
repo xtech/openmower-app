@@ -11,7 +11,7 @@ export default function MowerSelectorHeader({
 }: MowerSelectorHeaderProps) {
   return (
     <Box sx={{p: 2, borderBottom: '1px solid rgba(0,0,0,0.08)', userSelect: 'none'}}>
-      <Typography variant="subtitle2" fontWeight="600" color="text.primary">
+      <Typography variant="subtitle2" color="text.primary" sx={{fontWeight: '600'}}>
         {title}
       </Typography>
       <Typography variant="caption" color="text.secondary">

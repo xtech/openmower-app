@@ -181,8 +181,7 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
                     <Typography
                       variant="body2"
                       noWrap
-                      fontWeight={500}
-                      sx={{opacity: trackLoading ? 0.4 : 1, transition: 'opacity 0.15s'}}
+                      sx={{fontWeight: 500, opacity: trackLoading ? 0.4 : 1, transition: 'opacity 0.15s'}}
                     >
                       {currentEntry.label}
                     </Typography>

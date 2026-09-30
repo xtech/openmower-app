@@ -113,7 +113,7 @@ export default function EventsPage() {
                   />
                 </Box>
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1, minWidth: 0}}>
-                  <Typography variant="h6" fontWeight={600}>
+                  <Typography variant="h6" sx={{fontWeight: 600}}>
                     {formatEventDateLabel(selectedDate)}
                   </Typography>
                   {selectedDate === today && (

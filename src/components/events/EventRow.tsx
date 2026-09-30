@@ -48,7 +48,7 @@ export default function EventRow({event, dense = false}: EventRowProps) {
           rowGap: 0.25,
         }}
       >
-        <Typography variant="body2" fontWeight={600} sx={{minWidth: 0}}>
+        <Typography variant="body2" sx={{fontWeight: 600, minWidth: 0}}>
           {getEventLabel(event)}
         </Typography>
         {extraEntries.map(([key, value]) => (

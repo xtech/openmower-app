@@ -257,7 +257,7 @@ function SettingsAccordion({fieldset}: {fieldset: FieldsetFieldType}) {
         }}
       >
         <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, width: '100%'}}>
-          <Typography variant="subtitle1" fontWeight={600}>
+          <Typography variant="subtitle1" sx={{fontWeight: 600}}>
             {fieldset.label}
           </Typography>
           {changedCount > 0 && <Chip label={changedCount} size="small" color="primary" sx={{height: 22, minWidth: 22}} />}

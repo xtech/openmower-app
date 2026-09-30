@@ -74,8 +74,10 @@ export function IssuesDialog({isOpen, handleClose}: AsyncDialogProps<void, void>
               <ListItemText
                 primary={getFeatureName(issue.featureId)}
                 secondary={issue.message}
-                primaryTypographyProps={{variant: 'body2', fontWeight: 500}}
-                secondaryTypographyProps={{variant: 'caption'}}
+                slotProps={{
+                  primary: {variant: 'body2', sx: {fontWeight: 500}},
+                  secondary: {variant: 'caption'},
+                }}
               />
             </ListItem>
           ))}

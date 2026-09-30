@@ -205,11 +205,11 @@ export default function Dashboard() {
                       <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
                         <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
                           <BatteryIcon color={getBatteryColor(mower.battery)} sx={{fontSize: 28}} />
-                          <Typography variant="h6" fontWeight="600">
+                          <Typography variant="h6" sx={{fontWeight: '600'}}>
                             Battery Status
                           </Typography>
                         </Box>
-                        <Typography variant="h4" fontWeight="bold" color={getBatteryColor(mower.battery)}>
+                        <Typography variant="h4" color={getBatteryColor(mower.battery)} sx={{fontWeight: 'bold'}}>
                           {mower.battery}%
                         </Typography>
                       </Box>
@@ -230,7 +230,7 @@ export default function Dashboard() {
 
                     {/* Operation Info with Icons */}
                     <Box sx={{mb: 4}}>
-                      <Typography variant="h6" fontWeight="600" gutterBottom sx={{color: theme.palette.text.secondary}}>
+                      <Typography variant="h6" gutterBottom sx={{fontWeight: '600', color: theme.palette.text.secondary}}>
                         Current Operation
                       </Typography>
                       <Box
@@ -244,7 +244,7 @@ export default function Dashboard() {
                         }}
                       >
                         <PlayIcon color="primary" />
-                        <Typography variant="body1" fontWeight="500">
+                        <Typography variant="body1" sx={{fontWeight: '500'}}>
                           {mower.operation}
                         </Typography>
                       </Box>
@@ -261,7 +261,7 @@ export default function Dashboard() {
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Est. Time
                         </Typography>
-                        <Typography variant="h6" fontWeight="600" color="primary">
+                        <Typography variant="h6" color="primary" sx={{fontWeight: '600'}}>
                           {mower.estimatedTime}
                         </Typography>
                       </Box>
@@ -273,7 +273,7 @@ export default function Dashboard() {
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Speed
                         </Typography>
-                        <Typography variant="h6" fontWeight="600" color="success.main">
+                        <Typography variant="h6" color="success.main" sx={{fontWeight: '600'}}>
                           {mower.speed}
                         </Typography>
                       </Box>
@@ -283,7 +283,7 @@ export default function Dashboard() {
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Efficiency
                         </Typography>
-                        <Typography variant="h6" fontWeight="600" color="info.main">
+                        <Typography variant="h6" color="info.main" sx={{fontWeight: '600'}}>
                           {mower.efficiency}%
                         </Typography>
                       </Box>

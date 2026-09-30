@@ -96,7 +96,7 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
     <Box>
       <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
         <LinkIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" fontWeight={600}>
+        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
           MQTT
         </Typography>
         {mqttStatusChip(mqttStatus)}
@@ -110,7 +110,7 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
           alignItems: 'baseline',
         }}
       >
-        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
           URL
         </Typography>
         <Typography variant="body2" sx={{fontFamily: 'monospace', fontSize: '0.8rem', wordBreak: 'break-all'}}>
@@ -123,12 +123,12 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
             </Tooltip>
           )}
         </Typography>
-        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
           Prefix
         </Typography>
         <Typography variant="body2" sx={{fontFamily: 'monospace', fontSize: '0.8rem'}}>
           {mqttPrefix || (
-            <Typography component="span" color="text.disabled" fontSize="inherit">
+            <Typography component="span" color="text.disabled" sx={{fontSize: 'inherit'}}>
               (none)
             </Typography>
           )}
@@ -202,7 +202,7 @@ function RpcSection({rpc}: {rpc: OpenMowerRpc}) {
     <Box>
       <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
         <PlayArrowIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" fontWeight={600}>
+        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
           RPC
         </Typography>
       </Box>
@@ -220,7 +220,7 @@ function CapabilitiesSection({capabilities}: {capabilities: Capabilities}) {
     <Box>
       <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
         <CheckCircleIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" fontWeight={600}>
+        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
           Capabilities
         </Typography>
       </Box>
@@ -251,7 +251,7 @@ function MapSection({map}: {map: MapData}) {
     <Box>
       <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
         <MapIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" fontWeight={600}>
+        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
           Map
         </Typography>
         {hasMap ? (
@@ -263,7 +263,7 @@ function MapSection({map}: {map: MapData}) {
       <Box
         sx={{display: 'grid', gridTemplateColumns: 'max-content 1fr', columnGap: 2, rowGap: 0.5, alignItems: 'center'}}
       >
-        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
           Datum
         </Typography>
         <Typography variant="body2">
@@ -282,7 +282,7 @@ function MapSection({map}: {map: MapData}) {
             </Typography>
           )}
         </Typography>
-        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
           Areas
         </Typography>
         <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.75}}>
@@ -294,7 +294,7 @@ function MapSection({map}: {map: MapData}) {
             Object.entries(countsByType).map(([type, count]) => <SplitBadge key={type} label={type} value={count} />)
           )}
         </Box>
-        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
           Docking stations
         </Typography>
         <Typography variant="body2">{map.docking_stations.length}</Typography>
@@ -328,7 +328,7 @@ export default function DebugPage() {
             {mowers.map((mower) => (
               <Card key={mower.id} sx={outerCardStyles(theme)}>
                 <CardContent>
-                  <Typography variant="h5" fontWeight={700} gutterBottom>
+                  <Typography variant="h5" gutterBottom sx={{fontWeight: 700}}>
                     {mower.name}
                   </Typography>
                   {mower.description && (

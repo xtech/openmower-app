@@ -82,7 +82,7 @@ export function UploadModal({
             }
             label={
               <Box>
-                <Typography variant="body2" fontWeight="500">
+                <Typography variant="body2" sx={{fontWeight: '500'}}>
                   Remove existing features
                 </Typography>
                 <Typography variant="caption" color="text.secondary">

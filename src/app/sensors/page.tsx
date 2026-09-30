@@ -135,7 +135,7 @@ export default function SensorsPage() {
                     <BatteryIcon color="primary" />
                     <Typography variant="subtitle2">Voltage</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" fontWeight="medium">
+                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
                     {mockSensorData.battery.voltage}V
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -148,7 +148,7 @@ export default function SensorsPage() {
                     <SpeedIcon color="primary" />
                     <Typography variant="subtitle2">Current</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" fontWeight="medium">
+                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
                     {mockSensorData.battery.current}A
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -161,7 +161,7 @@ export default function SensorsPage() {
                     <TempIcon color="primary" />
                     <Typography variant="subtitle2">Temperature</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" fontWeight="medium">
+                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
                     {mockSensorData.battery.temperature}°C
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -196,7 +196,7 @@ export default function SensorsPage() {
               <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
                 {Object.entries(mockSensorData.motors).map(([motor, data]) => (
                   <Box key={motor} sx={{flex: '1', minWidth: '200px'}}>
-                    <Typography variant="subtitle1" fontWeight="medium" gutterBottom sx={{textTransform: 'capitalize'}}>
+                    <Typography variant="subtitle1" gutterBottom sx={{fontWeight: 'medium', textTransform: 'capitalize'}}>
                       {motor.replace(/([A-Z])/g, ' $1').trim()}
                     </Typography>
 
@@ -205,7 +205,7 @@ export default function SensorsPage() {
                         <Typography variant="body2" color="text.secondary">
                           RPM
                         </Typography>
-                        <Typography variant="body2" fontWeight="medium">
+                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
                           {data.rpm}
                         </Typography>
                       </Box>
@@ -222,7 +222,7 @@ export default function SensorsPage() {
                         <Typography variant="body2" color="text.secondary">
                           Power
                         </Typography>
-                        <Typography variant="body2" fontWeight="medium">
+                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
                           {data.power}%
                         </Typography>
                       </Box>
@@ -239,7 +239,7 @@ export default function SensorsPage() {
                         <Typography variant="body2" color="text.secondary">
                           Temperature
                         </Typography>
-                        <Typography variant="body2" fontWeight="medium">
+                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
                           {data.temperature}°C
                         </Typography>
                       </Box>
@@ -267,7 +267,7 @@ export default function SensorsPage() {
                 <Box sx={{flex: '1', minWidth: '250px'}}>
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
                     <GpsIcon color="primary" />
-                    <Typography variant="subtitle1" fontWeight="medium">
+                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
                       GPS
                     </Typography>
                     <Chip
@@ -288,7 +288,7 @@ export default function SensorsPage() {
                 <Box sx={{flex: '1', minWidth: '250px'}}>
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
                     <WarningIcon color="primary" />
-                    <Typography variant="subtitle1" fontWeight="medium">
+                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
                       Obstacle Detection
                     </Typography>
                     <Chip
@@ -312,7 +312,7 @@ export default function SensorsPage() {
                 <Box sx={{flex: '1', minWidth: '250px'}}>
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
                     <TempIcon color="primary" />
-                    <Typography variant="subtitle1" fontWeight="medium">
+                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
                       Environmental
                     </Typography>
                     <Chip

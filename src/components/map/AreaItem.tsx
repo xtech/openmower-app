@@ -93,7 +93,7 @@ export default function AreaItem({
           {!isGroupDragPlaceholder && <Icon size={18} strokeWidth={strokeWidth} />}
         </Box>
         <Box sx={{flex: 1, px: 1.5, py: 1, opacity: dragging ? 0.4 : 1.0}}>
-          <Typography variant="h6" fontWeight="600">
+          <Typography variant="h6" sx={{fontWeight: '600'}}>
             {isGroupDragPlaceholder ? `${dragCount} areas` : (area.properties.name ?? 'Unnamed area')}
           </Typography>
           {!isGroupDragPlaceholder && (

@@ -72,7 +72,7 @@ function FieldsetAccordion({field, level, pathPrefix}: {field: FieldsetFieldType
         }}
       >
         <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-          <Typography variant="subtitle2" fontWeight={600}>
+          <Typography variant="subtitle2" sx={{fontWeight: 600}}>
             {field.label}
           </Typography>
           {changedCount > 0 && <Chip label={changedCount} size="small" color="primary" sx={{height: 20, minWidth: 20}} />}

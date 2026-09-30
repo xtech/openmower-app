@@ -10,7 +10,7 @@ import {
   GpsOff as GpsUnavailableIcon,
   Layers as AreaIcon,
   NotificationsActive as EmergencyActiveIcon,
-  HelpOutline as UnknownEventIcon,
+  HelpOutlined as UnknownEventIcon,
   Sync as StateIcon,
 } from '@mui/icons-material';
 import type {ReactElement} from 'react';

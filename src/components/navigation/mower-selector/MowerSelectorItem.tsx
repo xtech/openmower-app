@@ -24,7 +24,7 @@ export default function MowerSelectorItem({mower, onClick}: MowerSelectorItemPro
     >
       <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
         <Box>
-          <Typography variant="body2" fontWeight="500">
+          <Typography variant="body2" sx={{fontWeight: '500'}}>
             {mower.name}
           </Typography>
         </Box>

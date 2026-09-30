@@ -101,7 +101,7 @@ export default function EventDatePicker({selectedDate, availableDates, onSelect}
           <IconButton aria-label="Previous month" size="small" onClick={() => setViewMonth((month) => addMonths(month, -1))}>
             <PrevMonthIcon fontSize="small" />
           </IconButton>
-          <Typography variant="subtitle2" fontWeight={600}>
+          <Typography variant="subtitle2" sx={{fontWeight: 600}}>
             {monthLabel}
           </Typography>
           <IconButton aria-label="Next month" size="small" onClick={() => setViewMonth((month) => addMonths(month, 1))}>
