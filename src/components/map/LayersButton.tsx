@@ -1,8 +1,8 @@
 'use client';
 
-import {useMapDisplayStore} from '@/stores/mapDisplayStore';
-import {useSelectedMower} from '@/stores/mowersStore';
-import type {Datum} from '@/stores/schemas';
+import { useMapDisplayStore } from '@/stores/mapDisplayStore';
+import { useSelectedMower } from '@/stores/mowersStore';
+import type { Datum } from '@/stores/schemas';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -12,10 +12,10 @@ import Skeleton from '@mui/material/Skeleton';
 import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import {ChevronLeftIcon, ChevronRightIcon, ClockIcon, LayersIcon, RotateCcwIcon} from 'lucide-react';
-import {useRControl} from 'maplibre-react-components';
-import {useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
+import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, LayersIcon, RotateCcwIcon } from 'lucide-react';
+import { useRControl } from 'maplibre-react-components';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface LayersButtonProps {
   datum: Datum | null;
@@ -23,8 +23,8 @@ interface LayersButtonProps {
   editMode?: boolean;
 }
 
-export default function LayersButton({datum, trackLoading, editMode}: LayersButtonProps) {
-  const {container} = useRControl({position: 'top-right'});
+export default function LayersButton({ datum, trackLoading, editMode }: LayersButtonProps) {
+  const { container } = useRControl({ position: 'top-right' });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -46,8 +46,8 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
   const pastJobs = (jobList ?? []).filter((j) => j.job_id !== liveJobId);
 
   // All selectable entries: index 0 = "Current (live)", then historical jobs newest-first
-  const allEntries: Array<{id: string | null; label: string}> = [
-    {id: null, label: 'Current'},
+  const allEntries: Array<{ id: string | null; label: string }> = [
+    { id: null, label: 'Current' },
     ...pastJobs.map((job) => {
       const date = new Date(job.epoch * 1000);
       const label = Number.isNaN(date.getTime())
@@ -59,7 +59,7 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
             hour: '2-digit',
             minute: '2-digit',
           });
-      return {id: job.job_id, label};
+      return { id: job.job_id, label };
     }),
   ];
 
@@ -87,7 +87,7 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
         type="button"
         title="Layers"
         onClick={() => setOpen((o) => !o)}
-        style={{padding: 0, position: 'relative'}}
+        style={{ padding: 0, position: 'relative' }}
       >
         <LayersIcon />
         {hasPositionCapability && isViewingHistory && !editMode && (
@@ -114,16 +114,16 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
         open={open}
         anchorEl={buttonRef.current}
         onClose={() => setOpen(false)}
-        anchorOrigin={{vertical: 'top', horizontal: 'left'}}
-        transformOrigin={{vertical: 'top', horizontal: 'right'}}
-        slotProps={{paper: {sx: {minWidth: 220, p: 1}}}}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        slotProps={{ paper: { sx: { minWidth: 220, p: 1 } } }}
       >
-        <Typography variant="overline" sx={{px: 1, display: 'block', lineHeight: 2}}>
+        <Typography variant="overline" sx={{ px: 1, display: 'block', lineHeight: 2 }}>
           Layers
         </Typography>
 
         <FormControlLabel
-          sx={{mx: 0, px: 1, py: 0.5, width: '100%'}}
+          sx={{ mx: 0, px: 1, py: 0.5, width: '100%' }}
           control={
             <Switch
               checked={showSatelliteLayer}
@@ -137,7 +137,7 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
         {hasPositionCapability && (
           <>
             <FormControlLabel
-              sx={{mx: 0, px: 1, py: 0.5, width: '100%'}}
+              sx={{ mx: 0, px: 1, py: 0.5, width: '100%' }}
               control={
                 <Switch
                   checked={showTrackLayer && !editMode}
@@ -146,15 +146,15 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
                 />
               }
               label={
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   Driven track
-                  <CircularProgress size={12} sx={{visibility: trackLoading ? 'visible' : 'hidden'}} />
+                  <CircularProgress size={12} sx={{ visibility: trackLoading ? 'visible' : 'hidden' }} />
                 </Box>
               }
             />
 
             {showTrackLayer && !editMode && (
-              <Box sx={{display: 'flex', alignItems: 'center', px: 1}}>
+              <Box sx={{ display: 'flex', alignItems: 'center', px: 1 }}>
                 <Tooltip title="Previous job">
                   <span>
                     <IconButton
@@ -176,12 +176,12 @@ export default function LayersButton({datum, trackLoading, editMode}: LayersButt
                   }}
                 >
                   {!jobListLoaded && selectedJobId !== null ? (
-                    <Skeleton variant="text" width="80%" sx={{mx: 'auto'}} />
+                    <Skeleton variant="text" width="80%" sx={{ mx: 'auto' }} />
                   ) : (
                     <Typography
                       variant="body2"
                       noWrap
-                      sx={{fontWeight: 500, opacity: trackLoading ? 0.4 : 1, transition: 'opacity 0.15s'}}
+                      sx={{ fontWeight: 500, opacity: trackLoading ? 0.4 : 1, transition: 'opacity 0.15s' }}
                     >
                       {currentEntry.label}
                     </Typography>

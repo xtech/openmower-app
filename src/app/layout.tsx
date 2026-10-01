@@ -1,10 +1,10 @@
-import {loadAppConfig} from '@/lib/actions';
-import {Box} from '@mui/material';
-import {AppRouterCacheProvider} from '@mui/material-nextjs/v15-appRouter';
-import type {Metadata} from 'next';
-import {Roboto} from 'next/font/google';
-import {DialogProvider} from 'react-dialog-async';
-import {ConfigInitializer} from '../components/ConfigInitializer';
+import { loadAppConfig } from '@/lib/actions';
+import { Box } from '@mui/material';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import type { Metadata } from 'next';
+import { Roboto } from 'next/font/google';
+import { DialogProvider } from 'react-dialog-async';
+import { ConfigInitializer } from '../components/ConfigInitializer';
 import ThemeRegistry from '../components/ThemeRegistry';
 import Navigation from '../components/navigation/Navigation';
 import './globals.css';
@@ -43,13 +43,13 @@ export default async function RootLayout({
         <AppRouterCacheProvider>
           <ThemeRegistry>
             <DialogProvider>
-              <Box sx={{display: 'flex', height: '100dvh'}}>
+              <Box sx={{ display: 'flex', height: '100dvh' }}>
                 <Navigation />
                 <Box
                   component="main"
                   sx={{
                     flex: 1,
-                    pb: {xs: 7, md: 0}, // Account for mobile bottom navigation
+                    pb: { xs: 7, md: 0 }, // Account for mobile bottom navigation
                     margin: 0,
                     padding: 0,
                     width: '100%',

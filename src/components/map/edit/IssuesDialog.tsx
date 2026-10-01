@@ -1,6 +1,6 @@
 'use client';
 
-import {useMapboxDraw, useMapContext, withDisplaySortKeys} from '@/contexts/MapContext';
+import { useMapboxDraw, useMapContext, withDisplaySortKeys } from '@/contexts/MapContext';
 import {
   Button,
   Checkbox,
@@ -12,14 +12,14 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import {featureCollection} from '@turf/helpers';
-import {BadgeCheckIcon, WrenchIcon} from 'lucide-react';
-import {useEffect, useState} from 'react';
-import {AsyncDialogProps} from 'react-dialog-async';
+import { featureCollection } from '@turf/helpers';
+import { BadgeCheckIcon, WrenchIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AsyncDialogProps } from 'react-dialog-async';
 import MapDialog from '../MapDialog';
 
-export function IssuesDialog({isOpen, handleClose}: AsyncDialogProps<void, void>) {
-  const {issues, setFeatures, features} = useMapContext();
+export function IssuesDialog({ isOpen, handleClose }: AsyncDialogProps<void, void>) {
+  const { issues, setFeatures, features } = useMapContext();
   const draw = useMapboxDraw();
   const [selected, setSelected] = useState<Set<string>>(() => new Set(issues.map((i) => i.id)));
 
@@ -55,28 +55,28 @@ export function IssuesDialog({isOpen, handleClose}: AsyncDialogProps<void, void>
   return (
     <MapDialog open={isOpen} onClose={() => handleClose()} maxWidth="xs" fullWidth>
       <DialogTitle>Map Issues</DialogTitle>
-      <DialogContent sx={{pb: 0}}>
+      <DialogContent sx={{ pb: 0 }}>
         <List disablePadding>
           {issues.map((issue) => (
             <ListItem
               key={issue.id}
               disablePadding
               onClick={() => toggleSelected(issue.id)}
-              sx={{display: 'flex', alignItems: 'center', gap: 0.5, py: 0.5, cursor: 'pointer'}}
+              sx={{ display: 'flex', alignItems: 'center', gap: 0.5, py: 0.5, cursor: 'pointer' }}
             >
               <Checkbox
                 size="small"
                 checked={selected.has(issue.id)}
                 tabIndex={-1}
                 disableRipple
-                sx={{p: 0.5, flexShrink: 0}}
+                sx={{ p: 0.5, flexShrink: 0 }}
               />
               <ListItemText
                 primary={getFeatureName(issue.featureId)}
                 secondary={issue.message}
                 slotProps={{
-                  primary: {variant: 'body2', sx: {fontWeight: 500}},
-                  secondary: {variant: 'caption'},
+                  primary: { variant: 'body2', sx: { fontWeight: 500 } },
+                  secondary: { variant: 'caption' },
                 }}
               />
             </ListItem>
@@ -85,7 +85,7 @@ export function IssuesDialog({isOpen, handleClose}: AsyncDialogProps<void, void>
             <Typography
               variant="body2"
               color="success.main"
-              sx={{py: 1, display: 'flex', alignItems: 'center', gap: 1}}
+              sx={{ py: 1, display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <BadgeCheckIcon size={16} />
               No issues found.

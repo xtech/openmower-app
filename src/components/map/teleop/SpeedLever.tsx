@@ -1,8 +1,8 @@
 'use client';
 
-import {Box} from '@mui/material';
-import {Rabbit, Turtle} from 'lucide-react';
-import {useCallback, useRef, useState} from 'react';
+import { Box } from '@mui/material';
+import { Rabbit, Turtle } from 'lucide-react';
+import { useCallback, useRef, useState } from 'react';
 
 interface SpeedLeverProps {
   value: number; // 0 (slow), 1 (medium), 2 (fast)
@@ -17,7 +17,7 @@ const BORDER_W = 2;
 const PAD = 2;
 const MAX_TRAVEL = TRACK_HEIGHT - BORDER_W * 2 - PAD * 2 - KNOB_SIZE;
 
-const Icons = ({color}: {color: string}) => (
+const Icons = ({ color }: { color: string }) => (
   <>
     <Box
       sx={{
@@ -54,7 +54,7 @@ const Icons = ({color}: {color: string}) => (
   </>
 );
 
-export default function SpeedLever({value, onChange, simulatorMode = false}: SpeedLeverProps) {
+export default function SpeedLever({ value, onChange, simulatorMode = false }: SpeedLeverProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragY, setDragY] = useState<number | null>(null);
@@ -65,14 +65,14 @@ export default function SpeedLever({value, onChange, simulatorMode = false}: Spe
     (e: React.PointerEvent) => {
       if (pointerIdRef.current !== null) return;
       if (!trackRef.current) return;
-      
+
       e.preventDefault();
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
       pointerIdRef.current = e.pointerId;
-      
+
       const rect = trackRef.current.getBoundingClientRect();
       const pointerY = e.clientY - rect.top - BORDER_W - PAD;
-      
+
       // We use value to determine the current visual position if not dragging
       const currentVisualY = value === 2 ? 0 : value === 1 ? MAX_TRAVEL / 2 : MAX_TRAVEL;
       const knobTop = currentVisualY;
@@ -94,42 +94,39 @@ export default function SpeedLever({value, onChange, simulatorMode = false}: Spe
         onChange(state);
       }
     },
-    [value, onChange]
+    [value, onChange],
   );
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (e.pointerId !== pointerIdRef.current || !isDragging) return;
       if (!trackRef.current) return;
-      
+
       const rect = trackRef.current.getBoundingClientRect();
       const pointerY = e.clientY - rect.top - BORDER_W - PAD;
-      
+
       let y = pointerY - dragOffsetRef.current;
       y = Math.max(0, Math.min(MAX_TRAVEL, y));
       setDragY(y);
-      
+
       const frac = y / MAX_TRAVEL;
       let state = 1;
       if (frac < 0.25) state = 2;
       else if (frac > 0.75) state = 0;
       onChange(state);
     },
-    [isDragging, onChange]
+    [isDragging, onChange],
   );
 
-  const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
-      if (e.pointerId !== pointerIdRef.current) return;
-      pointerIdRef.current = null;
-      setIsDragging(false);
-      setDragY(null);
-    },
-    []
-  );
+  const handlePointerUp = useCallback((e: React.PointerEvent) => {
+    if (e.pointerId !== pointerIdRef.current) return;
+    pointerIdRef.current = null;
+    setIsDragging(false);
+    setDragY(null);
+  }, []);
 
-  const currentY = isDragging && dragY !== null ? dragY : (value === 2 ? 0 : value === 1 ? MAX_TRAVEL / 2 : MAX_TRAVEL);
-  
+  const currentY = isDragging && dragY !== null ? dragY : value === 2 ? 0 : value === 1 ? MAX_TRAVEL / 2 : MAX_TRAVEL;
+
   // The springy transition is used when NOT dragging
   const transitionStyle = isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.34, 1.25, 0.64, 1)';
 

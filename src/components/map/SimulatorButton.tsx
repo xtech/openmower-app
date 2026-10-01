@@ -1,7 +1,7 @@
 'use client';
 
-import {useSimControl} from '@/hooks/useSimControl';
-import {useSelectedMower} from '@/stores/mowersStore';
+import { useSimControl } from '@/hooks/useSimControl';
+import { useSelectedMower } from '@/stores/mowersStore';
 import {
   KeyboardArrowDown as DownIcon,
   KeyboardArrowLeft as LeftIcon,
@@ -22,10 +22,9 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import {useRControl} from 'maplibre-react-components';
-import {useCallback, useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
-
+import { useRControl } from 'maplibre-react-components';
+import { useCallback, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const STEPS = [0.25, 0.5, 1, 2];
 
@@ -116,13 +115,13 @@ function BatterySlider({
   const rx = 3;
 
   return (
-    <Box ref={measuredRef} sx={{px: 1.5, pb: 1}}>
+    <Box ref={measuredRef} sx={{ px: 1.5, pb: 1 }}>
       <svg
         ref={svgRef}
         width="100%"
         height={SVG_H}
         viewBox={`0 0 ${width} ${SVG_H}`}
-        style={{display: 'block', cursor: 'text', userSelect: 'none', overflow: 'visible'}}
+        style={{ display: 'block', cursor: 'text', userSelect: 'none', overflow: 'visible' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -198,18 +197,27 @@ function BatterySlider({
   );
 }
 
-const rowSx = {mx: 0, px: 1, py: 0.25, width: '100%', justifyContent: 'space-between'} as const;
+const rowSx = { mx: 0, px: 1, py: 0.25, width: '100%', justifyContent: 'space-between' } as const;
 
 export default function SimulatorButton() {
-  const {container} = useRControl({position: 'bottom-right'});
+  const { container } = useRControl({ position: 'bottom-right' });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const [displaceStep, setDisplaceStep] = useState(0.5);
 
   const theme = useTheme();
 
-  const {simState, available, setEmergency, setMovementAllowed, setBatteryVoltage, setGpsGood, setJoyOverride, moveToDock, displace} =
-    useSimControl();
+  const {
+    simState,
+    available,
+    setEmergency,
+    setMovementAllowed,
+    setBatteryVoltage,
+    setGpsGood,
+    setJoyOverride,
+    moveToDock,
+    displace,
+  } = useSimControl();
 
   const params = useSelectedMower((m) => m?.params ?? {});
   const fullVoltage = params['/ll/services/power/battery_full_voltage'];
@@ -219,7 +227,10 @@ export default function SimulatorButton() {
   const batteryPct = useSelectedMower((m) => m?.state.battery_percentage ?? null);
 
   const hasActivity =
-    simState?.joy_override || simState?.emergency_latch || simState?.gps_good === false || simState?.movement_allowed === false;
+    simState?.joy_override ||
+    simState?.emergency_latch ||
+    simState?.gps_good === false ||
+    simState?.movement_allowed === false;
 
   const content = (
     <>
@@ -228,7 +239,7 @@ export default function SimulatorButton() {
         type="button"
         title="Simulator"
         onClick={() => setOpen((o) => !o)}
-        style={{padding: 0, position: 'relative'}}
+        style={{ padding: 0, position: 'relative' }}
       >
         <SimulatorIcon />
         {hasActivity && (
@@ -250,166 +261,171 @@ export default function SimulatorButton() {
         open={open}
         anchorEl={buttonRef.current}
         onClose={() => setOpen(false)}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-        transformOrigin={{vertical: 'bottom', horizontal: 'right'}}
-        slotProps={{paper: {sx: {width: 460, py: 1}}}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        slotProps={{ paper: { sx: { width: 460, py: 1 } } }}
       >
-        <Typography variant="overline" sx={{px: 1.5, display: 'block', lineHeight: 2.5}}>
+        <Typography variant="overline" sx={{ px: 1.5, display: 'block', lineHeight: 2.5 }}>
           Simulator
         </Typography>
 
         {available && simState ? (
           <>
-          <Box sx={{display: 'flex', gap: 0, alignItems: 'flex-start'}}>
-            {/* Left column */}
-            <Box sx={{flex: 1, minWidth: 0}}>
-              {/* Boolean toggles via Switch */}
-              <FormControlLabel
-                sx={rowSx}
-                labelPlacement="start"
-                control={<Switch checked={simState.joy_override} onChange={(e) => setJoyOverride(e.target.checked)} />}
-                label="Manual drive"
-              />
-
-              <FormControlLabel
-                sx={rowSx}
-                labelPlacement="start"
-                label="GPS fix"
-                control={<Switch checked={simState.gps_good} onChange={(e) => setGpsGood(e.target.checked)} />}
-              />
-              <FormControlLabel
-                sx={rowSx}
-                labelPlacement="start"
-                label="Traction"
-                control={
-                  <Switch checked={simState.movement_allowed} onChange={(e) => setMovementAllowed(e.target.checked)} />
-                }
-              />
-
-              <Divider sx={{my: 1}} />
-
-              {/* Battery slider */}
-              <Typography variant="caption" color="text.secondary" sx={{px: 1.5, display: 'block', mb: 0.5}}>
-                Battery{batteryPct !== null ? ` — ${batteryPct}%` : ''}{' '}
-                <Typography component="span" variant="caption" color="text.disabled">
-                  {simState.battery_voltage.toFixed(1)} V
-                </Typography>
-              </Typography>
-              {critLowVoltage !== undefined && critHighVoltage !== undefined ? (
-                <BatterySlider
-                  value={simState.battery_voltage}
-                  onChange={setBatteryVoltage}
-                  min={Math.min(critLowVoltage, critHighVoltage) - 0.5}
-                  max={Math.max(critLowVoltage, critHighVoltage) + 0.5}
-                  emptyVoltage={emptyVoltage}
-                  fullVoltage={fullVoltage}
-                  critLowVoltage={critLowVoltage}
-                  critHighVoltage={critHighVoltage}
+            <Box sx={{ display: 'flex', gap: 0, alignItems: 'flex-start' }}>
+              {/* Left column */}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                {/* Boolean toggles via Switch */}
+                <FormControlLabel
+                  sx={rowSx}
+                  labelPlacement="start"
+                  control={
+                    <Switch checked={simState.joy_override} onChange={(e) => setJoyOverride(e.target.checked)} />
+                  }
+                  label="Manual drive"
                 />
-              ) : (
-                <Typography variant="caption" color="text.disabled" sx={{px: 1.5, display: 'block', pb: 0.5}}>
-                  Voltage params not available
+
+                <FormControlLabel
+                  sx={rowSx}
+                  labelPlacement="start"
+                  label="GPS fix"
+                  control={<Switch checked={simState.gps_good} onChange={(e) => setGpsGood(e.target.checked)} />}
+                />
+                <FormControlLabel
+                  sx={rowSx}
+                  labelPlacement="start"
+                  label="Traction"
+                  control={
+                    <Switch
+                      checked={simState.movement_allowed}
+                      onChange={(e) => setMovementAllowed(e.target.checked)}
+                    />
+                  }
+                />
+
+                <Divider sx={{ my: 1 }} />
+
+                {/* Battery slider */}
+                <Typography variant="caption" color="text.secondary" sx={{ px: 1.5, display: 'block', mb: 0.5 }}>
+                  Battery{batteryPct !== null ? ` — ${batteryPct}%` : ''}{' '}
+                  <Typography component="span" variant="caption" color="text.disabled">
+                    {simState.battery_voltage.toFixed(1)} V
+                  </Typography>
                 </Typography>
-              )}
-            </Box>
+                {critLowVoltage !== undefined && critHighVoltage !== undefined ? (
+                  <BatterySlider
+                    value={simState.battery_voltage}
+                    onChange={setBatteryVoltage}
+                    min={Math.min(critLowVoltage, critHighVoltage) - 0.5}
+                    max={Math.max(critLowVoltage, critHighVoltage) + 0.5}
+                    emptyVoltage={emptyVoltage}
+                    fullVoltage={fullVoltage}
+                    critLowVoltage={critLowVoltage}
+                    critHighVoltage={critHighVoltage}
+                  />
+                ) : (
+                  <Typography variant="caption" color="text.disabled" sx={{ px: 1.5, display: 'block', pb: 0.5 }}>
+                    Voltage params not available
+                  </Typography>
+                )}
+              </Box>
 
-            <Divider orientation="vertical" flexItem sx={{mx: 0.5}} />
+              <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            {/* Right column — GPS jump */}
-            <Box sx={{px: 1, pt: 0.5, pb: 1}}>
-              <Typography variant="caption" color="text.secondary" sx={{display: 'block', mb: 0.75}}>
-                GPS jump
-              </Typography>
-              <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 32px)',
-                    gridTemplateRows: 'repeat(3, 32px)',
-                    gap: 0.25,
-                    justifyItems: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Box sx={{gridColumn: 2, gridRow: 1}}>
-                    <IconButton
-                      size="small"
-                      onClick={() => displace(0, displaceStep)}
-                      sx={{border: `1px solid ${theme.palette.divider}`, borderRadius: 1}}
-                    >
-                      <UpIcon fontSize="small" />
-                    </IconButton>
+              {/* Right column — GPS jump */}
+              <Box sx={{ px: 1, pt: 0.5, pb: 1 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.75 }}>
+                  GPS jump
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 32px)',
+                      gridTemplateRows: 'repeat(3, 32px)',
+                      gap: 0.25,
+                      justifyItems: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Box sx={{ gridColumn: 2, gridRow: 1 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => displace(0, displaceStep)}
+                        sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}
+                      >
+                        <UpIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                    <Box sx={{ gridColumn: 1, gridRow: 2 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => displace(-displaceStep, 0)}
+                        sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}
+                      >
+                        <LeftIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                    <Box sx={{ gridColumn: 3, gridRow: 2 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => displace(displaceStep, 0)}
+                        sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}
+                      >
+                        <RightIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                    <Box sx={{ gridColumn: 2, gridRow: 3 }}>
+                      <IconButton
+                        size="small"
+                        onClick={() => displace(0, -displaceStep)}
+                        sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1 }}
+                      >
+                        <DownIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
                   </Box>
-                  <Box sx={{gridColumn: 1, gridRow: 2}}>
-                    <IconButton
-                      size="small"
-                      onClick={() => displace(-displaceStep, 0)}
-                      sx={{border: `1px solid ${theme.palette.divider}`, borderRadius: 1}}
-                    >
-                      <LeftIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                  <Box sx={{gridColumn: 3, gridRow: 2}}>
-                    <IconButton
-                      size="small"
-                      onClick={() => displace(displaceStep, 0)}
-                      sx={{border: `1px solid ${theme.palette.divider}`, borderRadius: 1}}
-                    >
-                      <RightIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                  <Box sx={{gridColumn: 2, gridRow: 3}}>
-                    <IconButton
-                      size="small"
-                      onClick={() => displace(0, -displaceStep)}
-                      sx={{border: `1px solid ${theme.palette.divider}`, borderRadius: 1}}
-                    >
-                      <DownIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
+                  <ToggleButtonGroup
+                    exclusive
+                    size="small"
+                    value={displaceStep}
+                    onChange={(_, v) => v != null && setDisplaceStep(v)}
+                    orientation="vertical"
+                  >
+                    {STEPS.map((s) => (
+                      <ToggleButton key={s} value={s} sx={{ px: 1.5, py: 0.25 }}>
+                        {s} m
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
                 </Box>
-                <ToggleButtonGroup
-                  exclusive
-                  size="small"
-                  value={displaceStep}
-                  onChange={(_, v) => v != null && setDisplaceStep(v)}
-                  orientation="vertical"
-                >
-                  {STEPS.map((s) => (
-                    <ToggleButton key={s} value={s} sx={{px: 1.5, py: 0.25}}>
-                      {s} m
-                    </ToggleButton>
-                  ))}
-                </ToggleButtonGroup>
               </Box>
             </Box>
-          </Box>
-          <Divider sx={{mt: 1}} />
-          <Box sx={{display: 'flex', gap: 1, px: 1.5, py: 0.75, justifyContent: 'flex-end'}}>
-            <Button
-              size="small"
-              variant={simState.emergency_latch ? 'contained' : 'outlined'}
-              color={simState.emergency_latch ? 'error' : 'inherit'}
-              onClick={() => setEmergency(!simState.emergency_latch)}
-              sx={{textTransform: 'none', fontSize: '0.8rem'}}
-            >
-              {simState.emergency_latch ? 'Clear emergency' : 'Trigger emergency'}
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              color="inherit"
-              onClick={moveToDock}
-              sx={{textTransform: 'none', fontSize: '0.8rem'}}
-            >
-              {simState.charging ? 'Charging…' : 'Move to dock'}
-            </Button>
-          </Box>
+            <Divider sx={{ mt: 1 }} />
+            <Box sx={{ display: 'flex', gap: 1, px: 1.5, py: 0.75, justifyContent: 'flex-end' }}>
+              <Button
+                size="small"
+                variant={simState.emergency_latch ? 'contained' : 'outlined'}
+                color={simState.emergency_latch ? 'error' : 'inherit'}
+                onClick={() => setEmergency(!simState.emergency_latch)}
+                sx={{ textTransform: 'none', fontSize: '0.8rem' }}
+              >
+                {simState.emergency_latch ? 'Clear emergency' : 'Trigger emergency'}
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                color="inherit"
+                onClick={moveToDock}
+                sx={{ textTransform: 'none', fontSize: '0.8rem' }}
+              >
+                {simState.charging ? 'Charging…' : 'Move to dock'}
+              </Button>
+            </Box>
           </>
         ) : (
           <>
-            <Divider sx={{my: 1}} />
-            <Typography variant="caption" color="text.secondary" sx={{px: 1.5, display: 'block', pb: 0.5}}>
+            <Divider sx={{ my: 1 }} />
+            <Typography variant="caption" color="text.secondary" sx={{ px: 1.5, display: 'block', pb: 0.5 }}>
               Simulator not detected — waiting for <code>sim/state/json</code>…
             </Typography>
           </>

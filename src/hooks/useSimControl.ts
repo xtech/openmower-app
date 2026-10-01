@@ -1,9 +1,9 @@
 'use client';
 
-import type {OpenMowerRpc} from '@/lib/rpc';
-import {useSelectedMower} from '@/stores/mowersStore';
-import type {SimState} from '@/stores/schemas';
-import {useCallback, useState} from 'react';
+import type { OpenMowerRpc } from '@/lib/rpc';
+import { useSelectedMower } from '@/stores/mowersStore';
+import type { SimState } from '@/stores/schemas';
+import { useCallback, useState } from 'react';
 
 export type SimAction = 'emergency' | 'movement' | 'battery' | 'gps' | 'dock' | 'displace' | 'joy_override';
 
@@ -52,12 +52,12 @@ export function useSimControl(): SimControl {
     available: simState !== null,
     pending,
     error,
-    setEmergency: (active) => run('emergency', (r) => r.sim.emergency.set({active})),
-    setMovementAllowed: (allowed) => run('movement', (r) => r.sim.movement.set({allowed})),
-    setBatteryVoltage: (voltage) => run('battery', (r) => r.sim.battery.set({voltage})),
-    setGpsGood: (good) => run('gps', (r) => r.sim.gps.set({good})),
-    setJoyOverride: (enabled) => run('joy_override', (r) => r.sim.joy_override.set({enabled})),
+    setEmergency: (active) => run('emergency', (r) => r.sim.emergency.set({ active })),
+    setMovementAllowed: (allowed) => run('movement', (r) => r.sim.movement.set({ allowed })),
+    setBatteryVoltage: (voltage) => run('battery', (r) => r.sim.battery.set({ voltage })),
+    setGpsGood: (good) => run('gps', (r) => r.sim.gps.set({ good })),
+    setJoyOverride: (enabled) => run('joy_override', (r) => r.sim.joy_override.set({ enabled })),
     moveToDock: () => run('dock', (r) => r.sim.dock.move()),
-    displace: (dx, dy, dheading = 0) => run('displace', (r) => r.sim.displace({dx, dy, dheading})),
+    displace: (dx, dy, dheading = 0) => run('displace', (r) => r.sim.displace({ dx, dy, dheading })),
   };
 }

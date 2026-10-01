@@ -1,4 +1,4 @@
-import type {Field as JsfField} from '@remoteoss/json-schema-form';
+import type { Field as JsfField } from '@remoteoss/json-schema-form';
 
 export interface BaseField extends JsfField {
   'x-param'?: string;

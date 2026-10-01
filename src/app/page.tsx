@@ -1,9 +1,8 @@
 'use client';
 
-import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {outerCardStyles} from '@/lib/cardStyles';
-import {useMowers} from '@/stores/mowersStore';
-import {useRouter} from 'next/navigation';
+import { HeaderStat, Page, PageContent, PageHeader } from '@/components/page';
+import { outerCardStyles } from '@/lib/cardStyles';
+import { useMowers } from '@/stores/mowersStore';
 import {
   Battery90 as BatteryIcon,
   CheckCircle as CheckIcon,
@@ -17,8 +16,20 @@ import {
   TrendingUp as TrendingIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import {Avatar, Box, Button, Card, CardContent, Chip, LinearProgress, Paper, Typography, useTheme} from '@mui/material';
-import {useEffect, useState} from 'react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  LinearProgress,
+  Paper,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // Mock status data - in real app this would come from MQTT
 const mockStatusData = {
@@ -137,7 +148,7 @@ export default function Dashboard() {
 
       <PageContent>
         {mowers.length === 0 ? (
-          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px'}}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
             <Typography variant="h6" color="text.secondary">
               No mowers configured. Please add mowers to your config.json file.
             </Typography>
@@ -145,7 +156,7 @@ export default function Dashboard() {
         ) : (
           <>
             {/* Mower Status Cards */}
-            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6}}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 6 }}>
               {mowersWithStatus.map((mower) => (
                 <Card
                   key={mower.id}
@@ -162,13 +173,13 @@ export default function Dashboard() {
                 >
                   <CardContent>
                     {/* Header with Status */}
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3}}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
                       <Box>
                         <Typography
                           variant="h4"
                           component="h2"
                           gutterBottom
-                          sx={{fontWeight: 700, color: theme.palette.text.primary}}
+                          sx={{ fontWeight: 700, color: theme.palette.text.primary }}
                         >
                           {mower.name}
                         </Typography>
@@ -176,7 +187,7 @@ export default function Dashboard() {
                           label={getStatusLabel(mower.status)}
                           color={getStatusColor(mower.status)}
                           size="medium"
-                          sx={{fontWeight: 600, px: 2}}
+                          sx={{ fontWeight: 600, px: 2 }}
                         />
                       </Box>
                       <Avatar
@@ -186,10 +197,10 @@ export default function Dashboard() {
                             return color === 'success'
                               ? theme.palette.success.main
                               : color === 'warning'
-                              ? theme.palette.warning.main
-                              : color === 'error'
-                              ? theme.palette.error.main
-                              : theme.palette.info.main;
+                                ? theme.palette.warning.main
+                                : color === 'error'
+                                  ? theme.palette.error.main
+                                  : theme.palette.info.main;
                           })(),
                           width: 56,
                           height: 56,
@@ -201,15 +212,15 @@ export default function Dashboard() {
                     </Box>
 
                     {/* Battery Status with Enhanced Visual */}
-                    <Box sx={{mb: 4}}>
-                      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
-                          <BatteryIcon color={getBatteryColor(mower.battery)} sx={{fontSize: 28}} />
-                          <Typography variant="h6" sx={{fontWeight: '600'}}>
+                    <Box sx={{ mb: 4 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                          <BatteryIcon color={getBatteryColor(mower.battery)} sx={{ fontSize: 28 }} />
+                          <Typography variant="h6" sx={{ fontWeight: '600' }}>
                             Battery Status
                           </Typography>
                         </Box>
-                        <Typography variant="h4" color={getBatteryColor(mower.battery)} sx={{fontWeight: 'bold'}}>
+                        <Typography variant="h4" color={getBatteryColor(mower.battery)} sx={{ fontWeight: 'bold' }}>
                           {mower.battery}%
                         </Typography>
                       </Box>
@@ -229,8 +240,12 @@ export default function Dashboard() {
                     </Box>
 
                     {/* Operation Info with Icons */}
-                    <Box sx={{mb: 4}}>
-                      <Typography variant="h6" gutterBottom sx={{fontWeight: '600', color: theme.palette.text.secondary}}>
+                    <Box sx={{ mb: 4 }}>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ fontWeight: '600', color: theme.palette.text.secondary }}
+                      >
                         Current Operation
                       </Typography>
                       <Box
@@ -244,7 +259,7 @@ export default function Dashboard() {
                         }}
                       >
                         <PlayIcon color="primary" />
-                        <Typography variant="body1" sx={{fontWeight: '500'}}>
+                        <Typography variant="body1" sx={{ fontWeight: '500' }}>
                           {mower.operation}
                         </Typography>
                       </Box>
@@ -252,52 +267,59 @@ export default function Dashboard() {
 
                     {/* Enhanced Metrics Grid */}
                     <Box
-                      sx={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 2, mb: 4}}
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                        gap: 2,
+                        mb: 4,
+                      }}
                     >
                       <Box
-                        sx={{textAlign: 'center', p: 2, bgcolor: theme.palette.primary.light + '10', borderRadius: 2}}
+                        sx={{ textAlign: 'center', p: 2, bgcolor: theme.palette.primary.light + '10', borderRadius: 2 }}
                       >
-                        <TimerIcon color="primary" sx={{fontSize: 24, mb: 1}} />
+                        <TimerIcon color="primary" sx={{ fontSize: 24, mb: 1 }} />
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Est. Time
                         </Typography>
-                        <Typography variant="h6" color="primary" sx={{fontWeight: '600'}}>
+                        <Typography variant="h6" color="primary" sx={{ fontWeight: '600' }}>
                           {mower.estimatedTime}
                         </Typography>
                       </Box>
 
                       <Box
-                        sx={{textAlign: 'center', p: 2, bgcolor: theme.palette.success.light + '10', borderRadius: 2}}
+                        sx={{ textAlign: 'center', p: 2, bgcolor: theme.palette.success.light + '10', borderRadius: 2 }}
                       >
-                        <SpeedIcon color="success" sx={{fontSize: 24, mb: 1}} />
+                        <SpeedIcon color="success" sx={{ fontSize: 24, mb: 1 }} />
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Speed
                         </Typography>
-                        <Typography variant="h6" color="success.main" sx={{fontWeight: '600'}}>
+                        <Typography variant="h6" color="success.main" sx={{ fontWeight: '600' }}>
                           {mower.speed}
                         </Typography>
                       </Box>
 
-                      <Box sx={{textAlign: 'center', p: 2, bgcolor: theme.palette.info.light + '10', borderRadius: 2}}>
-                        <TrendingIcon color="info" sx={{fontSize: 24, mb: 1}} />
+                      <Box
+                        sx={{ textAlign: 'center', p: 2, bgcolor: theme.palette.info.light + '10', borderRadius: 2 }}
+                      >
+                        <TrendingIcon color="info" sx={{ fontSize: 24, mb: 1 }} />
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           Efficiency
                         </Typography>
-                        <Typography variant="h6" color="info.main" sx={{fontWeight: '600'}}>
+                        <Typography variant="h6" color="info.main" sx={{ fontWeight: '600' }}>
                           {mower.efficiency}%
                         </Typography>
                       </Box>
                     </Box>
 
                     {/* Quick Actions with Enhanced Buttons */}
-                    <Box sx={{display: 'flex', gap: 2}}>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
                       {mower.status === 'active' ? (
                         <>
                           <Button
                             variant="contained"
                             color="warning"
                             size="large"
-                            sx={{flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600}}
+                            sx={{ flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600 }}
                             startIcon={<StopIcon />}
                             onClick={() => handleAction('stop', mower.id)}
                             disabled={isProcessing}
@@ -308,7 +330,7 @@ export default function Dashboard() {
                             variant="outlined"
                             color="info"
                             size="large"
-                            sx={{flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600}}
+                            sx={{ flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600 }}
                             startIcon={<SkipIcon />}
                             onClick={() => handleAction('skip', mower.id)}
                             disabled={isProcessing}
@@ -322,7 +344,7 @@ export default function Dashboard() {
                             variant="contained"
                             color="primary"
                             size="large"
-                            sx={{flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600}}
+                            sx={{ flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600 }}
                             startIcon={<PlayIcon />}
                             onClick={() => handleAction('start', mower.id)}
                             disabled={isProcessing}
@@ -333,7 +355,7 @@ export default function Dashboard() {
                             variant="outlined"
                             color="secondary"
                             size="large"
-                            sx={{flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600}}
+                            sx={{ flex: 1, py: 1.5, borderRadius: 3, fontWeight: 600 }}
                             startIcon={<HomeIcon />}
                             onClick={() => handleAction('dock', mower.id)}
                             disabled={isProcessing}
@@ -358,8 +380,8 @@ export default function Dashboard() {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               }}
             >
-              <Box sx={{textAlign: 'center', mb: 4}}>
-                <Typography variant="h4" component="h3" gutterBottom sx={{fontWeight: 700}}>
+              <Box sx={{ textAlign: 'center', mb: 4 }}>
+                <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 700 }}>
                   Fleet Control Center
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -367,7 +389,7 @@ export default function Dashboard() {
                 </Typography>
               </Box>
 
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center'}}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
                 <Button
                   variant="contained"
                   color="primary"

@@ -1,7 +1,7 @@
 'use client';
 
-import {Box, Typography, useTheme, type SxProps} from '@mui/material';
-import {PropsWithChildren} from 'react';
+import { Box, Typography, useTheme, type SxProps } from '@mui/material';
+import { PropsWithChildren } from 'react';
 
 interface PageHeaderProps {
   title: string;
@@ -9,7 +9,7 @@ interface PageHeaderProps {
   sx?: SxProps;
 }
 
-export default function PageHeader({title, subtitle, children, sx}: PropsWithChildren<PageHeaderProps>) {
+export default function PageHeader({ title, subtitle, children, sx }: PropsWithChildren<PageHeaderProps>) {
   const theme = useTheme();
 
   return (
@@ -17,13 +17,13 @@ export default function PageHeader({title, subtitle, children, sx}: PropsWithChi
       sx={{
         background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
         color: 'white',
-        pt: {xs: 1, md: 4},
-        pb: {xs: 0, md: 6},
-        px: {xs: 0, md: 3},
-        mt: {xs: -1, md: 0},
+        pt: { xs: 1, md: 4 },
+        pb: { xs: 0, md: 6 },
+        px: { xs: 0, md: 3 },
+        mt: { xs: -1, md: 0 },
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: {xs: '0 0 24px 24px', md: '24px'},
+        borderRadius: { xs: '0 0 24px 24px', md: '24px' },
         boxShadow: '0 2px 12px -2px rgba(0,0,0,0.4)',
         ...sx,
       }}
@@ -41,25 +41,25 @@ export default function PageHeader({title, subtitle, children, sx}: PropsWithChi
         }}
       />
 
-      <Box sx={{px: 3}}>
-        <Box sx={{position: 'relative', zIndex: 1}}>
+      <Box sx={{ px: 3 }}>
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
           {/* Title */}
           <Typography
             variant="h2"
             component="h1"
             gutterBottom
-            sx={{fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.1)'}}
+            sx={{ fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
           >
             {title}
           </Typography>
 
           {/* Subtitle */}
-          <Typography variant="h5" sx={{opacity: 0.9, fontWeight: 300, mb: 3, display: {xs: 'none', md: 'block'}}}>
+          <Typography variant="h5" sx={{ opacity: 0.9, fontWeight: 300, mb: 3, display: { xs: 'none', md: 'block' } }}>
             {subtitle}
           </Typography>
 
           {/* Quick Stats */}
-          <Box sx={{display: {xs: 'none', md: 'flex'}, flexWrap: 'wrap', gap: 3, mt: 4}}>{children}</Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flexWrap: 'wrap', gap: 3, mt: 4 }}>{children}</Box>
         </Box>
       </Box>
     </Box>

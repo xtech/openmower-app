@@ -1,6 +1,6 @@
-import {useSelectedMowerActiveEmergency} from '@/hooks/useMowerEvents';
-import {type NavigationItem} from '@/components/types';
-import {Badge, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme} from '@mui/material';
+import { type NavigationItem } from '@/components/types';
+import { useSelectedMowerActiveEmergency } from '@/hooks/useMowerEvents';
+import { Badge, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 
 interface SidebarItemProps {
   item: NavigationItem;
@@ -8,7 +8,7 @@ interface SidebarItemProps {
   onClick: (path: string) => void;
 }
 
-export default function SidebarItem({item, isActive, onClick}: SidebarItemProps) {
+export default function SidebarItem({ item, isActive, onClick }: SidebarItemProps) {
   const theme = useTheme();
   const activeEmergency = useSelectedMowerActiveEmergency();
   const showAlert = item.path === '/events' && activeEmergency;

@@ -1,5 +1,5 @@
-import {fallbackDatum, type Area, type AreaProps, type MapData} from '@/stores/schemas';
-import type {AreaFeature} from '@/types/geojson';
+import { fallbackDatum, type Area, type AreaProps, type MapData } from '@/stores/schemas';
+import type { AreaFeature } from '@/types/geojson';
 import {
   datumToRelative,
   pointsToAbsolute,
@@ -9,9 +9,9 @@ import {
   type UtmPoint,
 } from '@/utils/coordinates';
 import area from '@turf/area';
-import {featureCollection, polygon} from '@turf/helpers';
-import type {Feature, FeatureCollection, Polygon} from 'geojson';
-import {produce} from 'immer';
+import { featureCollection, polygon } from '@turf/helpers';
+import type { Feature, FeatureCollection, Polygon } from 'geojson';
+import { produce } from 'immer';
 
 // Remove consecutive duplicate or near-duplicate points — floating point artifacts from the mower,
 // including low-precision truncated coordinates (~2mm apart in meter-space).
@@ -28,7 +28,7 @@ function dedupePoints(points: RelativePoint[]): RelativePoint[] {
 }
 
 function areaToFeature(area: Area, datum: UtmPoint): Feature<Polygon, AreaProps> {
-  return polygon([pointsToAbsolute(dedupePoints(area.outline), datum)], area.properties, {id: area.id});
+  return polygon([pointsToAbsolute(dedupePoints(area.outline), datum)], area.properties, { id: area.id });
 }
 
 function featureToArea(feature: AreaFeature, datum: UtmPoint): Area {
@@ -39,7 +39,7 @@ function featureToArea(feature: AreaFeature, datum: UtmPoint): Area {
   };
 }
 
-function convertDatum(datum: {lat: number; long: number}) {
+function convertDatum(datum: { lat: number; long: number }) {
   return datumToRelative([datum.long, datum.lat]);
 }
 

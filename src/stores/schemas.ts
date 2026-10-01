@@ -1,4 +1,4 @@
-import {z} from 'zod/v4';
+import { z } from 'zod/v4';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Capabilities
@@ -46,7 +46,7 @@ export const stateSchema = z.object({
 });
 
 export type State = z.infer<typeof stateSchema>;
-export type StateOptionalPose = Omit<State, 'pose'> & {pose?: State['pose']};
+export type StateOptionalPose = Omit<State, 'pose'> & { pose?: State['pose'] };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Simulation control (from sim/state/json topic and sim.* RPCs)
@@ -76,7 +76,7 @@ export const datumSchema = z.object({
 });
 export type Datum = z.infer<typeof datumSchema>;
 
-const pointSchema = z.object({x: z.number(), y: z.number()});
+const pointSchema = z.object({ x: z.number(), y: z.number() });
 const polygonSchema = z.array(pointSchema);
 export const areaSchema = z.object({
   id: z.string(),
@@ -180,12 +180,12 @@ const baseEventSchema = z.looseObject({
 
 export const eventSchema = z.union([
   z.discriminatedUnion('type', [
-    baseEventSchema.extend({type: z.literal('EMERGENCY'), active: z.boolean()}),
-    baseEventSchema.extend({type: z.literal('BOOTED')}),
-    baseEventSchema.extend({type: z.literal('GPS'), available: z.boolean()}),
-    baseEventSchema.extend({type: z.literal('STATE'), state: z.string()}),
-    baseEventSchema.extend({type: z.literal('BLADES'), enabled: z.boolean()}),
-    baseEventSchema.extend({type: z.literal('DOCKING'), reason: z.string()}),
+    baseEventSchema.extend({ type: z.literal('EMERGENCY'), active: z.boolean() }),
+    baseEventSchema.extend({ type: z.literal('BOOTED') }),
+    baseEventSchema.extend({ type: z.literal('GPS'), available: z.boolean() }),
+    baseEventSchema.extend({ type: z.literal('STATE'), state: z.string() }),
+    baseEventSchema.extend({ type: z.literal('BLADES'), enabled: z.boolean() }),
+    baseEventSchema.extend({ type: z.literal('DOCKING'), reason: z.string() }),
     baseEventSchema.extend({
       type: z.literal('AREA'),
       area_id: z.string(),
@@ -209,7 +209,7 @@ export const mapDefaults: MapData = {
   docking_stations: [],
 };
 
-export const fallbackDatum = {lat: 48.0, long: 11.0, height: 0} satisfies Datum;
+export const fallbackDatum = { lat: 48.0, long: 11.0, height: 0 } satisfies Datum;
 
 export const stateDefaults: StateOptionalPose = {
   battery_percentage: 100,

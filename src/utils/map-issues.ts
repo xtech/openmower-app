@@ -1,7 +1,7 @@
-import {generateId, getBiggestArea} from '@/utils/area-utils';
+import { generateId, getBiggestArea } from '@/utils/area-utils';
 import unkinkPolygon from '@turf/unkink-polygon';
-import type {Feature, FeatureCollection, Polygon} from 'geojson';
-import type {Draft} from 'immer';
+import type { Feature, FeatureCollection, Polygon } from 'geojson';
+import type { Draft } from 'immer';
 import sweeplineIntersections from 'sweepline-intersections';
 
 export interface MapIssue {
@@ -22,7 +22,7 @@ function hasSelfIntersections(poly: Feature<Polygon>): boolean {
 }
 
 function makePolygon(coords: number[][]): Feature<Polygon> {
-  return {type: 'Feature', geometry: {type: 'Polygon', coordinates: [coords]}, properties: {}};
+  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] }, properties: {} };
 }
 
 // Iteratively remove the vertex closest to each self-intersection until clean.
@@ -74,5 +74,5 @@ function checkKinks(feature: Feature): DetectedIssue {
 export function detectFeatureIssues(feature: Feature): MapIssue[] {
   return [checkKinks(feature)]
     .filter((issue) => issue !== null)
-    .map((issue) => ({...issue, id: generateId(), featureId: feature.id as string}));
+    .map((issue) => ({ ...issue, id: generateId(), featureId: feature.id as string }));
 }

@@ -1,13 +1,13 @@
 'use client';
 
-import type {MowerConfig} from '@/components/types';
-import {useMowerConfigs} from '@/stores/configStore';
-import {useSelectedMower} from '@/stores/mowersStore';
-import {Box, Drawer, List, SxProps, Theme, useTheme} from '@mui/material';
-import {usePathname, useRouter} from 'next/navigation';
-import {useState} from 'react';
+import type { MowerConfig } from '@/components/types';
+import { useMowerConfigs } from '@/stores/configStore';
+import { useSelectedMower } from '@/stores/mowersStore';
+import { Box, Drawer, List, SxProps, Theme, useTheme } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import MowerSelector from '../mower-selector/MowerSelector';
-import {createNavigationItems} from '../navigationItems';
+import { createNavigationItems } from '../navigationItems';
 import SelectedMower from './SelectedMower';
 import SidebarHeader from './SidebarHeader';
 import SidebarItem from './SidebarItem';
@@ -17,7 +17,7 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-export default function Sidebar({open, onClose}: SidebarProps) {
+export default function Sidebar({ open, onClose }: SidebarProps) {
   const theme = useTheme();
   const router = useRouter();
   const pathname = usePathname();
@@ -66,7 +66,7 @@ export default function Sidebar({open, onClose}: SidebarProps) {
           keepMounted: true, // Better mobile performance
         }}
         sx={{
-          display: {xs: 'block', md: 'none'},
+          display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': drawerStyle,
         }}
       >
@@ -77,7 +77,7 @@ export default function Sidebar({open, onClose}: SidebarProps) {
       <Drawer
         variant="permanent"
         sx={{
-          display: {xs: 'none', md: 'block'},
+          display: { xs: 'none', md: 'block' },
           '& .MuiDrawer-paper': {
             ...drawerStyle,
             position: 'fixed',
@@ -92,7 +92,7 @@ export default function Sidebar({open, onClose}: SidebarProps) {
       </Drawer>
 
       {/* Desktop Spacer - only show on desktop */}
-      <Box sx={{display: {xs: 'none', md: 'block'}, width: drawerWidth, flexShrink: 0}} />
+      <Box sx={{ display: { xs: 'none', md: 'block' }, width: drawerWidth, flexShrink: 0 }} />
 
       {/* Mower Selector Menu */}
       <MowerSelector onMowerSelect={handleMowerSelect} anchorEl={mowerMenuAnchor} onClose={handleMowerMenuClose} />
@@ -110,8 +110,8 @@ export default function Sidebar({open, onClose}: SidebarProps) {
         }}
       >
         <SidebarHeader />
-        <Box sx={{flex: 1, overflow: 'auto'}}>
-          <List sx={{py: 1}}>
+        <Box sx={{ flex: 1, overflow: 'auto' }}>
+          <List sx={{ py: 1 }}>
             {navigationItems.map((item) => (
               <SidebarItem key={item.path} item={item} isActive={pathname === item.path} onClick={handleNavigation} />
             ))}

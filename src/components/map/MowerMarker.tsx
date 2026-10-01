@@ -1,8 +1,8 @@
 'use client';
 
-import {useSmoothedPosition} from '@/hooks/useSmoothedPosition';
-import {useSelectedMower} from '@/stores/mowersStore';
-import type {Datum, Position} from '@/stores/schemas';
+import { useSmoothedPosition } from '@/hooks/useSmoothedPosition';
+import { useSelectedMower } from '@/stores/mowersStore';
+import type { Datum, Position } from '@/stores/schemas';
 import MapMarker from './MapMarker';
 
 export const MOWER_LENGTH_M = 0.55;
@@ -17,7 +17,7 @@ interface MowerArrowProps {
  * Mower arrow shape centered at (16, 16) in a 32×32 viewBox, pointing up (forward at 0° heading).
  * Half-width=10, half-height=13.
  */
-export function MowerArrow({scale = 1, fill}: MowerArrowProps) {
+export function MowerArrow({ scale = 1, fill }: MowerArrowProps) {
   const cx = 16;
   const cy = 16;
   const hw = 10 * scale;
@@ -39,7 +39,7 @@ interface MowerMarkerProps {
   datum: Datum;
 }
 
-export default function MowerMarker({position, datum}: MowerMarkerProps) {
+export default function MowerMarker({ position, datum }: MowerMarkerProps) {
   const smoothedPosition = useSmoothedPosition(position);
   const accuracy = useSelectedMower((s) => s?.state.pose?.pos_accuracy);
 

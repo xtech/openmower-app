@@ -1,13 +1,13 @@
-import type {MowerConfig} from '@/components/types';
-import {OpenMowerRpc} from '@/lib/rpc';
-import {generateId} from '@/utils/area-utils';
-import {TrackPipeline} from '@/utils/track-pipeline';
-import {BSON} from 'bson';
-import {immerable} from 'immer';
-import mqtt, {MqttClient} from 'mqtt';
-import {create, useStore} from 'zustand';
-import {immer} from 'zustand/middleware/immer';
-import {useConfigStore} from './configStore';
+import type { MowerConfig } from '@/components/types';
+import { OpenMowerRpc } from '@/lib/rpc';
+import { generateId } from '@/utils/area-utils';
+import { TrackPipeline } from '@/utils/track-pipeline';
+import { BSON } from 'bson';
+import { immerable } from 'immer';
+import mqtt, { MqttClient } from 'mqtt';
+import { create, useStore } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import { useConfigStore } from './configStore';
 import {
   applyLiveEvent,
   mowerEventDefaults,
@@ -60,7 +60,7 @@ class Mower {
   params: RosParams = {};
   position: PositionWithAttributes | null = null;
   track: TrackPipeline = new TrackPipeline();
-  jobList: {job_id: string; epoch: number}[] | null = null;
+  jobList: { job_id: string; epoch: number }[] | null = null;
   events: MowerEventState = mowerEventDefaults;
   // null until a retained sim/state/json message arrives — also used as the
   // "is this a simulator?" feature-detection flag.
@@ -91,7 +91,7 @@ class Mower {
   }
 
   publishTeleop(vx: number, vz: number) {
-    const payload = BSON.serialize({vx, vz});
+    const payload = BSON.serialize({ vx, vz });
     this.mqttClient.publish(this.mqttPrefix + 'teleop', Buffer.from(payload.buffer));
   }
 }
@@ -124,12 +124,12 @@ export const useMowersStore = create<MowersStore>()(
           password: urlObj.password,
           clean: true,
         });
-        const clientMowers: {prefix: string; idx: number}[] = [];
+        const clientMowers: { prefix: string; idx: number }[] = [];
         for (const config of mowerConfigs) {
           if (config.mqtt_ws_url === url) {
             const mower = new Mower(config, client);
             mowers.push(mower);
-            clientMowers.push({prefix: mower.mqttPrefix, idx: mowers.length - 1});
+            clientMowers.push({ prefix: mower.mqttPrefix, idx: mowers.length - 1 });
           }
         }
 
@@ -211,7 +211,7 @@ export const useMowersStore = create<MowersStore>()(
               .then((result) => {
                 set((state) => {
                   state.mowers[clientMower.idx].track.seedFromHistory(
-                    (result.segments ?? []) as {attributes: TrackAttributes; points: [number, number][]}[],
+                    (result.segments ?? []) as { attributes: TrackAttributes; points: [number, number][] }[],
                     (result.buffer ?? []) as [number, number][],
                   );
                 });
@@ -225,7 +225,7 @@ export const useMowersStore = create<MowersStore>()(
         client.on('message', (topic, payload) => {
           const clientMower = clientMowers.find((clientMower) => topic.startsWith(clientMower.prefix));
           if (clientMower !== undefined) {
-            const {idx, prefix} = clientMower;
+            const { idx, prefix } = clientMower;
             const partialTopic = topic.substring(prefix.length);
             if (partialTopic === 'robot_state/json') {
               set((state) => {
@@ -277,7 +277,7 @@ export const useMowersStore = create<MowersStore>()(
           }
         });
       }
-      set({mowers, selected: 0});
+      set({ mowers, selected: 0 });
     },
     fetchEventsForDate: async (mowerId, date) => {
       const mower = get().mowers.find((m) => m.id === mowerId);
@@ -285,7 +285,7 @@ export const useMowersStore = create<MowersStore>()(
         return;
       }
       try {
-        const events = await mower.rpc.events.history({date});
+        const events = await mower.rpc.events.history({ date });
         set((state) => {
           const target = state.mowers.find((m) => m.id === mowerId);
           if (target) {
@@ -340,7 +340,7 @@ const convertLegacyDockingStation = (docking_pose: LegacyMapData['docking_pose']
     name: 'Docking station',
     active: true,
   },
-  position: {x: docking_pose.x, y: docking_pose.y},
+  position: { x: docking_pose.x, y: docking_pose.y },
   heading: docking_pose.heading!,
 });
 

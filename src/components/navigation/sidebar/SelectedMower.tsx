@@ -1,17 +1,17 @@
-import type {MowerConfig} from '@/components/types';
-import {KeyboardArrowDown, SmartToy as MowerIcon} from '@mui/icons-material';
-import {Avatar, Box, Typography, useTheme} from '@mui/material';
+import type { MowerConfig } from '@/components/types';
+import { KeyboardArrowDown, SmartToy as MowerIcon } from '@mui/icons-material';
+import { Avatar, Box, Typography, useTheme } from '@mui/material';
 
 interface SelectedMowerProps {
   selectedMower: MowerConfig;
   onMowerMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-export default function SelectedMower({selectedMower, onMowerMenuOpen}: SelectedMowerProps) {
+export default function SelectedMower({ selectedMower, onMowerMenuOpen }: SelectedMowerProps) {
   const theme = useTheme();
 
   return (
-    <Box sx={{p: 3, borderTop: '1px solid rgba(0, 0, 0, 0.08)'}}>
+    <Box sx={{ p: 3, borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
       <Typography
         variant="overline"
         color="text.secondary"
@@ -45,12 +45,12 @@ export default function SelectedMower({selectedMower, onMowerMenuOpen}: Selected
         >
           <MowerIcon fontSize="small" />
         </Avatar>
-        <Box sx={{flex: 1, minWidth: 0}}>
-          <Typography variant="body2" color="text.primary" noWrap sx={{fontWeight: '600'}}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography variant="body2" color="text.primary" noWrap sx={{ fontWeight: '600' }}>
             {selectedMower.name}
           </Typography>
         </Box>
-        <KeyboardArrowDown sx={{color: theme.palette.primary.main}} />
+        <KeyboardArrowDown sx={{ color: theme.palette.primary.main }} />
       </Box>
     </Box>
   );

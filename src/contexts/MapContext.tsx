@@ -1,11 +1,11 @@
-import {fallbackDatum, type Datum} from '@/stores/schemas';
-import {detectFeatureIssues, type MapIssue} from '@/utils/map-issues';
-import MapboxDraw, {type DrawMode} from '@mapbox/mapbox-gl-draw';
+import { fallbackDatum, type Datum } from '@/stores/schemas';
+import { detectFeatureIssues, type MapIssue } from '@/utils/map-issues';
+import MapboxDraw, { type DrawMode } from '@mapbox/mapbox-gl-draw';
 import bbox from '@turf/bbox';
-import {featureCollection} from '@turf/helpers';
-import {Feature, FeatureCollection} from 'geojson';
-import {Draft, produce} from 'immer';
-import {useMap as useMapLibreMap} from 'maplibre-react-components';
+import { featureCollection } from '@turf/helpers';
+import { Feature, FeatureCollection } from 'geojson';
+import { Draft, produce } from 'immer';
+import { useMap as useMapLibreMap } from 'maplibre-react-components';
 import React, {
   createContext,
   Dispatch,
@@ -18,7 +18,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {Updater, useImmer} from 'use-immer';
+import { Updater, useImmer } from 'use-immer';
 
 type Bounds = [west: number, south: number, east: number, north: number];
 
@@ -97,7 +97,7 @@ export function withDisplaySortKeys(fc: FeatureCollection): FeatureCollection {
 
 export const MapContext = createContext<MapContextType | undefined>(undefined);
 
-export const MapContextProvider = ({id, children}: {id: string; children: React.ReactNode}) => {
+export const MapContextProvider = ({ id, children }: { id: string; children: React.ReactNode }) => {
   const [datum, setDatum] = useState<Datum | null>(null);
   const datumOrFallback = datum ?? fallbackDatum;
   // Note that here is where we keep the correct order of features (mapbox-gl-draw doesn't maintain it).
@@ -201,7 +201,7 @@ export function useMapContext() {
 }
 
 export function useMap() {
-  const {id} = useMapContext();
+  const { id } = useMapContext();
   return useMapLibreMap(id);
 }
 
@@ -212,14 +212,14 @@ export function useMapboxDraw() {
 
 export function useFitToBounds() {
   const map = useMap();
-  const {bounds} = useMapContext();
-  return useEffectEvent((immediate: boolean = false, padding = {top: 10, bottom: 10, left: 60, right: 60}) => {
-    map?.fitBounds(bounds, {padding, duration: immediate ? 0 : 1000});
+  const { bounds } = useMapContext();
+  return useEffectEvent((immediate: boolean = false, padding = { top: 10, bottom: 10, left: 60, right: 60 }) => {
+    map?.fitBounds(bounds, { padding, duration: immediate ? 0 : 1000 });
   });
 }
 
 export function useMapHover(): [string | null, Dispatch<SetStateAction<string | null>>] {
-  const {hoveredId, setHoveredId} = useMapContext();
+  const { hoveredId, setHoveredId } = useMapContext();
   return [hoveredId, setHoveredId];
 }
 
@@ -230,7 +230,7 @@ export function useMapSelection() {
   useEffect(() => {
     if (map && draw) {
       setSelectedIds(draw.getSelectedIds());
-      const updateSelectedIds = ({features}: {features: Feature[]}) => {
+      const updateSelectedIds = ({ features }: { features: Feature[] }) => {
         setSelectedIds(features.map((feature) => feature.id as string));
       };
       map?.on('draw.selectionchange', updateSelectedIds);

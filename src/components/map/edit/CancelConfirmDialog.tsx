@@ -1,8 +1,8 @@
-import {Button, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
-import {AsyncDialogProps} from 'react-dialog-async';
+import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { AsyncDialogProps } from 'react-dialog-async';
 import MapDialog from '../MapDialog';
 
-export function CancelConfirmDialog({isOpen, handleClose}: AsyncDialogProps<void, boolean>) {
+export function CancelConfirmDialog({ isOpen, handleClose }: AsyncDialogProps<void, boolean>) {
   return (
     <MapDialog open={isOpen} onClose={() => handleClose(false)} maxWidth="xs" fullWidth>
       <DialogTitle>Discard changes?</DialogTitle>

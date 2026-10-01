@@ -1,13 +1,13 @@
-import {AreaProps} from '@/stores/schemas';
-import {area as turfArea} from '@turf/area';
-import {booleanPointInPolygon} from '@turf/boolean-point-in-polygon';
-import {featureCollection, lineString, multiPolygon, polygon} from '@turf/helpers';
-import {nearestPointOnLine} from '@turf/nearest-point-on-line';
-import {pointOnFeature} from '@turf/point-on-feature';
-import {polygonToLine} from '@turf/polygon-to-line';
-import {polygonize} from '@turf/polygonize';
-import {Feature, GeoJsonProperties, Polygon, type LineString, type MultiPolygon, type Position} from 'geojson';
-import {customAlphabet} from 'nanoid';
+import { AreaProps } from '@/stores/schemas';
+import { area as turfArea } from '@turf/area';
+import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon';
+import { featureCollection, lineString, multiPolygon, polygon } from '@turf/helpers';
+import { nearestPointOnLine } from '@turf/nearest-point-on-line';
+import { pointOnFeature } from '@turf/point-on-feature';
+import { polygonToLine } from '@turf/polygon-to-line';
+import { polygonize } from '@turf/polygonize';
+import { Feature, GeoJsonProperties, Polygon, type LineString, type MultiPolygon, type Position } from 'geojson';
+import { customAlphabet } from 'nanoid';
 import sweeplineIntersections from 'sweepline-intersections';
 
 export const generateId = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 32);
@@ -17,9 +17,9 @@ export const getBiggestArea = <P extends GeoJsonProperties = AreaProps>(areas: F
   return areas.reduce(
     (max, curr) => {
       const currArea = turfArea(curr);
-      return currArea > max.area ? {feature: curr, area: currArea} : max;
+      return currArea > max.area ? { feature: curr, area: currArea } : max;
     },
-    {feature: areas[0], area: turfArea(areas[0])},
+    { feature: areas[0], area: turfArea(areas[0]) },
   ).feature;
 };
 

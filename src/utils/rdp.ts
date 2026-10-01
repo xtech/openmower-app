@@ -1,4 +1,4 @@
-type Point = {x: number; y: number};
+type Point = { x: number; y: number };
 
 function pointToSegmentDistSq(point: Point, lineStart: Point, lineEnd: Point): number {
   const dx = lineEnd.x - lineStart.x;

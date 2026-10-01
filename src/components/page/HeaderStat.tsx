@@ -1,5 +1,5 @@
-import {Avatar, Box, Typography} from '@mui/material';
-import {ReactNode} from 'react';
+import { Avatar, Box, Typography } from '@mui/material';
+import { ReactNode } from 'react';
 
 interface HeaderStatProps {
   icon: ReactNode;
@@ -7,15 +7,15 @@ interface HeaderStatProps {
   label: string;
 }
 
-export default function HeaderStat({icon, value, label}: HeaderStatProps) {
+export default function HeaderStat({ icon, value, label }: HeaderStatProps) {
   return (
-    <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-      <Avatar sx={{bgcolor: 'rgba(255,255,255,0.2)', color: 'white', width: 48, height: 48}}>{icon}</Avatar>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Avatar sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white', width: 48, height: 48 }}>{icon}</Avatar>
       <Box>
-        <Typography variant="h4" sx={{fontWeight: 'bold'}}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
           {value}
         </Typography>
-        <Typography variant="body2" sx={{opacity: 0.8}}>
+        <Typography variant="body2" sx={{ opacity: 0.8 }}>
           {label}
         </Typography>
       </Box>

@@ -1,8 +1,8 @@
 #!/usr/bin/env -S npx -y tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {type ContentDescriptorObject, type MethodObject} from '@open-rpc/meta-schema';
-import {parseOpenRPCDocument} from '@open-rpc/schema-utils-js';
+import { type ContentDescriptorObject, type MethodObject } from '@open-rpc/meta-schema';
+import { parseOpenRPCDocument } from '@open-rpc/schema-utils-js';
 import OpenRPCTypings from '@open-rpc/typings';
 
 function buildTree(methods: MethodObject[]): any {
@@ -20,7 +20,7 @@ function buildTree(methods: MethodObject[]): any {
   return tree;
 }
 
-type MethodTypings = Record<string, {params: string; result: string}>;
+type MethodTypings = Record<string, { params: string; result: string }>;
 function extractMethodTypings(methods: MethodObject[], typings: OpenRPCTypings): MethodTypings {
   const regex = /export type (\S+) = \((.*)\) => (.+);/;
   const typeMap = Object.fromEntries(
@@ -34,7 +34,7 @@ function extractMethodTypings(methods: MethodObject[], typings: OpenRPCTypings):
         const match = line.match(regex);
         if (!match) throw new Error(`Unexpected method typing: ${line}`);
         const [, method, params, result] = match;
-        return [typeMap[method], {params, result}];
+        return [typeMap[method], { params, result }];
       }),
   );
 }
@@ -64,8 +64,8 @@ function buildObject(node: any, methodTypings: MethodTypings, topLevel = false):
         method.params.length === 0
           ? `async (): ${resultType} => this.call('${method.name}')`
           : method.paramStructure === 'by-name'
-          ? `async (args: {${types.params}}): ${resultType} => this.call('${method.name}', args)`
-          : `async (...args: [${types.params}]): ${resultType} => this.call('${method.name}', args)`;
+            ? `async (args: {${types.params}}): ${resultType} => this.call('${method.name}', args)`
+            : `async (...args: [${types.params}]): ${resultType} => this.call('${method.name}', args)`;
       if (Object.keys(value).length > 1) {
         // both callable and nested → Object.assign
         const nested = buildObject(value, methodTypings);

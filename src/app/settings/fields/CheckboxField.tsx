@@ -1,19 +1,19 @@
-import {Box, Checkbox, FormControlLabel, FormHelperText} from '@mui/material';
-import {SettingsFieldWrapper} from '../SettingsFieldWrapper';
-import type {CheckboxField as CheckboxFieldType} from '../types';
-import {useSettingsField} from '../useSettingsField';
+import { Box, Checkbox, FormControlLabel, FormHelperText } from '@mui/material';
+import { SettingsFieldWrapper } from '../SettingsFieldWrapper';
+import type { CheckboxField as CheckboxFieldType } from '../types';
+import { useSettingsField } from '../useSettingsField';
 
 interface CheckboxFieldProps {
   field: CheckboxFieldType;
   path: string;
 }
 
-export function CheckboxField({field, path}: CheckboxFieldProps) {
-  const {controllerField, hasError, onChange} = useSettingsField(path, false);
+export function CheckboxField({ field, path }: CheckboxFieldProps) {
+  const { controllerField, hasError, onChange } = useSettingsField(path, false);
 
   return (
     <SettingsFieldWrapper path={path} currentValue={controllerField.value}>
-      <Box sx={{mb: 2}}>
+      <Box sx={{ mb: 2 }}>
         <FormControlLabel
           control={
             <Checkbox
@@ -25,7 +25,7 @@ export function CheckboxField({field, path}: CheckboxFieldProps) {
           }
           label={field.label}
         />
-        {field.description && <FormHelperText sx={{ml: 4, mt: -1}}>{field.description}</FormHelperText>}
+        {field.description && <FormHelperText sx={{ ml: 4, mt: -1 }}>{field.description}</FormHelperText>}
       </Box>
     </SettingsFieldWrapper>
   );

@@ -1,11 +1,11 @@
 'use client';
 
-import {darkTheme, lightTheme} from '@/theme';
+import { darkTheme, lightTheme } from '@/theme';
 import CssBaseline from '@mui/material/CssBaseline';
-import {ThemeProvider} from '@mui/material/styles';
-import {useEffect, useState} from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
 
-export default function ThemeRegistry({children}: {children: React.ReactNode}) {
+export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ name: Push PR Image
 
 on:
   workflow_run:
-    workflows: ["Build PR"]
+    workflows: ['Build PR']
     types: [completed]
 
 permissions:

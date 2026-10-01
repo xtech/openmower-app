@@ -1,12 +1,12 @@
-import {type MowerConfig} from '@/components/types';
-import {Box, MenuItem, Typography, useTheme} from '@mui/material';
+import { type MowerConfig } from '@/components/types';
+import { Box, MenuItem, Typography, useTheme } from '@mui/material';
 
 interface MowerSelectorItemProps {
   mower: MowerConfig;
   onClick: (mower: MowerConfig) => void;
 }
 
-export default function MowerSelectorItem({mower, onClick}: MowerSelectorItemProps) {
+export default function MowerSelectorItem({ mower, onClick }: MowerSelectorItemProps) {
   const theme = useTheme();
   return (
     <MenuItem
@@ -22,9 +22,9 @@ export default function MowerSelectorItem({mower, onClick}: MowerSelectorItemPro
         },
       }}
     >
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Box>
-          <Typography variant="body2" sx={{fontWeight: '500'}}>
+          <Typography variant="body2" sx={{ fontWeight: '500' }}>
             {mower.name}
           </Typography>
         </Box>

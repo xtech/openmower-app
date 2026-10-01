@@ -1,19 +1,19 @@
 'use client';
 
-import type {MowerEvent} from '@/stores/schemas';
+import type { MowerEvent } from '@/stores/schemas';
 import {
+  Layers as AreaIcon,
   ContentCut as BladesIcon,
   PowerSettingsNew as BootIcon,
   CheckCircle as CheckIcon,
   Home as DockingIcon,
+  NotificationsActive as EmergencyActiveIcon,
   GpsFixed as GpsAvailableIcon,
   GpsOff as GpsUnavailableIcon,
-  Layers as AreaIcon,
-  NotificationsActive as EmergencyActiveIcon,
-  HelpOutlined as UnknownEventIcon,
   Sync as StateIcon,
+  HelpOutlined as UnknownEventIcon,
 } from '@mui/icons-material';
-import type {ReactElement} from 'react';
+import type { ReactElement } from 'react';
 
 export function getEventTypeIcon(type: string): ReactElement {
   switch (type) {

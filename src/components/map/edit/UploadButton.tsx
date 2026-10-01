@@ -1,17 +1,17 @@
 'use client';
 
 import ControlButton from '@/components/map/ControlButton';
-import {useFitToBounds, useMapboxDraw, useMapContext, withDisplaySortKeys} from '@/contexts/MapContext';
-import {CloudUpload as UploadIcon} from '@mui/icons-material';
-import {featureCollection} from '@turf/helpers';
-import type {FeatureCollection} from 'geojson';
-import {useRef} from 'react';
-import {useDialog} from 'react-dialog-async';
-import {UploadModal} from './UploadModal';
+import { useFitToBounds, useMapboxDraw, useMapContext, withDisplaySortKeys } from '@/contexts/MapContext';
+import { CloudUpload as UploadIcon } from '@mui/icons-material';
+import { featureCollection } from '@turf/helpers';
+import type { FeatureCollection } from 'geojson';
+import { useRef } from 'react';
+import { useDialog } from 'react-dialog-async';
+import { UploadModal } from './UploadModal';
 
 export function UploadButton() {
   const draw = useMapboxDraw();
-  const {features, setFeatures, editMode, setEditMode} = useMapContext();
+  const { features, setFeatures, editMode, setEditMode } = useMapContext();
   const fitToBounds = useFitToBounds();
   const uploadModal = useDialog(UploadModal);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -55,7 +55,7 @@ export function UploadButton() {
         type="file"
         accept=".geojson,.json"
         onChange={handleFileUpload}
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
       />
       <ControlButton
         position="bottom-right"

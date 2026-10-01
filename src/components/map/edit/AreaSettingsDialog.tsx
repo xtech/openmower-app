@@ -1,10 +1,10 @@
 'use client';
 
-import {TooltipTextField} from '@/components/ui/TooltipTextField';
-import {displaySortKey, useMap, useMapboxDraw, useMapContext, useMapSelection} from '@/contexts/MapContext';
-import {AreaProps, areaSchema} from '@/stores/schemas';
+import { TooltipTextField } from '@/components/ui/TooltipTextField';
+import { displaySortKey, useMap, useMapboxDraw, useMapContext, useMapSelection } from '@/contexts/MapContext';
+import { AreaProps, areaSchema } from '@/stores/schemas';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import {ExpandMore as ExpandMoreIcon, InfoOutlined as InfoOutlinedIcon} from '@mui/icons-material';
+import { ExpandMore as ExpandMoreIcon, InfoOutlined as InfoOutlinedIcon } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -27,9 +27,9 @@ import {
   tooltipClasses,
   Typography,
 } from '@mui/material';
-import {useEffect, useState} from 'react';
-import {AsyncDialogProps} from 'react-dialog-async';
-import {z} from 'zod/v4';
+import { useEffect, useState } from 'react';
+import { AsyncDialogProps } from 'react-dialog-async';
+import { z } from 'zod/v4';
 import MapDialog from '../MapDialog';
 
 const RAD_TO_DEG = 180 / Math.PI;
@@ -40,10 +40,10 @@ function radToDegString(rad: number): string {
   return String(Math.round(rad * RAD_TO_DEG * 100) / 100);
 }
 
-export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
+export function AreaSettingsDialog({ isOpen, handleClose }: AsyncDialogProps) {
   const map = useMap();
   const draw = useMapboxDraw();
-  const {features} = useMapContext();
+  const { features } = useMapContext();
   const selectedIds = useMapSelection();
   const [name, setName] = useState('');
   const [type, setType] = useState<AreaProps['type']>('draft');
@@ -83,7 +83,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
   const propsShape = areaSchema.shape.properties.shape;
   const angleDegSchema = z.number().min(-180).max(180);
   const validateField = (
-    schema: {safeParse: (v: unknown) => {success: boolean; error?: {issues: {message: string}[]}}},
+    schema: { safeParse: (v: unknown) => { success: boolean; error?: { issues: { message: string }[] } } },
     raw: string,
   ): string => {
     if (raw.trim() === '') return '';
@@ -126,7 +126,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
 
     feature.properties = properties;
     draw.add(feature);
-    map.fire(MapboxDraw.constants.events.UPDATE, {features: [feature]});
+    map.fire(MapboxDraw.constants.events.UPDATE, { features: [feature] });
 
     handleClose();
   };
@@ -169,7 +169,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
         <FormControlLabel
           control={<Switch checked={active} onChange={(e) => setActive(e.target.checked)} />}
           label="Active"
-          sx={{mt: 2}}
+          sx={{ mt: 2 }}
         />
 
         {type === 'mow' && (
@@ -179,7 +179,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
             disableGutters
             sx={{
               mt: 2,
-              '&:before': {display: 'none'},
+              '&:before': { display: 'none' },
               borderRadius: '8px !important',
               overflow: 'hidden',
               border: '1px solid',
@@ -189,16 +189,16 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              sx={{bgcolor: 'background.paper', '&:hover': {bgcolor: 'action.hover'}, minHeight: 48}}
+              sx={{ bgcolor: 'background.paper', '&:hover': { bgcolor: 'action.hover' }, minHeight: 48 }}
             >
-              <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, flex: 1}}>
-                <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flex: 1 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                   Mowing settings overrides
                 </Typography>
                 {overrideCount > 0 && (
-                  <Chip label={overrideCount} size="small" color="primary" sx={{height: 20, minWidth: 20}} />
+                  <Chip label={overrideCount} size="small" color="primary" sx={{ height: 20, minWidth: 20 }} />
                 )}
-                <Box sx={{flex: 1}} />
+                <Box sx={{ flex: 1 }} />
                 <Tooltip
                   title="When non-empty, these values override the global mowing settings."
                   enterTouchDelay={0}
@@ -214,7 +214,7 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                         maxWidth: 260,
                         px: 1.5,
                         py: 1,
-                        [`& .${tooltipClasses.arrow}`]: {color: 'grey.900'},
+                        [`& .${tooltipClasses.arrow}`]: { color: 'grey.900' },
                       },
                     },
                   }}
@@ -228,8 +228,8 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                 </Tooltip>
               </Box>
             </AccordionSummary>
-            <AccordionDetails sx={{pt: 0}}>
-              <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 1}}>
+            <AccordionDetails sx={{ pt: 0 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 1 }}>
                 <TooltipTextField
                   label="Outline count"
                   type="number"
@@ -238,10 +238,10 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  slotProps={{htmlInput: {min: 0, step: 1}, inputLabel: {shrink: true}}}
+                  slotProps={{ htmlInput: { min: 0, step: 1 }, inputLabel: { shrink: true } }}
                   sx={{
-                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
-                    '& input[type=number]': {MozAppearance: 'textfield'},
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': { display: 'none' },
+                    '& input[type=number]': { MozAppearance: 'textfield' },
                   }}
                   error={!!outlineCountError}
                   helperText={outlineCountError}
@@ -255,10 +255,10 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  slotProps={{htmlInput: {min: 0, step: 1}, inputLabel: {shrink: true}}}
+                  slotProps={{ htmlInput: { min: 0, step: 1 }, inputLabel: { shrink: true } }}
                   sx={{
-                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
-                    '& input[type=number]': {MozAppearance: 'textfield'},
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': { display: 'none' },
+                    '& input[type=number]': { MozAppearance: 'textfield' },
                   }}
                   error={!!outlineOverlapCountError}
                   helperText={outlineOverlapCountError}
@@ -272,10 +272,10 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Global default"
-                  slotProps={{htmlInput: {step: 0.01}, inputLabel: {shrink: true}}}
+                  slotProps={{ htmlInput: { step: 0.01 }, inputLabel: { shrink: true } }}
                   sx={{
-                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
-                    '& input[type=number]': {MozAppearance: 'textfield'},
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': { display: 'none' },
+                    '& input[type=number]': { MozAppearance: 'textfield' },
                   }}
                   error={!!outlineOffsetError}
                   helperText={outlineOffsetError}
@@ -289,10 +289,10 @@ export function AreaSettingsDialog({isOpen, handleClose}: AsyncDialogProps) {
                   fullWidth
                   margin="normal"
                   placeholder="Auto-detect"
-                  slotProps={{htmlInput: {min: -180, max: 180, step: 'any'}, inputLabel: {shrink: true}}}
+                  slotProps={{ htmlInput: { min: -180, max: 180, step: 'any' }, inputLabel: { shrink: true } }}
                   sx={{
-                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {display: 'none'},
-                    '& input[type=number]': {MozAppearance: 'textfield'},
+                    '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': { display: 'none' },
+                    '& input[type=number]': { MozAppearance: 'textfield' },
                   }}
                   error={!!angleDegError}
                   helperText={angleDegError}

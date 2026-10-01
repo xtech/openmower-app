@@ -1,5 +1,5 @@
-import {type Position} from '@/stores/schemas';
-import {useEffect, useRef, useState} from 'react';
+import { type Position } from '@/stores/schemas';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Smoothly interpolates a position+heading value toward the latest target using
@@ -35,7 +35,10 @@ export function useSmoothedPosition(target: Position, halfLifeMs = 75): Position
       const t = targetRef.current;
       const c = currentRef.current;
 
-      if (t === undefined || c === undefined) { rafRef.current = null; return; }
+      if (t === undefined || c === undefined) {
+        rafRef.current = null;
+        return;
+      }
 
       const dt = lastTimestampRef.current !== null ? timestamp - lastTimestampRef.current : 0;
       lastTimestampRef.current = timestamp;
@@ -64,13 +67,13 @@ export function useSmoothedPosition(target: Position, halfLifeMs = 75): Position
 
       if (converged) {
         currentRef.current = t;
-        setSmoothed({...t});
+        setSmoothed({ ...t });
         rafRef.current = null;
         return;
       }
 
       if (alpha > 0) {
-        setSmoothed({...next});
+        setSmoothed({ ...next });
       }
 
       rafRef.current = requestAnimationFrame(animate);

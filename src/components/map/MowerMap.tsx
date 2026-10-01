@@ -1,37 +1,37 @@
 'use client';
 
-import {useFitToBounds, useMapboxDraw, useMapContext, useMapHover} from '@/contexts/MapContext';
-import {useJobTrack} from '@/hooks/useJobTrack';
-import {useMapDisplayStore} from '@/stores/mapDisplayStore';
-import {useSelectedMower} from '@/stores/mowersStore';
-import {MapData, type AreaProps} from '@/stores/schemas';
-import type {AreaFeature} from '@/types/geojson';
-import {generateId, splitPolygonWithLine} from '@/utils/area-utils';
+import { useFitToBounds, useMapboxDraw, useMapContext, useMapHover } from '@/contexts/MapContext';
+import { useJobTrack } from '@/hooks/useJobTrack';
+import { useMapDisplayStore } from '@/stores/mapDisplayStore';
+import { useSelectedMower } from '@/stores/mowersStore';
+import { MapData, type AreaProps } from '@/stores/schemas';
+import type { AreaFeature } from '@/types/geojson';
+import { generateId, splitPolygonWithLine } from '@/utils/area-utils';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import {Box, useMediaQuery, useTheme, type SxProps} from '@mui/material';
-import {featureCollection} from '@turf/helpers';
-import type {Feature, LineString, Polygon} from 'geojson';
-import {FocusIcon, LayoutListIcon, PencilIcon} from 'lucide-react';
-import type {Map} from 'maplibre-gl';
+import { Box, useMediaQuery, useTheme, type SxProps } from '@mui/material';
+import { featureCollection } from '@turf/helpers';
+import type { Feature, LineString, Polygon } from 'geojson';
+import { FocusIcon, LayoutListIcon, PencilIcon } from 'lucide-react';
+import type { Map } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import {RFullscreenControl, RMap} from 'maplibre-react-components';
-import {useCallback, useEffect, useEffectEvent, useMemo, useRef} from 'react';
-import {DialogOutlet, useDialog} from 'react-dialog-async';
+import { RFullscreenControl, RMap } from 'maplibre-react-components';
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef } from 'react';
+import { DialogOutlet, useDialog } from 'react-dialog-async';
 import AreasList from './AreasList';
 import ControlButton from './ControlButton';
 import DockingStationMarker from './DockingStationMarker';
-import {DrawControl} from './DrawControl';
-import {drawStyles} from './drawStyles';
-import {AreaSettingsDialog} from './edit/AreaSettingsDialog';
-import {DownloadButton} from './edit/DownloadButton';
+import { DrawControl } from './DrawControl';
+import { drawStyles } from './drawStyles';
+import { AreaSettingsDialog } from './edit/AreaSettingsDialog';
+import { DownloadButton } from './edit/DownloadButton';
 import EditControls from './edit/EditControls';
-import {IssuesButton} from './edit/IssuesButton';
-import {UploadButton} from './edit/UploadButton';
+import { IssuesButton } from './edit/IssuesButton';
+import { UploadButton } from './edit/UploadButton';
 import LayersButton from './LayersButton';
 import MapDialog from './MapDialog';
-import {mapStyles} from './mapStyles';
+import { mapStyles } from './mapStyles';
 import MowerMarker from './MowerMarker';
 import SimulatorButton from './SimulatorButton';
 import TeleopControls from './teleop/TeleopControls';
@@ -43,7 +43,7 @@ interface MowerMapProps {
   sx: SxProps;
 }
 
-export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
+export function MowerMap({ mapData, saveMapToMower, sx }: MowerMapProps) {
   const {
     id,
     datum,
@@ -71,10 +71,10 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const {showSatelliteLayer, showTrackLayer, showAreaList, selectedJobId, setShowAreaList} = useMapDisplayStore();
-  const {pastTrack, loading: trackLoading} = useJobTrack(selectedJobId);
+  const { showSatelliteLayer, showTrackLayer, showAreaList, selectedJobId, setShowAreaList } = useMapDisplayStore();
+  const { pastTrack, loading: trackLoading } = useJobTrack(selectedJobId);
   const areaSettingsDialog = useDialog(AreaSettingsDialog);
-  const padding = useMemo(() => ({top: 10, bottom: 10, left: 60, right: showAreaList ? 390 : 60}), [showAreaList]);
+  const padding = useMemo(() => ({ top: 10, bottom: 10, left: 60, right: showAreaList ? 390 : 60 }), [showAreaList]);
   const fitToBounds = useFitToBounds();
 
   const onBoundsChanged = useEffectEvent(() => {
@@ -94,7 +94,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
       featureCollection(
         features.features
           .filter((f) => f.geometry.type === 'Polygon')
-          .map((f) => ({...f, id: f.id, properties: {...f.properties, id: f.id}})),
+          .map((f) => ({ ...f, id: f.id, properties: { ...f.properties, id: f.id } })),
       ),
     [features],
   );
@@ -103,7 +103,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
     const map = mapRef.current;
     if (!map || !draw) return;
 
-    const onMouseMove = (e: {features?: {id?: string | number}[]}) => {
+    const onMouseMove = (e: { features?: { id?: string | number }[] }) => {
       const fid = e.features?.[0]?.id != null ? String(e.features[0].id) : null;
       setHoveredId(fid);
     };
@@ -116,12 +116,12 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
       if (map.getSource('areas-hover')) {
         return;
       }
-      map.addSource('areas-hover', {type: 'geojson', data, promoteId: 'id'} as Parameters<typeof map.addSource>[1]);
+      map.addSource('areas-hover', { type: 'geojson', data, promoteId: 'id' } as Parameters<typeof map.addSource>[1]);
       map.addLayer({
         id: 'areas-hover-fill',
         type: 'fill',
         source: 'areas-hover',
-        paint: {'fill-color': 'transparent', 'fill-opacity': 0},
+        paint: { 'fill-color': 'transparent', 'fill-opacity': 0 },
       });
       hoverSourceReady.current = true;
       map.on('mousemove', 'areas-hover-fill', onMouseMove);
@@ -153,7 +153,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !hoverSourceReady.current) return;
-    const src = map.getSource('areas-hover') as {setData?: (d: GeoJSON.FeatureCollection) => void} | undefined;
+    const src = map.getSource('areas-hover') as { setData?: (d: GeoJSON.FeatureCollection) => void } | undefined;
     src?.setData?.(getPolygonData());
   }, [features, getPolygonData]);
 
@@ -207,13 +207,13 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
   );
 
   return (
-    <Box sx={{...sx, overflow: 'hidden', position: 'relative'}}>
+    <Box sx={{ ...sx, overflow: 'hidden', position: 'relative' }}>
       <RMap
         key={id}
         // key={id + JSON.stringify(drawStyles)}
         id={id}
         ref={mapRef}
-        style={{width: '100%', height: '100%'}}
+        style={{ width: '100%', height: '100%' }}
         mapStyle={mapStyles[datum && showSatelliteLayer ? 'satellite' : 'white']}
         initialAttributionControl={false}
         maxZoom={25}
@@ -223,7 +223,7 @@ export function MowerMap({mapData, saveMapToMower, sx}: MowerMapProps) {
       >
         <DrawControl
           displayControlsDefault={false}
-          controls={{trash: true}}
+          controls={{ trash: true }}
           styles={drawStyles}
           modes={{
             ...MapboxDraw.modes,

@@ -1,4 +1,4 @@
-import {Box, Typography} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 interface MowerSelectorHeaderProps {
   title?: string;
@@ -10,8 +10,8 @@ export default function MowerSelectorHeader({
   subtitle = 'Choose which mower to control',
 }: MowerSelectorHeaderProps) {
   return (
-    <Box sx={{p: 2, borderBottom: '1px solid rgba(0,0,0,0.08)', userSelect: 'none'}}>
-      <Typography variant="subtitle2" color="text.primary" sx={{fontWeight: '600'}}>
+    <Box sx={{ p: 2, borderBottom: '1px solid rgba(0,0,0,0.08)', userSelect: 'none' }}>
+      <Typography variant="subtitle2" color="text.primary" sx={{ fontWeight: '600' }}>
         {title}
       </Typography>
       <Typography variant="caption" color="text.secondary">

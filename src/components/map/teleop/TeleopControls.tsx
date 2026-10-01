@@ -1,8 +1,8 @@
 'use client';
 
-import {useTeleop} from '@/hooks/useTeleop';
-import {Box, useMediaQuery, useTheme} from '@mui/material';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import { useTeleop } from '@/hooks/useTeleop';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SpeedLever from './SpeedLever';
 import VirtualJoystick from './VirtualJoystick';
 
@@ -14,16 +14,16 @@ const MIN_SPEED = 0.3;
 const MAX_SPEED = 1.0;
 const SPEED_MULTIPLIERS = [MIN_SPEED, (MIN_SPEED + MAX_SPEED) / 2, MAX_SPEED];
 
-export default function TeleopControls({simulatorMode = false}: TeleopControlsProps) {
-  const {setVelocity} = useTeleop();
+export default function TeleopControls({ simulatorMode = false }: TeleopControlsProps) {
+  const { setVelocity } = useTeleop();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [speedState, setSpeedState] = useState(1);
-  const rawVelocity = useRef({vx: 0, vz: 0});
+  const rawVelocity = useRef({ vx: 0, vz: 0 });
 
   const handleVelocityChange = useCallback(
     (vx: number, vz: number) => {
-      rawVelocity.current = {vx, vz};
+      rawVelocity.current = { vx, vz };
       const mult = SPEED_MULTIPLIERS[speedState];
       setVelocity(vx * mult, vz * mult);
     },
@@ -32,7 +32,7 @@ export default function TeleopControls({simulatorMode = false}: TeleopControlsPr
 
   // When speed state changes, re-emit the last known velocity immediately
   useEffect(() => {
-    const {vx, vz} = rawVelocity.current;
+    const { vx, vz } = rawVelocity.current;
     if (vx !== 0 || vz !== 0) {
       const mult = SPEED_MULTIPLIERS[speedState];
       setVelocity(vx * mult, vz * mult);

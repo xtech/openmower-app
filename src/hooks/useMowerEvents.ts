@@ -1,5 +1,5 @@
-import {useSelectedMower} from '@/stores/mowersStore';
-import type {MowerEvent} from '@/stores/schemas';
+import { useSelectedMower } from '@/stores/mowersStore';
+import type { MowerEvent } from '@/stores/schemas';
 
 const EMPTY_EVENTS: MowerEvent[] = [];
 const EMPTY_DATES: string[] = [];

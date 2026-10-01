@@ -7,15 +7,25 @@ import {
   useMapSelection,
   withDisplaySortKeys,
 } from '@/contexts/MapContext';
-import {AreaProps} from '@/stores/schemas';
-import {closestCenter, DndContext, DragEndEvent, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, type DragStartEvent} from '@dnd-kit/core';
-import {restrictToFirstScrollableAncestor, restrictToVerticalAxis} from '@dnd-kit/modifiers';
-import {arrayMove, SortableContext, verticalListSortingStrategy} from '@dnd-kit/sortable';
-import {Card, CardContent, CardHeader, IconButton, List, useTheme} from '@mui/material';
-import {featureCollection} from '@turf/helpers';
-import {Feature, Polygon} from 'geojson';
-import {XIcon} from 'lucide-react';
-import {useRef, useState} from 'react';
+import { AreaProps } from '@/stores/schemas';
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragStartEvent,
+} from '@dnd-kit/core';
+import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Card, CardContent, CardHeader, IconButton, List, useTheme } from '@mui/material';
+import { featureCollection } from '@turf/helpers';
+import { Feature, Polygon } from 'geojson';
+import { XIcon } from 'lucide-react';
+import { useRef, useState } from 'react';
 import SortableAreaItem from './edit/SortableAreaItem';
 
 function rangeIndices(ids: string[], a: string, b: string): [number, number] {
@@ -24,19 +34,19 @@ function rangeIndices(ids: string[], a: string, b: string): [number, number] {
   return [Math.min(ai, bi), Math.max(ai, bi)];
 }
 
-export default function AreasList({areas, onClose}: {areas: Feature<Polygon, AreaProps>[]; onClose?: () => void}) {
+export default function AreasList({ areas, onClose }: { areas: Feature<Polygon, AreaProps>[]; onClose?: () => void }) {
   const theme = useTheme();
   const selectedIds = useMapSelection();
   const [hoveredId, setHoveredId] = useMapHover();
-  const {editMode, setFeatures} = useMapContext();
+  const { editMode, setFeatures } = useMapContext();
   const draw = useMapboxDraw();
   const map = useMap();
   const anchorId = useRef<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const sensors = useSensors(
-    useSensor(MouseSensor, {activationConstraint: {distance: 5}}),
-    useSensor(TouchSensor, {activationConstraint: {delay: 250, tolerance: 8}}),
+    useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } }),
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -45,10 +55,10 @@ export default function AreasList({areas, onClose}: {areas: Feature<Polygon, Are
 
   const selectFeatures = (featureIds: string[]) => {
     if (!draw || !map) return;
-    draw.changeMode('simple_select', {featureIds});
+    draw.changeMode('simple_select', { featureIds });
     // draw.changeMode with featureIds suppresses draw.selectionchange by default,
     // so fire it manually to keep useMapSelection() in sync.
-    map.fire('draw.selectionchange', {features: featureIds.map((fid) => draw.get(fid)).filter(Boolean)});
+    map.fire('draw.selectionchange', { features: featureIds.map((fid) => draw.get(fid)).filter(Boolean) });
   };
 
   const handleSelect = (id: string, event: React.MouseEvent) => {
@@ -78,7 +88,7 @@ export default function AreasList({areas, onClose}: {areas: Feature<Polygon, Are
 
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveId(null);
-    const {active, over} = event;
+    const { active, over } = event;
     if (over?.id === undefined || active.id === over.id) return;
 
     const activeItemId = active.id as string;
@@ -116,12 +126,12 @@ export default function AreasList({areas, onClose}: {areas: Feature<Polygon, Are
   };
 
   return (
-    <Card sx={{height: '100%', display: 'flex', flexDirection: 'column', border: 0}}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', border: 0 }}>
       <CardHeader
         title="Areas"
         action={
           onClose && (
-            <IconButton size="small" onClick={onClose} sx={{color: theme.palette.primary.contrastText, mr: -1}}>
+            <IconButton size="small" onClick={onClose} sx={{ color: theme.palette.primary.contrastText, mr: -1 }}>
               <XIcon size={18} />
             </IconButton>
           )
@@ -131,11 +141,11 @@ export default function AreasList({areas, onClose}: {areas: Feature<Polygon, Are
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.primary.contrastText,
           userSelect: 'none',
-          '& .MuiCardHeader-action': {alignSelf: 'center', m: 0},
+          '& .MuiCardHeader-action': { alignSelf: 'center', m: 0 },
         }}
       />
-      <CardContent sx={{flex: 1, p: 0, overflowY: 'auto', '&:last-child': {pb: 0}}}>
-        <List sx={{minHeight: '100%', p: 0, userSelect: 'none'}}>
+      <CardContent sx={{ flex: 1, p: 0, overflowY: 'auto', '&:last-child': { pb: 0 } }}>
+        <List sx={{ minHeight: '100%', p: 0, userSelect: 'none' }}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -158,7 +168,7 @@ export default function AreasList({areas, onClose}: {areas: Feature<Polygon, Are
                 />
               ))}
             </SortableContext>
-            <DragOverlay style={{cursor: 'grabbing'}} />
+            <DragOverlay style={{ cursor: 'grabbing' }} />
           </DndContext>
         </List>
       </CardContent>

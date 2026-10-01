@@ -1,5 +1,5 @@
-import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface MapDisplayStore {
   showSatelliteLayer: boolean;
@@ -19,11 +19,11 @@ export const useMapDisplayStore = create<MapDisplayStore>()(
       showTrackLayer: true,
       showAreaList: true,
       selectedJobId: null,
-      setShowSatelliteLayer: (v) => set({showSatelliteLayer: v}),
-      setShowTrackLayer: (v) => set({showTrackLayer: v}),
-      setShowAreaList: (v) => set({showAreaList: v}),
-      setSelectedJobId: (v) => set({selectedJobId: v}),
+      setShowSatelliteLayer: (v) => set({ showSatelliteLayer: v }),
+      setShowTrackLayer: (v) => set({ showTrackLayer: v }),
+      setShowAreaList: (v) => set({ showAreaList: v }),
+      setSelectedJobId: (v) => set({ selectedJobId: v }),
     }),
-    {name: 'map-display'},
+    { name: 'map-display' },
   ),
 );

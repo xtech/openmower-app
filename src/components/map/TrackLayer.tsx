@@ -1,12 +1,12 @@
 'use client';
 
-import type {PastTrack} from '@/hooks/useJobTrack';
-import {useTrackFeatures, type TrackFeatures} from '@/hooks/useTrackFeatures';
-import {featureCollection, point} from '@turf/helpers';
-import type {Feature, FeatureCollection, LineString, Point} from 'geojson';
-import type {ExpressionSpecification, LineLayerSpecification} from 'maplibre-gl';
-import {RLayer, RSource} from 'maplibre-react-components';
-import {useMemo} from 'react';
+import type { PastTrack } from '@/hooks/useJobTrack';
+import { useTrackFeatures, type TrackFeatures } from '@/hooks/useTrackFeatures';
+import { featureCollection, point } from '@turf/helpers';
+import type { Feature, FeatureCollection, LineString, Point } from 'geojson';
+import type { ExpressionSpecification, LineLayerSpecification } from 'maplibre-gl';
+import { RLayer, RSource } from 'maplibre-react-components';
+import { useMemo } from 'react';
 
 const SHOW_TRACK_POINTS = false;
 
@@ -16,11 +16,11 @@ const linePaint: LineLayerSpecification['paint'] = {
   'line-opacity': ['case', ['==', ['get', 'blades'], true], 1, 0.5] as ExpressionSpecification,
   'line-dasharray': ['case', ['==', ['get', 'blades'], true], ['literal', [1, 0]], ['literal', [3, 3]]],
 };
-const pointPaint = {'circle-radius': 3, 'circle-color': '#1565C0', 'circle-opacity': 0.6} as const;
+const pointPaint = { 'circle-radius': 3, 'circle-color': '#1565C0', 'circle-opacity': 0.6 } as const;
 
 const emptyLine: Feature<LineString> = {
   type: 'Feature',
-  geometry: {type: 'LineString', coordinates: []},
+  geometry: { type: 'LineString', coordinates: [] },
   properties: {},
 };
 const emptyLineCollection: FeatureCollection<LineString> = featureCollection([]);
@@ -32,11 +32,11 @@ interface TrackLayerProps {
   loading?: boolean;
 }
 
-export default function TrackLayer({visible = true, pastTrack = null, loading = false}: TrackLayerProps) {
-  const {live, history} = useTrackFeatures(pastTrack, loading);
+export default function TrackLayer({ visible = true, pastTrack = null, loading = false }: TrackLayerProps) {
+  const { live, history } = useTrackFeatures(pastTrack, loading);
 
   const visibility = visible ? 'visible' : 'none';
-  const layout: LineLayerSpecification['layout'] = {'line-join': 'round', 'line-cap': 'butt', visibility};
+  const layout: LineLayerSpecification['layout'] = { 'line-join': 'round', 'line-cap': 'butt', visibility };
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function TrackLayer({visible = true, pastTrack = null, loading = 
   );
 }
 
-function TrackPointsLayer({live, history}: TrackFeatures) {
+function TrackPointsLayer({ live, history }: TrackFeatures) {
   const livePoints = useMemo(() => (live ? lineToPoints(live) : emptyPoints), [live]);
   const historyPoints = useMemo(() => (history ? collectionToPoints(history) : emptyPoints), [history]);
 

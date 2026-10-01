@@ -5,30 +5,20 @@ import EventRow from '@/components/events/EventRow';
 import { getEventTypeIcon } from '@/components/events/eventIcons';
 import { HeaderStat, Page, PageContent, PageHeader } from '@/components/page';
 import {
-    useSelectedMowerAvailableDates,
-    useSelectedMowerEventsForDate,
-    useSelectedMowerIsDateLoaded,
+  useSelectedMowerAvailableDates,
+  useSelectedMowerEventsForDate,
+  useSelectedMowerIsDateLoaded,
 } from '@/hooks/useMowerEvents';
 import { outerCardStyles } from '@/lib/cardStyles';
 import { formatEventDateLabel, getEventTypeLabel, getTodayDateKey, sortEventTypes } from '@/stores/mowerEvents';
 import { useMowersStore, useSelectedMower } from '@/stores/mowersStore';
 import {
-    EventNote as EventIcon,
-    FilterList as FilterIcon,
-    ChevronRight as NextIcon,
-    ChevronLeft as PrevIcon,
+  EventNote as EventIcon,
+  FilterList as FilterIcon,
+  ChevronRight as NextIcon,
+  ChevronLeft as PrevIcon,
 } from '@mui/icons-material';
-import {
-    Box,
-    Card,
-    CardContent,
-    Chip,
-    IconButton,
-    List,
-    Stack,
-    Typography,
-    useTheme,
-} from '@mui/material';
+import { Box, Card, CardContent, Chip, IconButton, List, Stack, Typography, useTheme } from '@mui/material';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function EventsPage() {
@@ -76,7 +66,6 @@ export default function EventsPage() {
   const canGoPrev = selectedDateIndex >= 0 && selectedDateIndex < navigableDates.length - 1;
   const canGoNext = selectedDateIndex > 0;
 
-
   return (
     <Page>
       <PageHeader title="Event History" subtitle="Review mower activity and system events">
@@ -88,8 +77,8 @@ export default function EventsPage() {
         <Card sx={outerCardStyles(theme)}>
           <CardContent>
             <Stack spacing={2}>
-              <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-                <Box sx={{display: 'flex', alignItems: 'center', flexShrink: 0}}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                   <IconButton
                     aria-label="Previous day"
                     size="small"
@@ -112,18 +101,18 @@ export default function EventsPage() {
                     onSelect={setSelectedDate}
                   />
                 </Box>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, minWidth: 0}}>
-                  <Typography variant="h6" sx={{fontWeight: 600}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
                     {formatEventDateLabel(selectedDate)}
                   </Typography>
                   {selectedDate === today && (
-                    <Chip label="Today" size="small" color="primary" sx={{ml: 0.5, opacity: 0.8}} />
+                    <Chip label="Today" size="small" color="primary" sx={{ ml: 0.5, opacity: 0.8 }} />
                   )}
                 </Box>
               </Box>
 
               {eventTypes.length > 0 && (
-                <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 1}}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                   <Chip
                     label="All types"
                     clickable
@@ -144,8 +133,8 @@ export default function EventsPage() {
               )}
 
               {displayedEvents.length === 0 ? (
-                <Box sx={{py: 6, textAlign: 'center'}}>
-                  <EventIcon sx={{fontSize: 48, color: theme.palette.grey[400], mb: 1}} />
+                <Box sx={{ py: 6, textAlign: 'center' }}>
+                  <EventIcon sx={{ fontSize: 48, color: theme.palette.grey[400], mb: 1 }} />
                   <Typography variant="body1" color="text.secondary">
                     No events for this date.
                   </Typography>

@@ -1,9 +1,9 @@
 'use client';
 
-import {Page, PageContent, PageHeader} from '@/components/page';
-import {useSelectedMower} from '@/stores/mowersStore';
+import { Page, PageContent, PageHeader } from '@/components/page';
+import { useSelectedMower } from '@/stores/mowersStore';
 import JsonSchemaDereferencer from '@json-schema-tools/dereferencer';
-import {ExpandMore as ExpandMoreIcon, Save as SaveIcon} from '@mui/icons-material';
+import { ExpandMore as ExpandMoreIcon, Save as SaveIcon } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -17,19 +17,19 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import {createHeadlessForm} from '@remoteoss/json-schema-form';
-import type {ValidationResult} from '@remoteoss/json-schema-form';
+import type { ValidationResult } from '@remoteoss/json-schema-form';
+import { createHeadlessForm } from '@remoteoss/json-schema-form';
 import mergeAllOf from 'json-schema-merge-allof';
 import merge from 'lodash.merge';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {FormProvider, useForm, useFormContext, useWatch} from 'react-hook-form';
-import {parse as parseYaml} from 'yaml';
-import {FieldsetField} from './fields/FieldsetField';
-import {SettingsContext} from './SettingsContext';
-import {StickyBreadcrumb} from './StickyBreadcrumb';
-import {deepMergeNoArrayMerge, getNestedValue, setNestedValue} from './settingsUtils';
-import type {Field, FieldsetField as FieldsetFieldType} from './types';
-import {jsonSchemaResolver} from './validationResolver';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FormProvider, useForm, useFormContext, useWatch } from 'react-hook-form';
+import { parse as parseYaml } from 'yaml';
+import { FieldsetField } from './fields/FieldsetField';
+import { SettingsContext } from './SettingsContext';
+import { deepMergeNoArrayMerge, getNestedValue, setNestedValue } from './settingsUtils';
+import { StickyBreadcrumb } from './StickyBreadcrumb';
+import type { Field, FieldsetField as FieldsetFieldType } from './types';
+import { jsonSchemaResolver } from './validationResolver';
 
 // TODO: Make this dynamic.
 const RELEVANT_DEFAULTS = ['defaults.yaml', 'boards/v1.yaml', 'mowers/YardForce500.yaml'];
@@ -69,7 +69,7 @@ export function SettingsForm() {
           throw new Error('Dereferenced schema is not an object');
         }
         const mergedSchema = mergeAllOf(dereferencedSchema);
-        const {fields: formFields, handleValidation} = createHeadlessForm(mergedSchema);
+        const { fields: formFields, handleValidation } = createHeadlessForm(mergedSchema);
 
         const newFormState = {
           fields: formFields as unknown as Field[],
@@ -91,7 +91,7 @@ export function SettingsForm() {
       <Page>
         <PageHeader title="Settings" subtitle="Configure your mower" />
         <PageContent>
-          <Typography color="error" sx={{p: 3}}>
+          <Typography color="error" sx={{ p: 3 }}>
             {error}
           </Typography>
         </PageContent>
@@ -104,7 +104,7 @@ export function SettingsForm() {
       <Page>
         <PageHeader title="Settings" subtitle="Configure your mower" />
         <PageContent>
-          <Box sx={{display: 'flex', justifyContent: 'center', py: 6}}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
             <CircularProgress />
           </Box>
         </PageContent>
@@ -115,7 +115,7 @@ export function SettingsForm() {
   return <SettingsFormContent formState={formState} />;
 }
 
-function SettingsFormContent({formState}: {formState: FormState}) {
+function SettingsFormContent({ formState }: { formState: FormState }) {
   const methods = useForm({
     defaultValues: formState.defaults,
     resolver: jsonSchemaResolver(formState.handleValidation),
@@ -143,7 +143,7 @@ function SettingsFormContent({formState}: {formState: FormState}) {
         return next;
       });
       const defaultValue = formState ? getNestedValue(formState.defaults, path) : undefined;
-      methods.resetField(path as never, {defaultValue: defaultValue as never});
+      methods.resetField(path as never, { defaultValue: defaultValue as never });
     },
     [formState, methods],
   );
@@ -159,7 +159,7 @@ function SettingsFormContent({formState}: {formState: FormState}) {
 
   const topLevelFieldsets = formState.fields.filter((field) => field.type === 'fieldset') as FieldsetFieldType[];
   const hasChanges = confirmedFields.size > 0;
-  const {isValid} = methods.formState;
+  const { isValid } = methods.formState;
 
   return (
     <SettingsContext.Provider
@@ -182,7 +182,7 @@ function SettingsFormContent({formState}: {formState: FormState}) {
             )}
           </PageHeader>
           <PageContent>
-            <Box sx={{display: 'flex', justifyContent: 'flex-end', mb: 2}}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <Button
                 variant="contained"
                 startIcon={<SaveIcon />}
@@ -213,8 +213,8 @@ function SettingsFormContent({formState}: {formState: FormState}) {
   );
 }
 
-function SettingsAccordion({fieldset}: {fieldset: FieldsetFieldType}) {
-  const {confirmedFields} = useSettingsContext();
+function SettingsAccordion({ fieldset }: { fieldset: FieldsetFieldType }) {
+  const { confirmedFields } = useSettingsContext();
 
   const changedCount = useMemo(() => {
     let count = 0;
@@ -229,7 +229,7 @@ function SettingsAccordion({fieldset}: {fieldset: FieldsetFieldType}) {
       disableGutters
       sx={{
         mb: 1.5,
-        '&:before': {display: 'none'},
+        '&:before': { display: 'none' },
         borderRadius: '12px !important',
         overflow: 'hidden',
         border: '1px solid',
@@ -249,23 +249,25 @@ function SettingsAccordion({fieldset}: {fieldset: FieldsetFieldType}) {
         data-section-label={fieldset.label}
         sx={{
           bgcolor: 'background.paper',
-          '&:hover': {bgcolor: 'action.hover'},
+          '&:hover': { bgcolor: 'action.hover' },
           minHeight: 56,
           '& .MuiAccordionSummary-content': {
             margin: '14px 0',
           },
         }}
       >
-        <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5, width: '100%'}}>
-          <Typography variant="subtitle1" sx={{fontWeight: 600}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
             {fieldset.label}
           </Typography>
-          {changedCount > 0 && <Chip label={changedCount} size="small" color="primary" sx={{height: 22, minWidth: 22}} />}
+          {changedCount > 0 && (
+            <Chip label={changedCount} size="small" color="primary" sx={{ height: 22, minWidth: 22 }} />
+          )}
         </Box>
       </AccordionSummary>
-      <AccordionDetails sx={{pt: 2, pb: 3}}>
+      <AccordionDetails sx={{ pt: 2, pb: 3 }}>
         {fieldset.description && (
-          <Typography variant="body2" color="text.secondary" sx={{mb: 2.5}}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
             {fieldset.description}
           </Typography>
         )}
@@ -275,7 +277,7 @@ function SettingsAccordion({fieldset}: {fieldset: FieldsetFieldType}) {
   );
 }
 
-import {useSettingsContext} from './SettingsContext';
+import { useSettingsContext } from './SettingsContext';
 
 interface ConfirmedValuesDebugProps {
   confirmedFieldsRef: React.RefObject<Set<string>>;
@@ -283,10 +285,10 @@ interface ConfirmedValuesDebugProps {
   defaults: Record<string, unknown>;
 }
 
-function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults}: ConfirmedValuesDebugProps) {
+function ConfirmedValuesDebug({ confirmedFieldsRef, getConfirmedValues, defaults }: ConfirmedValuesDebugProps) {
   useWatch({});
   const {
-    formState: {errors},
+    formState: { errors },
   } = useFormContext();
 
   const [showMerged, setShowMerged] = useState(false);
@@ -309,7 +311,7 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults}
         borderRadius: 3,
       }}
     >
-      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Typography variant="subtitle2" color="text.secondary">
           Config to be persisted
         </Typography>
@@ -317,7 +319,7 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults}
           control={<Switch size="small" checked={showMerged} onChange={(e) => setShowMerged(e.target.checked)} />}
           label={<Typography variant="caption">Show merged with defaults</Typography>}
           labelPlacement="start"
-          sx={{m: 0, gap: 1}}
+          sx={{ m: 0, gap: 1 }}
         />
       </Box>
       <Box
@@ -341,7 +343,7 @@ function ConfirmedValuesDebug({confirmedFieldsRef, getConfirmedValues, defaults}
         {isEmpty && !showMerged ? '(no changes)' : JSON.stringify(displayed, null, 2)}
       </Box>
       {hasErrors && (
-        <Box sx={{mt: 2}}>
+        <Box sx={{ mt: 2 }}>
           <Typography variant="subtitle2" color="error" gutterBottom>
             Validation errors
           </Typography>

@@ -1,4 +1,4 @@
-import {BASE_EVENT_KEYS, type MowerEvent} from './schemas';
+import { BASE_EVENT_KEYS, type MowerEvent } from './schemas';
 
 export interface MowerEventState {
   eventsByDate: Record<string, MowerEvent[]>;
@@ -159,9 +159,7 @@ export function getEventLabel(event: MowerEvent): string {
     case 'GPS':
       return event.available ? 'GPS available' : 'GPS unavailable';
     case 'STATE': {
-      return event.state
-        ? `State changed to "${getStateLabel(String(event.state))}"`
-        : 'State changed';
+      return event.state ? `State changed to "${getStateLabel(String(event.state))}"` : 'State changed';
     }
     case 'BLADES':
       return event.enabled ? 'Blades on' : 'Blades off';

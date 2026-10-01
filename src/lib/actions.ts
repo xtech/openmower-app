@@ -1,8 +1,8 @@
 'use server';
 
-import {AppConfig} from '@/components/types';
-import {promises as fs} from 'fs';
-import {headers} from 'next/headers';
+import { AppConfig } from '@/components/types';
+import { promises as fs } from 'fs';
+import { headers } from 'next/headers';
 import path from 'path';
 
 const configPath = path.join(process.cwd(), 'config.json');

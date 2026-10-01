@@ -1,12 +1,12 @@
-import {useController, useFormContext} from 'react-hook-form';
-import {useSettingsContext} from './SettingsContext';
-import {getNestedValue} from './settingsUtils';
+import { useController, useFormContext } from 'react-hook-form';
+import { useSettingsContext } from './SettingsContext';
+import { getNestedValue } from './settingsUtils';
 
 export function useSettingsField(path: string, fallbackDefault: unknown = '') {
-  const {control} = useFormContext();
-  const {defaults, onFieldChange, confirmedFields} = useSettingsContext();
+  const { control } = useFormContext();
+  const { defaults, onFieldChange, confirmedFields } = useSettingsContext();
 
-  const {field: controllerField, fieldState} = useController({
+  const { field: controllerField, fieldState } = useController({
     name: path,
     control,
     defaultValue: getNestedValue(defaults, path) ?? fallbackDefault,

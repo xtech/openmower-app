@@ -1,4 +1,4 @@
-import {type Capabilities, type NavigationItem} from '@/components/types';
+import { type Capabilities, type NavigationItem } from '@/components/types';
 import {
   BugReport as BugReportIcon,
   Dashboard as DashboardIcon,
@@ -17,12 +17,12 @@ export function createNavigationItems(capabilities: Capabilities = {}): Navigati
   };
 
   return [
-    isDev && {label: 'Dashboard', icon: <DashboardIcon />, path: '/', isGlobal: true},
-    {label: 'Map', icon: <MapIcon />, path: '/map', isGlobal: false},
-    hasCapability('events') && {label: 'Events', icon: <EventIcon />, path: '/events', isGlobal: false},
-    isDev && {label: 'Tasks', icon: <TaskIcon />, path: '/tasks', isGlobal: false},
-    isDev && {label: 'Sensors', icon: <SensorIcon />, path: '/sensors', isGlobal: false},
-    isDev && {label: 'Settings', icon: <SettingsIcon />, path: '/settings', isGlobal: true},
-    {label: 'Debug', icon: <BugReportIcon />, path: '/debug', isGlobal: true},
+    isDev && { label: 'Dashboard', icon: <DashboardIcon />, path: '/', isGlobal: true },
+    { label: 'Map', icon: <MapIcon />, path: '/map', isGlobal: false },
+    hasCapability('events') && { label: 'Events', icon: <EventIcon />, path: '/events', isGlobal: false },
+    isDev && { label: 'Tasks', icon: <TaskIcon />, path: '/tasks', isGlobal: false },
+    isDev && { label: 'Sensors', icon: <SensorIcon />, path: '/sensors', isGlobal: false },
+    isDev && { label: 'Settings', icon: <SettingsIcon />, path: '/settings', isGlobal: true },
+    { label: 'Debug', icon: <BugReportIcon />, path: '/debug', isGlobal: true },
   ].filter((item): item is NavigationItem => !!item);
 }

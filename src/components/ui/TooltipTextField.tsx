@@ -1,11 +1,11 @@
-import {InfoOutlined as InfoOutlinedIcon} from '@mui/icons-material';
-import {IconButton, InputAdornment, TextField, Tooltip, tooltipClasses, type TextFieldProps} from '@mui/material';
+import { InfoOutlined as InfoOutlinedIcon } from '@mui/icons-material';
+import { IconButton, InputAdornment, TextField, Tooltip, tooltipClasses, type TextFieldProps } from '@mui/material';
 
 type TooltipTextFieldProps = TextFieldProps & {
   tooltip: string;
 };
 
-export function TooltipTextField({tooltip, slotProps, ...props}: TooltipTextFieldProps) {
+export function TooltipTextField({ tooltip, slotProps, ...props }: TooltipTextFieldProps) {
   const infoAdornment = (
     <InputAdornment position="end">
       <Tooltip
@@ -23,7 +23,7 @@ export function TooltipTextField({tooltip, slotProps, ...props}: TooltipTextFiel
               maxWidth: 260,
               px: 1.5,
               py: 1,
-              [`& .${tooltipClasses.arrow}`]: {color: 'grey.900'},
+              [`& .${tooltipClasses.arrow}`]: { color: 'grey.900' },
             },
           },
         }}

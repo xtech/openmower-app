@@ -15,7 +15,12 @@ export function setNestedValue(obj: Record<string, unknown>, path: string, value
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];
-    if (!(part in current) || typeof current[part] !== 'object' || current[part] === null || Array.isArray(current[part])) {
+    if (
+      !(part in current) ||
+      typeof current[part] !== 'object' ||
+      current[part] === null ||
+      Array.isArray(current[part])
+    ) {
       current[part] = {};
     }
     current = current[part] as Record<string, unknown>;
@@ -34,7 +39,7 @@ export function deepMergeNoArrayMerge(
   target: Record<string, unknown>,
   source: Record<string, unknown>,
 ): Record<string, unknown> {
-  const result: Record<string, unknown> = {...target};
+  const result: Record<string, unknown> = { ...target };
   for (const key of Object.keys(source)) {
     const srcVal = source[key];
     const tgtVal = result[key];
@@ -46,10 +51,7 @@ export function deepMergeNoArrayMerge(
       typeof tgtVal === 'object' &&
       !Array.isArray(tgtVal)
     ) {
-      result[key] = deepMergeNoArrayMerge(
-        tgtVal as Record<string, unknown>,
-        srcVal as Record<string, unknown>,
-      );
+      result[key] = deepMergeNoArrayMerge(tgtVal as Record<string, unknown>, srcVal as Record<string, unknown>);
     } else {
       result[key] = srcVal;
     }

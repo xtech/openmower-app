@@ -1,4 +1,4 @@
-type Point = {x: number; y: number};
+type Point = { x: number; y: number };
 
 function angleDiff(a: number, b: number): number {
   const d = Math.abs(a - b) % (2 * Math.PI);

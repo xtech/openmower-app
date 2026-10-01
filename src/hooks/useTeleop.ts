@@ -1,20 +1,20 @@
-import {useMowersStore} from '@/stores/mowersStore';
-import {useCallback, useEffect, useRef} from 'react';
+import { useMowersStore } from '@/stores/mowersStore';
+import { useCallback, useEffect, useRef } from 'react';
 
 const PUBLISH_INTERVAL_MS = 100;
 
 export function useTeleop() {
-  const vel = useRef({vx: 0, vz: 0});
+  const vel = useRef({ vx: 0, vz: 0 });
   const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const publish = useCallback(() => {
-    const {mowers, selected} = useMowersStore.getState();
+    const { mowers, selected } = useMowersStore.getState();
     mowers[selected]?.publishTeleop(vel.current.vx, vel.current.vz);
   }, []);
 
   const setVelocity = useCallback(
     (vx: number, vz: number) => {
-      vel.current = {vx: Math.max(-1, Math.min(1, vx)), vz: Math.max(-1, Math.min(1, vz))};
+      vel.current = { vx: Math.max(-1, Math.min(1, vx)), vz: Math.max(-1, Math.min(1, vz)) };
 
       const moving = vx !== 0 || vz !== 0;
       const wasMoving = interval.current !== null;
@@ -34,10 +34,10 @@ export function useTeleop() {
   useEffect(() => {
     return () => {
       if (interval.current !== null) clearInterval(interval.current);
-      vel.current = {vx: 0, vz: 0};
+      vel.current = { vx: 0, vz: 0 };
       publish();
     };
   }, []);
 
-  return {setVelocity};
+  return { setVelocity };
 }

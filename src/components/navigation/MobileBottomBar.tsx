@@ -1,17 +1,17 @@
 'use client';
 
-import {useSelectedMowerActiveEmergency} from '@/hooks/useMowerEvents';
-import {useSelectedMower} from '@/stores/mowersStore';
-import {Menu as MenuIcon} from '@mui/icons-material';
-import {Badge, BottomNavigation, BottomNavigationAction, Paper, useTheme} from '@mui/material';
-import {usePathname, useRouter} from 'next/navigation';
-import {createNavigationItems} from './navigationItems';
+import { useSelectedMowerActiveEmergency } from '@/hooks/useMowerEvents';
+import { useSelectedMower } from '@/stores/mowersStore';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { Badge, BottomNavigation, BottomNavigationAction, Paper, useTheme } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
+import { createNavigationItems } from './navigationItems';
 
 interface MobileBottomBarProps {
   onMenuOpen: () => void;
 }
 
-export default function MobileBottomBar({onMenuOpen}: MobileBottomBarProps) {
+export default function MobileBottomBar({ onMenuOpen }: MobileBottomBarProps) {
   const theme = useTheme();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,7 +41,7 @@ export default function MobileBottomBar({onMenuOpen}: MobileBottomBarProps) {
           boxShadow: '0 -2px 12px -2px rgba(0,0,0,0.2)',
           border: '1px solid rgba(0,0,0,0.08)',
           borderBottom: 'none',
-          display: {xs: 'block', md: 'none'},
+          display: { xs: 'block', md: 'none' },
         }}
       >
         <BottomNavigation

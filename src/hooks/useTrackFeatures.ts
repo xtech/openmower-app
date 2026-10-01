@@ -1,7 +1,7 @@
-import {useMapContext} from '@/contexts/MapContext';
-import {type PastTrack} from '@/hooks/useJobTrack';
-import {useSelectedMower} from '@/stores/mowersStore';
-import {type TrackAttributes} from '@/stores/schemas';
+import { useMapContext } from '@/contexts/MapContext';
+import { type PastTrack } from '@/hooks/useJobTrack';
+import { useSelectedMower } from '@/stores/mowersStore';
+import { type TrackAttributes } from '@/stores/schemas';
 import {
   datumToRelative,
   pointToAbsolute,
@@ -9,10 +9,10 @@ import {
   type RelativePoint,
   type UtmPoint,
 } from '@/utils/coordinates';
-import {type TrackSegment} from '@/utils/track-pipeline';
-import {lineString} from '@turf/helpers';
-import type {Feature, FeatureCollection, LineString} from 'geojson';
-import {useMemo, useRef} from 'react';
+import { type TrackSegment } from '@/utils/track-pipeline';
+import { lineString } from '@turf/helpers';
+import type { Feature, FeatureCollection, LineString } from 'geojson';
+import { useMemo, useRef } from 'react';
 
 export interface TrackFeatures {
   live: Feature<LineString> | null;
@@ -35,7 +35,7 @@ class TrackCache {
     const convert = (p: RelativePoint): AbsolutePoint => pointToAbsolute(p, this._datum);
     const history = this.syncHistory(historySegments, convert);
     const live = this.syncLive(buffer, liveAttributes, historySegments, convert);
-    return {live, history};
+    return { live, history };
   }
 
   private syncHistory(
@@ -78,7 +78,7 @@ class TrackCache {
       const features = this.historyFeatures.filter(
         (f): f is Feature<LineString> => f != null && f.geometry.coordinates.length >= 2,
       );
-      this.historyCollection = features.length === 0 ? null : {type: 'FeatureCollection', features};
+      this.historyCollection = features.length === 0 ? null : { type: 'FeatureCollection', features };
     }
 
     return this.historyCollection;
@@ -116,9 +116,9 @@ class TrackCache {
 export function useTrackFeatures(pastTrack: PastTrack | null = null, loading = false): TrackFeatures {
   const buffer = useSelectedMower((s) => s?.track.buffer ?? ([] as RelativePoint[]));
   const historySegments = useSelectedMower((s) => s?.track.historySegments ?? ([] as TrackSegment[]));
-  const liveAttributes = useSelectedMower((s) => s?.track.attributes ?? ({blades: false} as TrackAttributes));
+  const liveAttributes = useSelectedMower((s) => s?.track.attributes ?? ({ blades: false } as TrackAttributes));
 
-  const {datumOrFallback} = useMapContext();
+  const { datumOrFallback } = useMapContext();
   const utmDatum = useMemo(() => datumToRelative([datumOrFallback.long, datumOrFallback.lat]), [datumOrFallback]);
 
   // Track the job identity the cache was built for: null means live job.
@@ -136,12 +136,12 @@ export function useTrackFeatures(pastTrack: PastTrack | null = null, loading = f
 
   // While switching jobs, show nothing.
   if (loading) {
-    return {live: null, history: null};
+    return { live: null, history: null };
   }
 
   // When a historical job is selected, render only its segments with no live buffer.
   if (pastTrack !== null) {
-    return cache.current.sync([], pastTrack.segments, {blades: false} as TrackAttributes);
+    return cache.current.sync([], pastTrack.segments, { blades: false } as TrackAttributes);
   }
 
   // useMemo is intentionally omitted: sync() is cheap (incremental),

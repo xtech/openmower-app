@@ -1,14 +1,14 @@
 'use client';
 
-import {type Datum} from '@/stores/schemas';
+import { type Datum } from '@/stores/schemas';
 import MapMarker from './MapMarker';
-import {MOWER_LENGTH_M, MowerArrow} from './MowerMarker';
+import { MOWER_LENGTH_M, MowerArrow } from './MowerMarker';
 
 const DOCK_PADDING_M = 0.45;
 const DOCK_SIZE_M = MOWER_LENGTH_M + DOCK_PADDING_M;
 
 interface DockingStation {
-  position: {x: number; y: number};
+  position: { x: number; y: number };
   heading: number;
 }
 
@@ -18,7 +18,7 @@ interface DockingStationMarkerProps {
   isDocked?: boolean;
 }
 
-export default function DockingStationMarker({station, datum, isDocked = false}: DockingStationMarkerProps) {
+export default function DockingStationMarker({ station, datum, isDocked = false }: DockingStationMarkerProps) {
   return (
     <MapMarker
       position={station.position}

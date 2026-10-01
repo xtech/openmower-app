@@ -1,6 +1,6 @@
 'use client';
 
-import {createContext, useContext} from 'react';
+import { createContext, useContext } from 'react';
 
 interface SettingsContextValue {
   defaults: Record<string, unknown>;

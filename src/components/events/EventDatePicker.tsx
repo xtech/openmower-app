@@ -1,13 +1,13 @@
 'use client';
 
-import {getTodayDateKey, parseDateKey} from '@/stores/mowerEvents';
+import { getTodayDateKey, parseDateKey } from '@/stores/mowerEvents';
 import {
   CalendarMonth as CalendarIcon,
-  ChevronLeft as PrevMonthIcon,
   ChevronRight as NextMonthIcon,
+  ChevronLeft as PrevMonthIcon,
 } from '@mui/icons-material';
-import {Box, IconButton, Popover, Typography, useTheme} from '@mui/material';
-import {useMemo, useState} from 'react';
+import { Box, IconButton, Popover, Typography, useTheme } from '@mui/material';
+import { useMemo, useState } from 'react';
 
 interface EventDatePickerProps {
   selectedDate: string;
@@ -38,8 +38,11 @@ function getMonthWeeks(viewMonth: Date): (Date | null)[][] {
   const daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
 
   const cells: (Date | null)[] = [
-    ...Array.from({length: startOffset}, () => null),
-    ...Array.from({length: daysInMonth}, (_, index) => new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1, 12)),
+    ...Array.from({ length: startOffset }, () => null),
+    ...Array.from(
+      { length: daysInMonth },
+      (_, index) => new Date(viewMonth.getFullYear(), viewMonth.getMonth(), index + 1, 12),
+    ),
   ];
 
   while (cells.length % 7 !== 0) {
@@ -53,7 +56,7 @@ function getMonthWeeks(viewMonth: Date): (Date | null)[][] {
   return weeks;
 }
 
-export default function EventDatePicker({selectedDate, availableDates, onSelect}: EventDatePickerProps) {
+export default function EventDatePicker({ selectedDate, availableDates, onSelect }: EventDatePickerProps) {
   const theme = useTheme();
   const today = getTodayDateKey();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -61,7 +64,7 @@ export default function EventDatePicker({selectedDate, availableDates, onSelect}
 
   const selectableDates = useMemo(() => new Set([today, ...availableDates]), [today, availableDates]);
   const weeks = useMemo(() => getMonthWeeks(viewMonth), [viewMonth]);
-  const monthLabel = viewMonth.toLocaleDateString(undefined, {month: 'long', year: 'numeric'});
+  const monthLabel = viewMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
   const open = Boolean(anchorEl);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -91,17 +94,21 @@ export default function EventDatePicker({selectedDate, availableDates, onSelect}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-        transformOrigin={{vertical: 'top', horizontal: 'right'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{
-          paper: {sx: {p: 1.5, width: 280}},
+          paper: { sx: { p: 1.5, width: 280 } },
         }}
       >
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1}}>
-          <IconButton aria-label="Previous month" size="small" onClick={() => setViewMonth((month) => addMonths(month, -1))}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+          <IconButton
+            aria-label="Previous month"
+            size="small"
+            onClick={() => setViewMonth((month) => addMonths(month, -1))}
+          >
             <PrevMonthIcon fontSize="small" />
           </IconButton>
-          <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
             {monthLabel}
           </Typography>
           <IconButton aria-label="Next month" size="small" onClick={() => setViewMonth((month) => addMonths(month, 1))}>
@@ -109,25 +116,25 @@ export default function EventDatePicker({selectedDate, availableDates, onSelect}
           </IconButton>
         </Box>
 
-        <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 0.25, mb: 0.5}}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 0.25, mb: 0.5 }}>
           {WEEKDAY_LABELS.map((label) => (
             <Typography
               key={label}
               variant="caption"
               color="text.secondary"
-              sx={{textAlign: 'center', fontWeight: 600, py: 0.25}}
+              sx={{ textAlign: 'center', fontWeight: 600, py: 0.25 }}
             >
               {label}
             </Typography>
           ))}
         </Box>
 
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 0.25}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
           {weeks.map((week, weekIndex) => (
-            <Box key={weekIndex} sx={{display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 0.25}}>
+            <Box key={weekIndex} sx={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 0.25 }}>
               {week.map((day, dayIndex) => {
                 if (!day) {
-                  return <Box key={dayIndex} sx={{width: 32, height: 32}} />;
+                  return <Box key={dayIndex} sx={{ width: 32, height: 32 }} />;
                 }
 
                 const dateKey = toDateKey(day);
@@ -158,8 +165,8 @@ export default function EventDatePicker({selectedDate, availableDates, onSelect}
                       fontSize: '0.8125rem',
                       fontWeight: isToday ? 700 : 400,
                       outline: isToday && !isSelected ? `1px solid ${theme.palette.divider}` : 'none',
-                      '&:hover': selectable && !isSelected ? {bgcolor: 'action.hover'} : undefined,
-                      '&:disabled': {opacity: 0.45},
+                      '&:hover': selectable && !isSelected ? { bgcolor: 'action.hover' } : undefined,
+                      '&:disabled': { opacity: 0.45 },
                     }}
                   >
                     {day.getDate()}

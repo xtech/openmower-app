@@ -1,11 +1,11 @@
 'use client';
 
-import {useMap} from '@/contexts/MapContext';
-import type {Datum} from '@/stores/schemas';
-import {datumToRelative, pointToAbsolute} from '@/utils/coordinates';
-import {Box} from '@mui/material';
-import {RMarker} from 'maplibre-react-components';
-import {type ReactNode, useEffect, useMemo, useState} from 'react';
+import { useMap } from '@/contexts/MapContext';
+import type { Datum } from '@/stores/schemas';
+import { datumToRelative, pointToAbsolute } from '@/utils/coordinates';
+import { Box } from '@mui/material';
+import { RMarker } from 'maplibre-react-components';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
 const EARTH_CIRCUMFERENCE_M = 40_075_016.686;
 
@@ -17,7 +17,7 @@ function metersToPixels(meters: number, zoom: number, latDeg: number): number {
 
 interface MapMarkerProps {
   /** Relative position in the mower coordinate system */
-  position: {x: number; y: number};
+  position: { x: number; y: number };
   /** Heading in radians (same convention as pose.heading) */
   heading: number;
   /** Physical size of the marker in meters (used for zoom-based scaling) */
@@ -27,7 +27,7 @@ interface MapMarkerProps {
   children: (sizePx: number) => ReactNode;
 }
 
-export default function MapMarker({position, heading, sizeM, datum, className, children}: MapMarkerProps) {
+export default function MapMarker({ position, heading, sizeM, datum, className, children }: MapMarkerProps) {
   const map = useMap();
   const [zoom, setZoom] = useState<number>(() => map?.getZoom() ?? 18);
 
@@ -41,7 +41,7 @@ export default function MapMarker({position, heading, sizeM, datum, className, c
   }, [map]);
 
   const absPosition = useMemo(() => {
-    const {long, lat} = datum;
+    const { long, lat } = datum;
     const utmDatum = datumToRelative([long, lat]);
     return pointToAbsolute(position, utmDatum);
   }, [datum, position]);
@@ -65,7 +65,7 @@ export default function MapMarker({position, heading, sizeM, datum, className, c
           alignItems: 'center',
           justifyContent: 'center',
         }}
-        style={{transform: `rotate(${headingDeg}deg)`}}
+        style={{ transform: `rotate(${headingDeg}deg)` }}
       >
         {children(sizePx)}
       </Box>

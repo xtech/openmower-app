@@ -1,8 +1,8 @@
 'use client';
 
-import type {MowerConfig} from '@/components/types';
-import {useMowerConfigs} from '@/stores/configStore';
-import {Menu} from '@mui/material';
+import type { MowerConfig } from '@/components/types';
+import { useMowerConfigs } from '@/stores/configStore';
+import { Menu } from '@mui/material';
 import MowerSelectorHeader from './MowerSelectorHeader';
 import MowerSelectorItem from './MowerSelectorItem';
 
@@ -12,7 +12,7 @@ interface MowerSelectorProps {
   onClose: () => void;
 }
 
-export default function MowerSelector({onMowerSelect, anchorEl, onClose}: MowerSelectorProps) {
+export default function MowerSelector({ onMowerSelect, anchorEl, onClose }: MowerSelectorProps) {
   const mowerConfigs = useMowerConfigs();
   return (
     <Menu

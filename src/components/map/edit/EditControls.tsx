@@ -1,12 +1,12 @@
-import {useMapboxDraw, useMapContext, useMapSelection, withDisplaySortKeys} from '@/contexts/MapContext';
-import type {AreaFeature} from '@/types/geojson';
-import {removeMiniCoords} from '@/utils/area-utils';
+import { useMapboxDraw, useMapContext, useMapSelection, withDisplaySortKeys } from '@/contexts/MapContext';
+import type { AreaFeature } from '@/types/geojson';
+import { removeMiniCoords } from '@/utils/area-utils';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import {useTheme} from '@mui/material';
-import {difference} from '@turf/difference';
-import {featureCollection} from '@turf/helpers';
-import {union} from '@turf/union';
-import type {Geometry} from 'geojson';
+import { useTheme } from '@mui/material';
+import { difference } from '@turf/difference';
+import { featureCollection } from '@turf/helpers';
+import { union } from '@turf/union';
+import type { Geometry } from 'geojson';
 import {
   CircleXIcon,
   PencilLineIcon,
@@ -19,11 +19,11 @@ import {
   Trash2Icon,
   Undo2Icon,
 } from 'lucide-react';
-import {useCallback, useState} from 'react';
-import {useDialog} from 'react-dialog-async';
+import { useCallback, useState } from 'react';
+import { useDialog } from 'react-dialog-async';
 import ControlButton from '../ControlButton';
-import {AreaSettingsDialog} from './AreaSettingsDialog';
-import {CancelConfirmDialog} from './CancelConfirmDialog';
+import { AreaSettingsDialog } from './AreaSettingsDialog';
+import { CancelConfirmDialog } from './CancelConfirmDialog';
 import MergeDialog from './MergeDialog';
 import SubtractDialog from './SubtractDialog';
 
@@ -96,14 +96,14 @@ export default function EditControls({
   );
 
   const handleMerge = useCallback(async () => {
-    const targetId = await mergeDialog.open({selectedAreas});
+    const targetId = await mergeDialog.open({ selectedAreas });
     if (targetId === undefined) return;
     const result = removeMiniCoords(union(featureCollection(selectedAreas)));
     updateAreaGeometry(targetId, result?.geometry, true);
   }, [mergeDialog, selectedAreas, updateAreaGeometry]);
 
   const handleSubtract = useCallback(async () => {
-    const [targetId, keepAllAreas] = (await subtractDialog.open({selectedAreas})) ?? [undefined, false];
+    const [targetId, keepAllAreas] = (await subtractDialog.open({ selectedAreas })) ?? [undefined, false];
     if (targetId === undefined) return;
     const targetArea = selectedAreas.find((area) => area.id === targetId)!;
     const otherAreas = selectedAreas.filter((area) => area.id !== targetId);
@@ -112,7 +112,7 @@ export default function EditControls({
   }, [subtractDialog, selectedAreas, updateAreaGeometry]);
 
   const handleSplit = useCallback(async () => {
-    setDrawWorkflow({type: 'split_polygon', areaId: selectedIds[0]});
+    setDrawWorkflow({ type: 'split_polygon', areaId: selectedIds[0] });
     draw?.changeMode(MapboxDraw.constants.modes.DRAW_LINE_STRING);
   }, [setDrawWorkflow, selectedIds, draw]);
 
@@ -120,7 +120,7 @@ export default function EditControls({
     return (
       <ControlButton
         position="top-left"
-        icon={() => <SaveIcon style={{animation: 'pulse 1.5s ease-in-out infinite'}} />}
+        icon={() => <SaveIcon style={{ animation: 'pulse 1.5s ease-in-out infinite' }} />}
         title="Saving…"
         disabled
       />
@@ -133,7 +133,7 @@ export default function EditControls({
         position="top-left"
         icon={SaveIcon}
         title="Save"
-        style={{color: hasUnsavedChanges ? theme.palette.success.main : undefined}}
+        style={{ color: hasUnsavedChanges ? theme.palette.success.main : undefined }}
         disabled={!hasUnsavedChanges}
         onClick={handleSave}
       />
@@ -141,7 +141,7 @@ export default function EditControls({
         position="top-left"
         icon={CircleXIcon}
         title="Cancel"
-        style={{color: theme.palette.error.main}}
+        style={{ color: theme.palette.error.main }}
         onClick={handleCancel}
       />
       <ControlButton

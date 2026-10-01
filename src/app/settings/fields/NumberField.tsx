@@ -1,21 +1,21 @@
-import {Box, TextField as MuiTextField} from '@mui/material';
-import {SettingsFieldWrapper} from '../SettingsFieldWrapper';
-import type {NumberField as NumberFieldType} from '../types';
-import {useSettingsField} from '../useSettingsField';
+import { Box, TextField as MuiTextField } from '@mui/material';
+import { SettingsFieldWrapper } from '../SettingsFieldWrapper';
+import type { NumberField as NumberFieldType } from '../types';
+import { useSettingsField } from '../useSettingsField';
 
 interface NumberFieldProps {
   field: NumberFieldType;
   path: string;
 }
 
-export function NumberField({field, path}: NumberFieldProps) {
-  const {controllerField, hasError, onChange} = useSettingsField(path);
+export function NumberField({ field, path }: NumberFieldProps) {
+  const { controllerField, hasError, onChange } = useSettingsField(path);
 
   const unit = field['x-unit'] ? ` (${field['x-unit']})` : '';
 
   return (
     <SettingsFieldWrapper path={path} currentValue={controllerField.value}>
-      <Box sx={{mb: 2}}>
+      <Box sx={{ mb: 2 }}>
         <MuiTextField
           fullWidth
           type="number"
@@ -35,7 +35,7 @@ export function NumberField({field, path}: NumberFieldProps) {
               step: field.jsonType === 'integer' ? 1 : 'any',
             },
             formHelperText: {
-              sx: {whiteSpace: 'pre-wrap'},
+              sx: { whiteSpace: 'pre-wrap' },
             },
           }}
         />

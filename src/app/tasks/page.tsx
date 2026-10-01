@@ -1,7 +1,7 @@
 'use client';
 
-import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {innerCardStyles, outerCardStyles} from '@/lib/cardStyles';
+import { HeaderStat, Page, PageContent, PageHeader } from '@/components/page';
+import { innerCardStyles, outerCardStyles } from '@/lib/cardStyles';
 
 import {
   Add as AddIcon,
@@ -28,7 +28,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import {useState} from 'react';
+import { useState } from 'react';
 
 // Mock data - in real app this would come from API
 const mockTasks = [
@@ -139,19 +139,19 @@ export default function TasksPage() {
       </PageHeader>
 
       <PageContent>
-        <Box sx={{display: 'flex', gap: 4, flexDirection: isMobile ? 'column' : 'row'}}>
+        <Box sx={{ display: 'flex', gap: 4, flexDirection: isMobile ? 'column' : 'row' }}>
           {/* Task List */}
-          <Box sx={{flex: 1}}>
+          <Box sx={{ flex: 1 }}>
             <Card sx={outerCardStyles(theme)}>
               <CardContent>
                 {/* Task List Header */}
-                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-                    <Avatar sx={{bgcolor: theme.palette.warning.main, width: 48, height: 48}}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Avatar sx={{ bgcolor: theme.palette.warning.main, width: 48, height: 48 }}>
                       <AssignmentIcon />
                     </Avatar>
                     <Box>
-                      <Typography variant="h5" component="h2" sx={{fontWeight: '600'}}>
+                      <Typography variant="h5" component="h2" sx={{ fontWeight: '600' }}>
                         Mowing Tasks
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -159,12 +159,12 @@ export default function TasksPage() {
                       </Typography>
                     </Box>
                   </Box>
-                  <Box sx={{display: 'flex', gap: 1}}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
                     <Button
                       variant="contained"
                       color="primary"
                       startIcon={<AddIcon />}
-                      sx={{borderRadius: 2, fontWeight: 600}}
+                      sx={{ borderRadius: 2, fontWeight: 600 }}
                     >
                       Add Task
                     </Button>
@@ -172,14 +172,14 @@ export default function TasksPage() {
                       variant="outlined"
                       color="primary"
                       startIcon={<ScheduleIcon />}
-                      sx={{borderRadius: 2, fontWeight: 600}}
+                      sx={{ borderRadius: 2, fontWeight: 600 }}
                     >
                       Schedule
                     </Button>
                   </Box>
                 </Box>
 
-                <List sx={{p: 0}}>
+                <List sx={{ p: 0 }}>
                   {mockTasks.map((task) => (
                     <Card
                       key={task.id}
@@ -196,27 +196,27 @@ export default function TasksPage() {
                       }}
                       onClick={() => setSelectedTask(task.id)}
                     >
-                      <CardContent sx={{py: 3, '&:last-child': {pb: 3}}}>
-                        <Box sx={{display: 'flex', alignItems: 'flex-start', gap: 3}}>
-                          <DragIcon sx={{mt: 1, color: theme.palette.grey[400]}} />
+                      <CardContent sx={{ py: 3, '&:last-child': { pb: 3 } }}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
+                          <DragIcon sx={{ mt: 1, color: theme.palette.grey[400] }} />
 
-                          <Box sx={{flex: 1}}>
+                          <Box sx={{ flex: 1 }}>
                             {/* Task Header */}
-                            <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 2}}>
-                              <Typography variant="h6" sx={{fontWeight: '600'}}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                              <Typography variant="h6" sx={{ fontWeight: '600' }}>
                                 {task.name}
                               </Typography>
                               <Chip
                                 label={task.priority}
                                 color={getPriorityColor(task.priority)}
                                 size="small"
-                                sx={{fontWeight: 500}}
+                                sx={{ fontWeight: 500 }}
                               />
                               <Chip
                                 label={getStatusLabel(task.status)}
                                 color={getStatusColor(task.status)}
                                 size="small"
-                                sx={{fontWeight: 500}}
+                                sx={{ fontWeight: 500 }}
                               />
                             </Box>
 
@@ -233,7 +233,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Area
                                 </Typography>
-                                <Typography variant="body1" sx={{fontWeight: '500'}}>
+                                <Typography variant="body1" sx={{ fontWeight: '500' }}>
                                   {task.area}
                                 </Typography>
                               </Box>
@@ -241,7 +241,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Pattern
                                 </Typography>
-                                <Typography variant="body1" sx={{fontWeight: '500'}}>
+                                <Typography variant="body1" sx={{ fontWeight: '500' }}>
                                   {task.pattern}
                                 </Typography>
                               </Box>
@@ -249,7 +249,7 @@ export default function TasksPage() {
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                   Est. Time
                                 </Typography>
-                                <Typography variant="body1" sx={{fontWeight: '500'}}>
+                                <Typography variant="body1" sx={{ fontWeight: '500' }}>
                                   {task.estimatedTime}
                                 </Typography>
                               </Box>
@@ -260,7 +260,7 @@ export default function TasksPage() {
                                 <Typography
                                   variant="body1"
                                   color={task.efficiency > 80 ? 'success.main' : 'warning.main'}
-                                  sx={{fontWeight: '500'}}
+                                  sx={{ fontWeight: '500' }}
                                 >
                                   {task.efficiency}%
                                 </Typography>
@@ -268,20 +268,20 @@ export default function TasksPage() {
                             </Box>
 
                             {/* Schedule Info */}
-                            <Box sx={{display: 'flex', gap: 3, flexWrap: 'wrap'}}>
+                            <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
                               <Box>
-                                <Typography variant="caption" color="text.secondary" sx={{display: 'block'}}>
+                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                                   Next Run
                                 </Typography>
-                                <Typography variant="body2" sx={{fontWeight: '500'}}>
+                                <Typography variant="body2" sx={{ fontWeight: '500' }}>
                                   {task.nextRun}
                                 </Typography>
                               </Box>
                               <Box>
-                                <Typography variant="caption" color="text.secondary" sx={{display: 'block'}}>
+                                <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                                   Last Run
                                 </Typography>
-                                <Typography variant="body2" sx={{fontWeight: '500'}}>
+                                <Typography variant="body2" sx={{ fontWeight: '500' }}>
                                   {task.lastRun}
                                 </Typography>
                               </Box>
@@ -289,13 +289,13 @@ export default function TasksPage() {
                           </Box>
 
                           {/* Action Buttons */}
-                          <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+                          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                             {task.status === 'active' ? (
                               <IconButton
                                 color="warning"
                                 sx={{
                                   bgcolor: theme.palette.warning.light + '20',
-                                  '&:hover': {bgcolor: theme.palette.warning.light + '30'},
+                                  '&:hover': { bgcolor: theme.palette.warning.light + '30' },
                                 }}
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -309,7 +309,7 @@ export default function TasksPage() {
                                 color="primary"
                                 sx={{
                                   bgcolor: theme.palette.primary.light + '20',
-                                  '&:hover': {bgcolor: theme.palette.primary.light + '30'},
+                                  '&:hover': { bgcolor: theme.palette.primary.light + '30' },
                                 }}
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -324,7 +324,7 @@ export default function TasksPage() {
                               color="primary"
                               sx={{
                                 bgcolor: theme.palette.primary.light + '20',
-                                '&:hover': {bgcolor: theme.palette.primary.light + '30'},
+                                '&:hover': { bgcolor: theme.palette.primary.light + '30' },
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -338,7 +338,7 @@ export default function TasksPage() {
                               color="error"
                               sx={{
                                 bgcolor: theme.palette.error.light + '20',
-                                '&:hover': {bgcolor: theme.palette.error.light + '30'},
+                                '&:hover': { bgcolor: theme.palette.error.light + '30' },
                               }}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -358,14 +358,14 @@ export default function TasksPage() {
           </Box>
 
           {/* Task Details Sidebar */}
-          <Box sx={{width: isMobile ? '100%' : '400px'}}>
+          <Box sx={{ width: isMobile ? '100%' : '400px' }}>
             <Card sx={outerCardStyles(theme)}>
               <CardContent>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 3}}>
-                  <Avatar sx={{bgcolor: theme.palette.info.main, width: 40, height: 40}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+                  <Avatar sx={{ bgcolor: theme.palette.info.main, width: 40, height: 40 }}>
                     <CheckIcon />
                   </Avatar>
-                  <Typography variant="h5" component="h3" sx={{fontWeight: '600'}}>
+                  <Typography variant="h5" component="h3" sx={{ fontWeight: '600' }}>
                     Task Details
                   </Typography>
                 </Box>
@@ -377,12 +377,12 @@ export default function TasksPage() {
                       if (!task) return null;
 
                       return (
-                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                           <Box>
                             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                               Task Name
                             </Typography>
-                            <Typography variant="h6" sx={{fontWeight: '600'}}>
+                            <Typography variant="h6" sx={{ fontWeight: '600' }}>
                               {task.name}
                             </Typography>
                           </Box>
@@ -422,7 +422,7 @@ export default function TasksPage() {
                             <Typography variant="body1">{task.lastRun}</Typography>
                           </Box>
 
-                          <Divider sx={{my: 2}} />
+                          <Divider sx={{ my: 2 }} />
 
                           <Button
                             variant="contained"
@@ -449,8 +449,8 @@ export default function TasksPage() {
                     })()}
                   </Box>
                 ) : (
-                  <Box sx={{textAlign: 'center', py: 6}}>
-                    <AssignmentIcon sx={{fontSize: 64, color: theme.palette.grey[400], mb: 2}} />
+                  <Box sx={{ textAlign: 'center', py: 6 }}>
+                    <AssignmentIcon sx={{ fontSize: 64, color: theme.palette.grey[400], mb: 2 }} />
                     <Typography variant="body1" color="text.secondary" gutterBottom>
                       Select a task to view details
                     </Typography>

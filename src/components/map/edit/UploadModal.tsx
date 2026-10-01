@@ -1,6 +1,6 @@
 'use client';
 
-import {getFeatureDescription} from '@/utils/area-converter';
+import { getFeatureDescription } from '@/utils/area-converter';
 import {
   Box,
   Button,
@@ -18,9 +18,9 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import type {Feature, FeatureCollection} from 'geojson';
-import {useState} from 'react';
-import {AsyncDialogProps} from 'react-dialog-async';
+import type { Feature, FeatureCollection } from 'geojson';
+import { useState } from 'react';
+import { AsyncDialogProps } from 'react-dialog-async';
 
 export interface UploadModalResult {
   features: Feature[];
@@ -75,14 +75,12 @@ export function UploadModal({
       </DialogTitle>
 
       <DialogContent>
-        <Box sx={{mb: 3}}>
+        <Box sx={{ mb: 3 }}>
           <FormControlLabel
-            control={
-              <Switch checked={clearExisting} onChange={(e) => setClearExisting(e.target.checked)} />
-            }
+            control={<Switch checked={clearExisting} onChange={(e) => setClearExisting(e.target.checked)} />}
             label={
               <Box>
-                <Typography variant="body2" sx={{fontWeight: '500'}}>
+                <Typography variant="body2" sx={{ fontWeight: '500' }}>
                   Remove existing features
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -93,7 +91,7 @@ export function UploadModal({
           />
         </Box>
 
-        <Box sx={{mb: 2}}>
+        <Box sx={{ mb: 2 }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -135,15 +133,15 @@ export function UploadModal({
         </List>
       </DialogContent>
 
-      <DialogActions sx={{px: 3, pb: 3}}>
-        <Button onClick={() => handleClose(undefined)} sx={{borderRadius: 2}}>
+      <DialogActions sx={{ px: 3, pb: 3 }}>
+        <Button onClick={() => handleClose(undefined)} sx={{ borderRadius: 2 }}>
           Cancel
         </Button>
         <Button
           variant="contained"
           onClick={handleImport}
           disabled={selectedFeatures.size === 0}
-          sx={{borderRadius: 2, fontWeight: 600}}
+          sx={{ borderRadius: 2, fontWeight: 600 }}
         >
           Import {selectedFeatures.size} Feature{selectedFeatures.size !== 1 ? 's' : ''}
         </Button>

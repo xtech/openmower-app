@@ -1,8 +1,8 @@
 'use client';
 
-import {Box} from '@mui/material';
-import {ChevronDown, ChevronLeft, ChevronRight, ChevronUp} from 'lucide-react';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import { Box } from '@mui/material';
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const OUTER_RADIUS = 90;
 const KNOB_RADIUS = 25;
@@ -17,11 +17,11 @@ const ANGULAR_FACTOR = 1.6;
 
 type DpadDirection = 'up' | 'down' | 'left' | 'right' | null;
 
-const DPAD_HIT_CENTERS: Record<Exclude<DpadDirection, null>, {x: number; y: number}> = {
-  up: {x: 0, y: -DPAD_CENTER_OFFSET},
-  down: {x: 0, y: DPAD_CENTER_OFFSET},
-  left: {x: -DPAD_CENTER_OFFSET, y: 0},
-  right: {x: DPAD_CENTER_OFFSET, y: 0},
+const DPAD_HIT_CENTERS: Record<Exclude<DpadDirection, null>, { x: number; y: number }> = {
+  up: { x: 0, y: -DPAD_CENTER_OFFSET },
+  down: { x: 0, y: DPAD_CENTER_OFFSET },
+  left: { x: -DPAD_CENTER_OFFSET, y: 0 },
+  right: { x: DPAD_CENTER_OFFSET, y: 0 },
 };
 
 interface VirtualJoystickProps {
@@ -29,9 +29,9 @@ interface VirtualJoystickProps {
   simulatorMode?: boolean;
 }
 
-export default function VirtualJoystick({onVelocityChange, simulatorMode = false}: VirtualJoystickProps) {
+export default function VirtualJoystick({ onVelocityChange, simulatorMode = false }: VirtualJoystickProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [knobPos, setKnobPos] = useState({x: 0, y: 0});
+  const [knobPos, setKnobPos] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [hoverKnob, setHoverKnob] = useState(false);
   const [hoverDpad, setHoverDpad] = useState<DpadDirection>(null);
@@ -45,7 +45,7 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
     const rect = containerRef.current.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    return {dx: clientX - cx, dy: clientY - cy};
+    return { dx: clientX - cx, dy: clientY - cy };
   }, []);
 
   const isKnobHit = useCallback(
@@ -63,7 +63,7 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
       if (isKnobHit(clientX, clientY)) return null;
       const offset = getJoystickOffset(clientX, clientY);
       if (!offset) return null;
-      const {dx, dy} = offset;
+      const { dx, dy } = offset;
 
       for (const dir of ['up', 'down', 'left', 'right'] as const) {
         const center = DPAD_HIT_CENTERS[dir];
@@ -76,18 +76,18 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
     [getJoystickOffset, isKnobHit],
   );
 
-  const dpadToVelocity = useCallback((dir: DpadDirection, elapsed: number): {vx: number; vz: number} => {
-    if (!dir) return {vx: 0, vz: 0};
+  const dpadToVelocity = useCallback((dir: DpadDirection, elapsed: number): { vx: number; vz: number } => {
+    if (!dir) return { vx: 0, vz: 0 };
     const t = Math.min(elapsed / DPAD_RAMP_DURATION_MS, 1);
     switch (dir) {
       case 'up':
-        return {vx: t, vz: 0};
+        return { vx: t, vz: 0 };
       case 'down':
-        return {vx: -t, vz: 0};
+        return { vx: -t, vz: 0 };
       case 'left':
-        return {vx: 0, vz: t * ANGULAR_FACTOR};
+        return { vx: 0, vz: t * ANGULAR_FACTOR };
       case 'right':
-        return {vx: 0, vz: -t * ANGULAR_FACTOR};
+        return { vx: 0, vz: -t * ANGULAR_FACTOR };
     }
   }, []);
 
@@ -99,7 +99,7 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
     dpadStartTime.current = performance.now();
     const tick = () => {
       const elapsed = performance.now() - dpadStartTime.current;
-      const {vx, vz} = dpadToVelocity(activeDpad, elapsed);
+      const { vx, vz } = dpadToVelocity(activeDpad, elapsed);
       onVelocityChange(vx, vz);
       dpadRafRef.current = requestAnimationFrame(tick);
     };
@@ -147,7 +147,7 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
         dy = (dy / dist) * maxDist;
       }
 
-      setKnobPos({x: dx, y: dy});
+      setKnobPos({ x: dx, y: dy });
 
       const vx = -(dy / maxDist);
       const vz = -(dx / maxDist) * ANGULAR_FACTOR;
@@ -166,7 +166,7 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
       if (e.pointerId !== pointerIdRef.current) return;
       pointerIdRef.current = null;
       setDragging(false);
-      setKnobPos({x: 0, y: 0});
+      setKnobPos({ x: 0, y: 0 });
       setActiveDpad(null);
       onVelocityChange(0, 0);
     },
@@ -201,12 +201,12 @@ export default function VirtualJoystick({onVelocityChange, simulatorMode = false
       {/* D-pad arrows */}
       {(
         [
-          {dir: 'up', Icon: ChevronUp, top: DPAD_ICON_INSET, left: '50%', transform: 'translateX(-50%)'},
-          {dir: 'down', Icon: ChevronDown, bottom: DPAD_ICON_INSET, left: '50%', transform: 'translateX(-50%)'},
-          {dir: 'left', Icon: ChevronLeft, left: DPAD_ICON_INSET, top: '50%', transform: 'translateY(-50%)'},
-          {dir: 'right', Icon: ChevronRight, right: DPAD_ICON_INSET, top: '50%', transform: 'translateY(-50%)'},
+          { dir: 'up', Icon: ChevronUp, top: DPAD_ICON_INSET, left: '50%', transform: 'translateX(-50%)' },
+          { dir: 'down', Icon: ChevronDown, bottom: DPAD_ICON_INSET, left: '50%', transform: 'translateX(-50%)' },
+          { dir: 'left', Icon: ChevronLeft, left: DPAD_ICON_INSET, top: '50%', transform: 'translateY(-50%)' },
+          { dir: 'right', Icon: ChevronRight, right: DPAD_ICON_INSET, top: '50%', transform: 'translateY(-50%)' },
         ] as const
-      ).map(({dir, Icon, ...pos}) => (
+      ).map(({ dir, Icon, ...pos }) => (
         <Box
           key={dir}
           sx={{

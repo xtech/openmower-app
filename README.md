@@ -16,12 +16,12 @@ At this time, "only" the map editor and some debug information are enabled.
 3. In the `compose.yaml` editor, add the following lines above the `# Dockge-specific extras shown in the UI` line:
 
    ```yaml
-     app:
-       image: ghcr.io/xtech/openmower-app:edge
-       container_name: app
-       ports:
-         - 3000:3000
-       restart: unless-stopped
+   app:
+     image: ghcr.io/xtech/openmower-app:edge
+     container_name: app
+     ports:
+       - 3000:3000
+     restart: unless-stopped
    ```
 
    Double-check the indentation, `app` should be indented 2 spaces, just like the other containers.
@@ -76,6 +76,7 @@ WantedBy=multi-user.target default.target
 ```
 
 Then enable the service and start it:
+
 ```bash
 sudo systemctl enable --now openmower-app.service
 ```

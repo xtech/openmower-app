@@ -1,4 +1,4 @@
-import {withDisplaySortKeys, useMapContext} from '@/contexts/MapContext';
+import { useMapContext, withDisplaySortKeys } from '@/contexts/MapContext';
 import type {
   DrawActionableEvent,
   DrawCreateEvent,
@@ -7,11 +7,11 @@ import type {
   DrawUpdateEvent,
   MapboxDrawOptions,
 } from '@mapbox/mapbox-gl-draw';
-import MapboxDraw, {type DrawMode} from '@mapbox/mapbox-gl-draw';
-import type {Feature, FeatureCollection} from 'geojson';
-import type {ControlPosition, IControl} from 'maplibre-gl';
-import {useControl, useMap} from 'maplibre-react-components';
-import {useCallback, useEffect} from 'react';
+import MapboxDraw, { type DrawMode } from '@mapbox/mapbox-gl-draw';
+import type { Feature, FeatureCollection } from 'geojson';
+import type { ControlPosition, IControl } from 'maplibre-gl';
+import { useControl, useMap } from 'maplibre-react-components';
+import { useCallback, useEffect } from 'react';
 
 const constants = MapboxDraw.constants.classes as Record<string, string>;
 constants.CONTROL_BASE = 'maplibregl-ctrl';
@@ -23,8 +23,8 @@ export function DrawControl({
   position = 'top-left',
   onFeaturesCreated,
   ...props
-}: MapboxDrawOptions & {position?: ControlPosition; onFeaturesCreated?: (features: Feature[]) => void}) {
-  const {editMode, setFeatures, setDrawMode, setTrashEnabled} = useMapContext();
+}: MapboxDrawOptions & { position?: ControlPosition; onFeaturesCreated?: (features: Feature[]) => void }) {
+  const { editMode, setFeatures, setDrawMode, setTrashEnabled } = useMapContext();
   const map = useMap();
   const draw = useControl({
     position,

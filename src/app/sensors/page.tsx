@@ -1,7 +1,7 @@
 'use client';
 
-import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {outerCardStyles} from '@/lib/cardStyles';
+import { HeaderStat, Page, PageContent, PageHeader } from '@/components/page';
+import { outerCardStyles } from '@/lib/cardStyles';
 
 import {
   BatteryFull as BatteryIcon,
@@ -11,7 +11,7 @@ import {
   Thermostat as TempIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import {Box, Card, CardContent, Chip, LinearProgress, Typography, useTheme} from '@mui/material';
+import { Box, Card, CardContent, Chip, LinearProgress, Typography, useTheme } from '@mui/material';
 
 // Mock data - in real app this would come from API
 const mockSensorData = {
@@ -23,14 +23,14 @@ const mockSensorData = {
     estimatedTime: '2h 15m',
   },
   motors: {
-    leftWheel: {rpm: 120, power: 85, temperature: 42},
-    rightWheel: {rpm: 118, power: 83, temperature: 41},
-    blade: {rpm: 2800, power: 92, temperature: 38},
+    leftWheel: { rpm: 120, power: 85, temperature: 42 },
+    rightWheel: { rpm: 118, power: 83, temperature: 41 },
+    blade: { rpm: 2800, power: 92, temperature: 38 },
   },
   sensors: {
-    gps: {accuracy: '±0.5m', satellites: 8, status: 'good'},
-    obstacle: {front: 'clear', left: 'clear', right: 'clear', status: 'good'},
-    rain: {detected: false, humidity: 45, status: 'good'},
+    gps: { accuracy: '±0.5m', satellites: 8, status: 'good' },
+    obstacle: { front: 'clear', left: 'clear', right: 'clear', status: 'good' },
+    rain: { detected: false, humidity: 45, status: 'good' },
   },
   system: {
     uptime: '3h 22m',
@@ -93,14 +93,14 @@ export default function SensorsPage() {
       </PageHeader>
 
       <PageContent>
-        <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* System Status Overview */}
           <Card sx={outerCardStyles(theme)}>
             <CardContent>
               <Typography variant="h6" component="h2" gutterBottom>
                 System Status
               </Typography>
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center'}}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
                 <Chip
                   label={mockSensorData.system.status}
                   color={getSystemStatusColor(mockSensorData.system.status)}
@@ -129,13 +129,13 @@ export default function SensorsPage() {
               <Typography variant="h6" component="h2" gutterBottom>
                 Battery Status
               </Typography>
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
-                <Box sx={{flex: '1', minWidth: '200px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+                <Box sx={{ flex: '1', minWidth: '200px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <BatteryIcon color="primary" />
                     <Typography variant="subtitle2">Voltage</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'medium' }}>
                     {mockSensorData.battery.voltage}V
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -143,12 +143,12 @@ export default function SensorsPage() {
                   </Typography>
                 </Box>
 
-                <Box sx={{flex: '1', minWidth: '200px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                <Box sx={{ flex: '1', minWidth: '200px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <SpeedIcon color="primary" />
                     <Typography variant="subtitle2">Current</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'medium' }}>
                     {mockSensorData.battery.current}A
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -156,12 +156,12 @@ export default function SensorsPage() {
                   </Typography>
                 </Box>
 
-                <Box sx={{flex: '1', minWidth: '200px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                <Box sx={{ flex: '1', minWidth: '200px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <TempIcon color="primary" />
                     <Typography variant="subtitle2">Temperature</Typography>
                   </Box>
-                  <Typography variant="h4" color="primary" sx={{fontWeight: 'medium'}}>
+                  <Typography variant="h4" color="primary" sx={{ fontWeight: 'medium' }}>
                     {mockSensorData.battery.temperature}°C
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -169,8 +169,8 @@ export default function SensorsPage() {
                   </Typography>
                 </Box>
 
-                <Box sx={{flex: '1', minWidth: '200px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                <Box sx={{ flex: '1', minWidth: '200px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <CheckIcon color="primary" />
                     <Typography variant="subtitle2">Health</Typography>
                   </Box>
@@ -179,7 +179,7 @@ export default function SensorsPage() {
                     color={getBatteryHealthColor(mockSensorData.battery.health)}
                     size="medium"
                   />
-                  <Typography variant="body2" color="text.secondary" sx={{mt: 1}}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     Est. Time: {mockSensorData.battery.estimatedTime}
                   </Typography>
                 </Box>
@@ -193,19 +193,23 @@ export default function SensorsPage() {
               <Typography variant="h6" component="h2" gutterBottom>
                 Motor Status
               </Typography>
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                 {Object.entries(mockSensorData.motors).map(([motor, data]) => (
-                  <Box key={motor} sx={{flex: '1', minWidth: '200px'}}>
-                    <Typography variant="subtitle1" gutterBottom sx={{fontWeight: 'medium', textTransform: 'capitalize'}}>
+                  <Box key={motor} sx={{ flex: '1', minWidth: '200px' }}>
+                    <Typography
+                      variant="subtitle1"
+                      gutterBottom
+                      sx={{ fontWeight: 'medium', textTransform: 'capitalize' }}
+                    >
                       {motor.replace(/([A-Z])/g, ' $1').trim()}
                     </Typography>
 
-                    <Box sx={{mb: 2}}>
-                      <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 0.5}}>
+                    <Box sx={{ mb: 2 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                         <Typography variant="body2" color="text.secondary">
                           RPM
                         </Typography>
-                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
                           {data.rpm}
                         </Typography>
                       </Box>
@@ -213,16 +217,16 @@ export default function SensorsPage() {
                         variant="determinate"
                         value={(data.rpm / 3000) * 100}
                         color="primary"
-                        sx={{height: 6, borderRadius: 3}}
+                        sx={{ height: 6, borderRadius: 3 }}
                       />
                     </Box>
 
-                    <Box sx={{mb: 2}}>
-                      <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 0.5}}>
+                    <Box sx={{ mb: 2 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                         <Typography variant="body2" color="text.secondary">
                           Power
                         </Typography>
-                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
                           {data.power}%
                         </Typography>
                       </Box>
@@ -230,16 +234,16 @@ export default function SensorsPage() {
                         variant="determinate"
                         value={data.power}
                         color="success"
-                        sx={{height: 6, borderRadius: 3}}
+                        sx={{ height: 6, borderRadius: 3 }}
                       />
                     </Box>
 
                     <Box>
-                      <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 0.5}}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                         <Typography variant="body2" color="text.secondary">
                           Temperature
                         </Typography>
-                        <Typography variant="body2" sx={{fontWeight: 'medium'}}>
+                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
                           {data.temperature}°C
                         </Typography>
                       </Box>
@@ -247,7 +251,7 @@ export default function SensorsPage() {
                         variant="determinate"
                         value={(data.temperature / 80) * 100}
                         color={data.temperature > 60 ? 'warning' : 'info'}
-                        sx={{height: 6, borderRadius: 3}}
+                        sx={{ height: 6, borderRadius: 3 }}
                       />
                     </Box>
                   </Box>
@@ -262,12 +266,12 @@ export default function SensorsPage() {
               <Typography variant="h6" component="h2" gutterBottom>
                 Sensor Status
               </Typography>
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                 {/* GPS Status */}
-                <Box sx={{flex: '1', minWidth: '250px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
+                <Box sx={{ flex: '1', minWidth: '250px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                     <GpsIcon color="primary" />
-                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
                       GPS
                     </Typography>
                     <Chip
@@ -285,10 +289,10 @@ export default function SensorsPage() {
                 </Box>
 
                 {/* Obstacle Detection */}
-                <Box sx={{flex: '1', minWidth: '250px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
+                <Box sx={{ flex: '1', minWidth: '250px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                     <WarningIcon color="primary" />
-                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
                       Obstacle Detection
                     </Typography>
                     <Chip
@@ -309,10 +313,10 @@ export default function SensorsPage() {
                 </Box>
 
                 {/* Rain Sensor */}
-                <Box sx={{flex: '1', minWidth: '250px'}}>
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 2}}>
+                <Box sx={{ flex: '1', minWidth: '250px' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                     <TempIcon color="primary" />
-                    <Typography variant="subtitle1" sx={{fontWeight: 'medium'}}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
                       Environmental
                     </Typography>
                     <Chip

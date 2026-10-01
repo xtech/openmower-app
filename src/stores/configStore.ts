@@ -1,5 +1,5 @@
-import {AppConfig} from '@/components/types';
-import {create} from 'zustand';
+import { AppConfig } from '@/components/types';
+import { create } from 'zustand';
 
 interface ConfigStore {
   config: AppConfig;
@@ -7,8 +7,8 @@ interface ConfigStore {
 }
 
 export const useConfigStore = create<ConfigStore>((set) => ({
-  config: {mowers: []},
-  setConfig: (config) => set({config}),
+  config: { mowers: [] },
+  setConfig: (config) => set({ config }),
 }));
 
 export const useMowerConfigs = () => useConfigStore((s) => s.config.mowers);

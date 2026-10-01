@@ -1,30 +1,41 @@
 'use client';
 
-import {HeaderStat, Page, PageContent, PageHeader} from '@/components/page';
-import {outerCardStyles} from '@/lib/cardStyles';
-import type {OpenMowerRpc} from '@/lib/rpc';
-import type {MqttStatus} from '@/stores/mowersStore';
-import {useMowers, useMowersStore} from '@/stores/mowersStore';
-import type {Capabilities, MapData} from '@/stores/schemas';
+import { HeaderStat, Page, PageContent, PageHeader } from '@/components/page';
+import { outerCardStyles } from '@/lib/cardStyles';
+import type { OpenMowerRpc } from '@/lib/rpc';
+import type { MqttStatus } from '@/stores/mowersStore';
+import { useMowers, useMowersStore } from '@/stores/mowersStore';
+import type { Capabilities, MapData } from '@/stores/schemas';
 import {
   BugReport as BugReportIcon,
   CheckCircle as CheckCircleIcon,
   Error as ErrorIcon,
   Link as LinkIcon,
-  PlayArrow as PlayArrowIcon,
   Map as MapIcon,
   NetworkCheck as NetworkCheckIcon,
+  PlayArrow as PlayArrowIcon,
   Refresh as RefreshIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
   WifiOff as WifiOffIcon,
 } from '@mui/icons-material';
-import {Box, Card, CardContent, Chip, CircularProgress, Divider, IconButton, Tooltip, Typography, useTheme} from '@mui/material';
-import React, {useEffect, useRef, useState} from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 
-type PingState = {latency: number | null; error: string | null; loading: boolean};
+type PingState = { latency: number | null; error: string | null; loading: boolean };
 
-function SplitBadge({label, value}: {label: string; value: React.ReactNode}) {
+function SplitBadge({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <Box
       sx={{
@@ -36,7 +47,7 @@ function SplitBadge({label, value}: {label: string; value: React.ReactNode}) {
         fontSize: '0.75rem',
       }}
     >
-      <Box sx={{px: 1, py: 0.25, bgcolor: 'action.hover', fontFamily: 'monospace'}}>{label}</Box>
+      <Box sx={{ px: 1, py: 0.25, bgcolor: 'action.hover', fontFamily: 'monospace' }}>{label}</Box>
       <Box
         sx={{
           px: 1,
@@ -81,7 +92,15 @@ function maskPassword(rawUrl: string): string {
   }
 }
 
-function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPrefix: string; mqttStatus: MqttStatus}) {
+function MqttSection({
+  mqttUrl,
+  mqttPrefix,
+  mqttStatus,
+}: {
+  mqttUrl: string;
+  mqttPrefix: string;
+  mqttStatus: MqttStatus;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const displayUrl = showPassword ? mqttUrl : maskPassword(mqttUrl);
   const hasPassword = (() => {
@@ -94,9 +113,9 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
 
   return (
     <Box>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
         <LinkIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
           MQTT
         </Typography>
         {mqttStatusChip(mqttStatus)}
@@ -110,25 +129,25 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
           alignItems: 'baseline',
         }}
       >
-        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           URL
         </Typography>
-        <Typography variant="body2" sx={{fontFamily: 'monospace', fontSize: '0.8rem', wordBreak: 'break-all'}}>
+        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem', wordBreak: 'break-all' }}>
           {displayUrl}
           {hasPassword && (
             <Tooltip title={showPassword ? 'Hide password' : 'Show password'}>
-              <IconButton size="small" onClick={() => setShowPassword((v) => !v)} sx={{ml: 0.5}}>
+              <IconButton size="small" onClick={() => setShowPassword((v) => !v)} sx={{ ml: 0.5 }}>
                 {showPassword ? <VisibilityOffIcon fontSize="inherit" /> : <VisibilityIcon fontSize="inherit" />}
               </IconButton>
             </Tooltip>
           )}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           Prefix
         </Typography>
-        <Typography variant="body2" sx={{fontFamily: 'monospace', fontSize: '0.8rem'}}>
+        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
           {mqttPrefix || (
-            <Typography component="span" color="text.disabled" sx={{fontSize: 'inherit'}}>
+            <Typography component="span" color="text.disabled" sx={{ fontSize: 'inherit' }}>
               (none)
             </Typography>
           )}
@@ -138,15 +157,15 @@ function MqttSection({mqttUrl, mqttPrefix, mqttStatus}: {mqttUrl: string; mqttPr
   );
 }
 
-function PingRow({label, onPing}: {label: string; onPing: () => Promise<unknown>}) {
-  const [ping, setPing] = useState<PingState>({latency: null, error: null, loading: true});
+function PingRow({ label, onPing }: { label: string; onPing: () => Promise<unknown> }) {
+  const [ping, setPing] = useState<PingState>({ latency: null, error: null, loading: true });
   const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortedRef = useRef(false);
 
   const runPing = async () => {
     abortedRef.current = false;
     const timer = setTimeout(() => {
-      if (!abortedRef.current) setPing({latency: null, error: null, loading: true});
+      if (!abortedRef.current) setPing({ latency: null, error: null, loading: true });
     }, 200);
     loadingTimerRef.current = timer;
     const start = performance.now();
@@ -155,12 +174,12 @@ function PingRow({label, onPing}: {label: string; onPing: () => Promise<unknown>
       clearTimeout(timer);
       if (!abortedRef.current) {
         const latency = Math.round(performance.now() - start);
-        setPing({latency, error: null, loading: false});
+        setPing({ latency, error: null, loading: false });
       }
     } catch (e) {
       clearTimeout(timer);
       if (!abortedRef.current) {
-        setPing({latency: null, error: e instanceof Error ? e.message : 'Timeout', loading: false});
+        setPing({ latency: null, error: e instanceof Error ? e.message : 'Timeout', loading: false });
       }
     }
   };
@@ -175,7 +194,7 @@ function PingRow({label, onPing}: {label: string; onPing: () => Promise<unknown>
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box sx={{display: 'flex', alignItems: 'center', gap: 1.5}}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
       <Chip
         label={label}
         onClick={runPing}
@@ -183,7 +202,7 @@ function PingRow({label, onPing}: {label: string; onPing: () => Promise<unknown>
         icon={ping.loading ? <CircularProgress size={14} /> : <NetworkCheckIcon />}
         variant="outlined"
         size="small"
-        sx={{cursor: 'pointer'}}
+        sx={{ cursor: 'pointer' }}
       />
       {ping.loading && (
         <Typography variant="body2" color="text.secondary">
@@ -197,16 +216,16 @@ function PingRow({label, onPing}: {label: string; onPing: () => Promise<unknown>
   );
 }
 
-function RpcSection({rpc}: {rpc: OpenMowerRpc}) {
+function RpcSection({ rpc }: { rpc: OpenMowerRpc }) {
   return (
     <Box>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
         <PlayArrowIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
           RPC
         </Typography>
       </Box>
-      <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <PingRow label="Ping" onPing={() => rpc.rpc.ping()} />
         {process.env.NEXT_PUBLIC_IS_DEV && <PingRow label="Meta Ping" onPing={() => rpc.meta.rpc.ping()} />}
       </Box>
@@ -214,13 +233,13 @@ function RpcSection({rpc}: {rpc: OpenMowerRpc}) {
   );
 }
 
-function CapabilitiesSection({capabilities}: {capabilities: Capabilities}) {
+function CapabilitiesSection({ capabilities }: { capabilities: Capabilities }) {
   const entries = Object.entries(capabilities);
   return (
     <Box>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
         <CheckCircleIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
           Capabilities
         </Typography>
       </Box>
@@ -229,7 +248,7 @@ function CapabilitiesSection({capabilities}: {capabilities: Capabilities}) {
           No capabilities received yet
         </Typography>
       ) : (
-        <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.75}}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
           {entries.map(([key, level]) => (
             <SplitBadge key={key} label={key} value={level} />
           ))}
@@ -239,7 +258,7 @@ function CapabilitiesSection({capabilities}: {capabilities: Capabilities}) {
   );
 }
 
-function MapSection({map}: {map: MapData}) {
+function MapSection({ map }: { map: MapData }) {
   const hasMap = map.areas.length > 0 || map.docking_stations.length > 0;
   const countsByType = map.areas.reduce<Record<string, number>>((acc, a) => {
     const t = a.properties.type;
@@ -249,9 +268,9 @@ function MapSection({map}: {map: MapData}) {
 
   return (
     <Box>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1.5}}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
         <MapIcon fontSize="small" color="action" />
-        <Typography variant="subtitle2" sx={{fontWeight: 600}}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
           Map
         </Typography>
         {hasMap ? (
@@ -261,9 +280,15 @@ function MapSection({map}: {map: MapData}) {
         )}
       </Box>
       <Box
-        sx={{display: 'grid', gridTemplateColumns: 'max-content 1fr', columnGap: 2, rowGap: 0.5, alignItems: 'center'}}
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'max-content 1fr',
+          columnGap: 2,
+          rowGap: 0.5,
+          alignItems: 'center',
+        }}
       >
-        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           Datum
         </Typography>
         <Typography variant="body2">
@@ -272,7 +297,7 @@ function MapSection({map}: {map: MapData}) {
               href={`https://www.google.com/maps?q=${map.datum.lat},${map.datum.long}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{fontFamily: 'monospace', fontSize: '0.8rem'}}
+              style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}
             >
               {map.datum.lat.toFixed(6)}, {map.datum.long.toFixed(6)}
             </a>
@@ -282,10 +307,10 @@ function MapSection({map}: {map: MapData}) {
             </Typography>
           )}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           Areas
         </Typography>
-        <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.75}}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
           {Object.keys(countsByType).length === 0 ? (
             <Typography variant="body2" color="text.disabled">
               None
@@ -294,7 +319,7 @@ function MapSection({map}: {map: MapData}) {
             Object.entries(countsByType).map(([type, count]) => <SplitBadge key={type} label={type} value={count} />)
           )}
         </Box>
-        <Typography variant="body2" color="text.secondary" sx={{fontWeight: 500}}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           Docking stations
         </Typography>
         <Typography variant="body2">{map.docking_stations.length}</Typography>
@@ -318,26 +343,26 @@ export default function DebugPage() {
 
       <PageContent>
         {mowers.length === 0 ? (
-          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200}}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
             <Typography variant="h6" color="text.secondary">
               No mowers configured.
             </Typography>
           </Box>
         ) : (
-          <Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             {mowers.map((mower) => (
               <Card key={mower.id} sx={outerCardStyles(theme)}>
                 <CardContent>
-                  <Typography variant="h5" gutterBottom sx={{fontWeight: 700}}>
+                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
                     {mower.name}
                   </Typography>
                   {mower.description && (
-                    <Typography variant="body2" color="text.secondary" sx={{mb: 2}}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                       {mower.description}
                     </Typography>
                   )}
 
-                  <Box sx={{display: 'flex', flexDirection: 'column', gap: 2.5}}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                     <MqttSection
                       mqttUrl={mower.mqttUrl}
                       mqttPrefix={mower.mqttPrefix}

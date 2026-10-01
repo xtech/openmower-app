@@ -1,5 +1,5 @@
-import {generateId} from '@/utils/area-utils';
-import type {MqttClient} from 'mqtt';
+import { generateId } from '@/utils/area-utils';
+import type { MqttClient } from 'mqtt';
 
 interface PendingRequest<T> {
   resolve: (value: T) => void;
@@ -20,7 +20,10 @@ export default class OpenMowerRpcBase {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private pendingRequests = new Map<string, PendingRequest<any>>();
 
-  constructor(private mqtt: MqttClient, private prefix: string) {}
+  constructor(
+    private mqtt: MqttClient,
+    private prefix: string,
+  ) {}
 
   protected call<T>(method: string, params?: object): Promise<T> {
     const id = generateId();

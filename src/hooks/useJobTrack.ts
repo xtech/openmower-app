@@ -1,7 +1,7 @@
-import {useSelectedMower} from '@/stores/mowersStore';
-import type {TrackAttributes} from '@/stores/schemas';
-import type {TrackSegment} from '@/utils/track-pipeline';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import { useSelectedMower } from '@/stores/mowersStore';
+import type { TrackAttributes } from '@/stores/schemas';
+import type { TrackSegment } from '@/utils/track-pipeline';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface PastTrack {
   jobId: string;
@@ -9,10 +9,10 @@ export interface PastTrack {
 }
 
 export type JobTrackState =
-  | {status: 'live'}
-  | {status: 'loading'}
-  | {status: 'loaded'; pastTrack: PastTrack}
-  | {status: 'error'; jobId: string};
+  | { status: 'live' }
+  | { status: 'loading' }
+  | { status: 'loaded'; pastTrack: PastTrack }
+  | { status: 'error'; jobId: string };
 
 /**
  * Fetches and caches historical track data for a selected job.
@@ -30,7 +30,7 @@ export function useJobTrack(selectedJobId: string | null): {
   // Cache past tracks by job_id to avoid re-fetching
   const cache = useRef<Map<string, PastTrack>>(new Map());
 
-  const [state, setState] = useState<JobTrackState>({status: 'live'});
+  const [state, setState] = useState<JobTrackState>({ status: 'live' });
 
   const isHistoricalJob = selectedJobId !== null && selectedJobId !== liveJobId;
 
@@ -40,13 +40,13 @@ export function useJobTrack(selectedJobId: string | null): {
 
       const cached = cache.current.get(jobId);
       if (cached) {
-        setState({status: 'loaded', pastTrack: cached});
+        setState({ status: 'loaded', pastTrack: cached });
         return;
       }
 
-      setState({status: 'loading'});
+      setState({ status: 'loading' });
       try {
-        const result = await rpc.position.history({job_id: jobId});
+        const result = await rpc.position.history({ job_id: jobId });
         const segments: TrackSegment[] = (
           (result.segments ?? []) as {
             attributes: TrackAttributes;
@@ -54,13 +54,13 @@ export function useJobTrack(selectedJobId: string | null): {
           }[]
         ).map((seg) => ({
           attributes: seg.attributes as TrackAttributes,
-          points: seg.points.map(([x, y]) => ({x, y})),
+          points: seg.points.map(([x, y]) => ({ x, y })),
         }));
-        const pastTrack: PastTrack = {jobId, segments};
+        const pastTrack: PastTrack = { jobId, segments };
         cache.current.set(jobId, pastTrack);
-        setState({status: 'loaded', pastTrack});
+        setState({ status: 'loaded', pastTrack });
       } catch {
-        setState({status: 'error', jobId});
+        setState({ status: 'error', jobId });
       }
     },
     [rpc],
@@ -68,20 +68,20 @@ export function useJobTrack(selectedJobId: string | null): {
 
   useEffect(() => {
     if (!isHistoricalJob) {
-      setState({status: 'live'});
+      setState({ status: 'live' });
       return;
     }
     void fetchJob(selectedJobId);
   }, [isHistoricalJob, selectedJobId, fetchJob]);
 
   if (!isHistoricalJob) {
-    return {pastTrack: null, loading: false};
+    return { pastTrack: null, loading: false };
   }
 
   if (state.status === 'loaded' && state.pastTrack.jobId === selectedJobId) {
-    return {pastTrack: state.pastTrack, loading: false};
+    return { pastTrack: state.pastTrack, loading: false };
   }
 
   // Either explicitly loading, or state belongs to a different job (stale)
-  return {pastTrack: null, loading: true};
+  return { pastTrack: null, loading: true };
 }

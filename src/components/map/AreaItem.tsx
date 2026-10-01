@@ -1,16 +1,16 @@
-import {formatAreaSize} from '@/app/map/page';
-import {AreaProps} from '@/stores/schemas';
-import type {DraggableSyntheticListeners} from '@dnd-kit/core';
-import {Box, ListItem, Typography, useTheme} from '@mui/material';
-import {area as turfArea} from '@turf/area';
-import {Feature, Polygon} from 'geojson';
-import {CircleSlashIcon, MenuIcon, RouteIcon, ScissorsIcon, SquareDashedIcon, type LucideIcon} from 'lucide-react';
+import { formatAreaSize } from '@/app/map/page';
+import { AreaProps } from '@/stores/schemas';
+import type { DraggableSyntheticListeners } from '@dnd-kit/core';
+import { Box, ListItem, Typography, useTheme } from '@mui/material';
+import { area as turfArea } from '@turf/area';
+import { Feature, Polygon } from 'geojson';
+import { CircleSlashIcon, MenuIcon, RouteIcon, ScissorsIcon, SquareDashedIcon, type LucideIcon } from 'lucide-react';
 
-const TYPE_CONFIG: Record<AreaProps['type'], {icon: LucideIcon; color: string; strokeWidth: number}> = {
-  mow: {icon: ScissorsIcon, color: '#4caf50', strokeWidth: 3},
-  nav: {icon: RouteIcon, color: '#42a5f5', strokeWidth: 2},
-  obstacle: {icon: CircleSlashIcon, color: '#78909c', strokeWidth: 1.5},
-  draft: {icon: SquareDashedIcon, color: '#9e9e9e', strokeWidth: 2},
+const TYPE_CONFIG: Record<AreaProps['type'], { icon: LucideIcon; color: string; strokeWidth: number }> = {
+  mow: { icon: ScissorsIcon, color: '#4caf50', strokeWidth: 3 },
+  nav: { icon: RouteIcon, color: '#42a5f5', strokeWidth: 2 },
+  obstacle: { icon: CircleSlashIcon, color: '#78909c', strokeWidth: 1.5 },
+  draft: { icon: SquareDashedIcon, color: '#9e9e9e', strokeWidth: 2 },
 };
 
 export interface AreaItemProps {
@@ -50,7 +50,7 @@ export default function AreaItem({
 }: AreaItemProps & SortableItemProps) {
   const theme = useTheme();
   const inactive = area.properties.active === false;
-  const {icon: Icon, color, strokeWidth} = TYPE_CONFIG[area.properties.type ?? 'draft'];
+  const { icon: Icon, color, strokeWidth } = TYPE_CONFIG[area.properties.type ?? 'draft'];
   const isGroupDragPlaceholder = !!dragCount && dragCount > 0;
   return (
     <ListItem
@@ -88,12 +88,20 @@ export default function AreaItem({
         }),
       }}
     >
-      <Box sx={{width: '100%', display: 'flex'}}>
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', pl: 2, color: isGroupDragPlaceholder ? undefined : color}}>
+      <Box sx={{ width: '100%', display: 'flex' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pl: 2,
+            color: isGroupDragPlaceholder ? undefined : color,
+          }}
+        >
           {!isGroupDragPlaceholder && <Icon size={18} strokeWidth={strokeWidth} />}
         </Box>
-        <Box sx={{flex: 1, px: 1.5, py: 1, opacity: dragging ? 0.4 : 1.0}}>
-          <Typography variant="h6" sx={{fontWeight: '600'}}>
+        <Box sx={{ flex: 1, px: 1.5, py: 1, opacity: dragging ? 0.4 : 1.0 }}>
+          <Typography variant="h6" sx={{ fontWeight: '600' }}>
             {isGroupDragPlaceholder ? `${dragCount} areas` : (area.properties.name ?? 'Unnamed area')}
           </Typography>
           {!isGroupDragPlaceholder && (
@@ -118,7 +126,7 @@ export default function AreaItem({
               color: dragging ? theme.palette.secondary.contrastText : theme.palette.text.secondary,
             }}
           >
-            <MenuIcon size={16} style={{pointerEvents: 'none'}} />
+            <MenuIcon size={16} style={{ pointerEvents: 'none' }} />
           </Box>
         )}
       </Box>

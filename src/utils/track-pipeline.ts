@@ -1,8 +1,8 @@
-import {type PositionWithAttributes, type TrackAttributes} from '@/stores/schemas';
-import {type RelativePoint} from '@/utils/coordinates';
-import {decimateFilter} from '@/utils/decimate';
-import {rdpSimplify} from '@/utils/rdp';
-import {immerable} from 'immer';
+import { type PositionWithAttributes, type TrackAttributes } from '@/stores/schemas';
+import { type RelativePoint } from '@/utils/coordinates';
+import { decimateFilter } from '@/utils/decimate';
+import { rdpSimplify } from '@/utils/rdp';
+import { immerable } from 'immer';
 
 /*
  * Two-layer GPS track pipeline: "Live" (raw) + "History" (simplified).
@@ -63,18 +63,18 @@ export class TrackPipeline {
   [immerable] = true;
   buffer: RelativePoint[] = [];
   historySegments: TrackSegment[] = [];
-  attributes: TrackAttributes = {job_id: '', session_id: '', blades: false};
+  attributes: TrackAttributes = { job_id: '', session_id: '', blades: false };
 
   seedFromHistory(
-    segments: {attributes: TrackAttributes; points: [number, number][]}[],
+    segments: { attributes: TrackAttributes; points: [number, number][] }[],
     buffer: [number, number][],
   ): void {
     this.historySegments = segments.map((seg) => ({
-      attributes: {...seg.attributes},
-      points: seg.points.map(([x, y]) => ({x, y})),
+      attributes: { ...seg.attributes },
+      points: seg.points.map(([x, y]) => ({ x, y })),
     }));
-    this.buffer = buffer.map(([x, y]) => ({x, y}));
-    this.attributes = segments.at(-1)?.attributes ?? {job_id: '', session_id: '', blades: false};
+    this.buffer = buffer.map(([x, y]) => ({ x, y }));
+    this.attributes = segments.at(-1)?.attributes ?? { job_id: '', session_id: '', blades: false };
   }
 
   addPoint(position: PositionWithAttributes): void {
@@ -85,7 +85,7 @@ export class TrackPipeline {
       this.compact(true); // flush remaining buffer under OLD attributes
     }
     this.attributes = position.attributes;
-    this.buffer.push({x: position.x, y: position.y});
+    this.buffer.push({ x: position.x, y: position.y });
     if (this.buffer.length > COMPACTION_THRESHOLD) {
       this.compact();
     }
@@ -137,7 +137,7 @@ export class TrackPipeline {
         const bridge = lastPoint ? [lastPoint] : [];
         const points = [...bridge, ...committed];
         if (points.length >= 2) {
-          this.historySegments.push({points, attributes: {...this.attributes}});
+          this.historySegments.push({ points, attributes: { ...this.attributes } });
         } else {
           // Not enough points to form a renderable segment yet; leave committed
           // points in the suffix so they accumulate with the next batch.

@@ -1,12 +1,12 @@
 'use client';
 
 import ControlButton from '@/components/map/ControlButton';
-import {useMapboxDraw, useMapContext} from '@/contexts/MapContext';
-import {CloudDownload as DownloadIcon} from '@mui/icons-material';
+import { useMapboxDraw, useMapContext } from '@/contexts/MapContext';
+import { CloudDownload as DownloadIcon } from '@mui/icons-material';
 
 export function DownloadButton() {
   const draw = useMapboxDraw();
-  const {datum} = useMapContext();
+  const { datum } = useMapContext();
 
   const downloadFeatures = () => {
     if (!draw) return;

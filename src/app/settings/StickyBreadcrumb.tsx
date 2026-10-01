@@ -1,13 +1,13 @@
 'use client';
 
-import {ChevronRight as ChevronRightIcon} from '@mui/icons-material';
-import {Box, Typography} from '@mui/material';
-import {Fragment, useEffect, useRef, useState} from 'react';
-import {createPortal} from 'react-dom';
+import { ChevronRight as ChevronRightIcon } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export function StickyBreadcrumb() {
   const [crumbs, setCrumbs] = useState<string[]>([]);
-  const [rect, setRect] = useState<{top: number; left: number; width: number} | null>(null);
+  const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
   const [slideOffset, setSlideOffset] = useState(0);
   const barRef = useRef<HTMLDivElement>(null);
 
@@ -19,7 +19,7 @@ export function StickyBreadcrumb() {
 
     function update() {
       const containerRect = scrollContainer!.getBoundingClientRect();
-      setRect({top: containerRect.top, left: containerRect.left, width: containerRect.width});
+      setRect({ top: containerRect.top, left: containerRect.left, width: containerRect.width });
 
       const markers = document.querySelectorAll<HTMLElement>('[data-section-marker]');
       const barHeight = barRef.current?.getBoundingClientRect().height ?? 0;
@@ -47,7 +47,7 @@ export function StickyBreadcrumb() {
       setSlideOffset(offset);
 
       const threshold = containerTop + barHeight;
-      const active = new Map<number, {label: string; marker: HTMLElement}>();
+      const active = new Map<number, { label: string; marker: HTMLElement }>();
 
       for (const marker of markers) {
         if (marker.closest('.MuiCollapse-hidden')) continue;
@@ -57,7 +57,7 @@ export function StickyBreadcrumb() {
         const level = Number(marker.dataset.sectionLevel);
         const label = marker.dataset.sectionLabel!;
 
-        active.set(level, {label, marker});
+        active.set(level, { label, marker });
         for (const key of active.keys()) {
           if (key > level) active.delete(key);
         }
@@ -67,14 +67,17 @@ export function StickyBreadcrumb() {
       // If a same-level sibling follows, extend the active region all the way to that sibling's marker
       // top — so the crumb stays until the moment the next header takes over, with no gap.
       // If no sibling follows, pop as soon as the collapse bottom passes the threshold.
-      for (const [level, {marker}] of active) {
+      for (const [level, { marker }] of active) {
         const accordion = marker.closest('.MuiAccordion-root');
         const collapse = accordion?.querySelector(':scope > .MuiCollapse-root');
         if (!collapse) continue;
         if (collapse.getBoundingClientRect().bottom >= threshold) continue;
 
-        const nextAccordion = accordion?.nextElementSibling?.closest('.MuiAccordion-root') ?? accordion?.nextElementSibling;
-        const nextMarker = nextAccordion?.querySelector<HTMLElement>(`[data-section-marker][data-section-level="${level}"]`);
+        const nextAccordion =
+          accordion?.nextElementSibling?.closest('.MuiAccordion-root') ?? accordion?.nextElementSibling;
+        const nextMarker = nextAccordion?.querySelector<HTMLElement>(
+          `[data-section-marker][data-section-level="${level}"]`,
+        );
         if (nextMarker && nextMarker.getBoundingClientRect().top > threshold) {
           // Gap between sections — keep current crumb until next marker crosses.
           continue;
@@ -83,9 +86,7 @@ export function StickyBreadcrumb() {
         active.delete(level);
       }
 
-      const result = [...active.entries()]
-        .sort(([a], [b]) => a - b)
-        .map(([, {label}]) => label);
+      const result = [...active.entries()].sort(([a], [b]) => a - b).map(([, { label }]) => label);
 
       setCrumbs((prev) => {
         if (prev.length === result.length && prev.every((v, i) => v === result[i])) return prev;
@@ -98,7 +99,7 @@ export function StickyBreadcrumb() {
       rafId = requestAnimationFrame(update);
     }
 
-    scrollContainer.addEventListener('scroll', onScroll, {passive: true});
+    scrollContainer.addEventListener('scroll', onScroll, { passive: true });
     update();
 
     return () => {
@@ -135,7 +136,7 @@ export function StickyBreadcrumb() {
       {crumbs.length === 0 && <Typography variant="caption">&nbsp;</Typography>}
       {crumbs.map((label, i) => (
         <Fragment key={i}>
-          {i > 0 && <ChevronRightIcon sx={{fontSize: 16, color: 'text.disabled', flexShrink: 0}} />}
+          {i > 0 && <ChevronRightIcon sx={{ fontSize: 16, color: 'text.disabled', flexShrink: 0 }} />}
           <Typography
             variant="caption"
             noWrap

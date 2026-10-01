@@ -1,20 +1,20 @@
 'use client';
-import {createTheme} from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 const sharedTokens = {
   typography: {
     fontFamily: 'var(--font-roboto)',
-    h1: {fontWeight: 700, fontSize: '2.5rem'},
-    h2: {fontWeight: 600, fontSize: '2rem'},
-    h3: {fontWeight: 600, fontSize: '1.75rem'},
-    h4: {fontWeight: 500, fontSize: '1.5rem'},
-    h5: {fontWeight: 500, fontSize: '1.25rem'},
-    h6: {fontWeight: 500, fontSize: '1rem'},
-    body1: {fontSize: '1rem', lineHeight: 1.6},
-    body2: {fontSize: '0.875rem', lineHeight: 1.5},
-    button: {fontWeight: 500, textTransform: 'none' as const},
+    h1: { fontWeight: 700, fontSize: '2.5rem' },
+    h2: { fontWeight: 600, fontSize: '2rem' },
+    h3: { fontWeight: 600, fontSize: '1.75rem' },
+    h4: { fontWeight: 500, fontSize: '1.5rem' },
+    h5: { fontWeight: 500, fontSize: '1.25rem' },
+    h6: { fontWeight: 500, fontSize: '1rem' },
+    body1: { fontSize: '1rem', lineHeight: 1.6 },
+    body2: { fontSize: '0.875rem', lineHeight: 1.5 },
+    button: { fontWeight: 500, textTransform: 'none' as const },
   },
-  shape: {borderRadius: 12},
+  shape: { borderRadius: 12 },
   palette: {
     primary: {
       main: '#4CAF50',
@@ -28,31 +28,31 @@ const sharedTokens = {
       dark: '#FFA000',
       contrastText: '#000000',
     },
-    success: {main: '#4CAF50', light: '#81C784', dark: '#388E3C'},
-    warning: {main: '#FF9800', light: '#FFB74D', dark: '#F57C00'},
-    error: {main: '#F44336', light: '#E57373', dark: '#D32F2F'},
-    info: {main: '#2196F3', light: '#64B5F6', dark: '#1976D2'},
+    success: { main: '#4CAF50', light: '#81C784', dark: '#388E3C' },
+    warning: { main: '#FF9800', light: '#FFB74D', dark: '#F57C00' },
+    error: { main: '#F44336', light: '#E57373', dark: '#D32F2F' },
+    info: { main: '#2196F3', light: '#64B5F6', dark: '#1976D2' },
   },
 };
 
 const componentOverrides = {
   MuiButton: {
     styleOverrides: {
-      root: {borderRadius: 8, padding: '8px 16px', fontWeight: 500},
+      root: { borderRadius: 8, padding: '8px 16px', fontWeight: 500 },
       contained: {
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        '&:hover': {boxShadow: '0 4px 8px rgba(0,0,0,0.15)'},
+        '&:hover': { boxShadow: '0 4px 8px rgba(0,0,0,0.15)' },
       },
     },
   },
   MuiCard: {
     styleOverrides: {
-      root: {borderRadius: 12},
+      root: { borderRadius: 12 },
     },
   },
   MuiAppBar: {
     styleOverrides: {
-      root: {boxShadow: '0 2px 8px rgba(0,0,0,0.1)'},
+      root: { boxShadow: '0 2px 8px rgba(0,0,0,0.1)' },
     },
   },
 };
