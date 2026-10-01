@@ -1,0 +1,5 @@
+.vscode/
+node_modules/
+pnpm-lock.yaml
+openrpc.json
+src/lib/rpc.ts
