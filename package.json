@@ -12,11 +12,7 @@
     "prepare": "[ \"$CI\" = \"true\" ] && exit 0 || husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,mjs}": [
-      "eslint",
-      "prettier --write"
-    ],
-    "*.{json,md,css}": "prettier --write"
+    "*.{ts,tsx,js,jsx,mjs,json,md,css}": "prettier --write"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
