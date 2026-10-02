@@ -6,8 +6,12 @@ WORKDIR /app
 
 FROM base AS builder
 
-COPY --chown=node:node package.json pnpm-lock.yaml ./
-RUN corepack enable && pnpm install --frozen-lockfile
+USER root
+RUN corepack enable
+USER node
+
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY --chown=node:node . .
 RUN pnpm run build
